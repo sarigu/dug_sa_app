@@ -1,0 +1,36 @@
+.navbar-wrapper{
+    background-color: #FFF5F4;
+    width:100%;
+    height:130px;
+    margin:0;
+    padding:0;
+    border-radius: 0 0 15px 15px;
+    position: relative;
+}
+
+.navbar-wrapper h2{
+    margin:0;
+}
+
+.navbar span{
+    margin-left:10px;
+}
+
+.navbar{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 90%;
+    margin: auto;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+nav{
+    float:right;
+}

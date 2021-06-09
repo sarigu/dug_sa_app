@@ -1,0 +1,25 @@
+.no-access-wrapper{
+    background-color: #FFF5F4;
+    width:100vw;
+    height:100vh;
+}
+
+.no-access-wrapper div{
+    width: fit-content;
+    margin: 0;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.no-access-wrapper h2{
+    margin:0 0 20px 0;
+}
+
+.no-access-wrapper a{
+    text-decoration: none;
+    font-size: 12px;
+    color: #9F9F9F;
+    font-weight: 500;
+}

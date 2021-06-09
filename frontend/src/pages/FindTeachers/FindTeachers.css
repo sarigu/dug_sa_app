@@ -1,0 +1,18 @@
+.teacher-options{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    color: #9F9F9F;
+    font-weight: bold;
+    list-style:none;
+    padding:0;
+}
+
+.teacher-options * {
+  margin-right:20px;
+}
+
+.teachers-list{
+    display: flex;
+    flex-direction: column;
+}

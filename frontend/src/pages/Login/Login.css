@@ -1,0 +1,33 @@
+.login-wrapper{
+    width: 30%;
+    height:fit-content;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.login-wrapper button{
+    margin-top:35px;
+}
+
+.login-links-container{
+    display: flex;
+    flex-direction: row;
+    width:100%;
+    justify-content: space-between;
+    margin-top:35px;
+}
+
+.login-links-container * {
+    text-decoration: none;
+    font-size: 12px;
+    color: #9F9F9F;
+    font-weight: 500;
+}
+
+.error-message{
+    color:red;
+}
