@@ -13,7 +13,6 @@ const Navbar = ({ logout, user, userType }) => {
     };
 
     return (
-        console.log(userType, user),
         <div className="navbar-wrapper">
             <div className="navbar">
                 <h2>Hi, {user && userType && userType === "teacher" ? user.user.first_name : user ? user.first_name : null}<span>&#128075;&#127998;</span> </h2>

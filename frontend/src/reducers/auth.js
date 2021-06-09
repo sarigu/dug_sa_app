@@ -14,6 +14,7 @@ import {
     LOGOUT,
     TEACHER_UPDATE_SUCCESS,
     TEACHER_UPDATE_FAIL,
+    SELECTED_ROLE,
 } from '../actions/types';
 
 const initialState = {
@@ -23,6 +24,8 @@ const initialState = {
     user: null,
     userType: null,
     error: null,
+    selectedRole: "student",
+    signUpStatus: "",
 };
 
 export default function (state = initialState, action) {
@@ -41,13 +44,16 @@ export default function (state = initialState, action) {
                 ...state,
                 isAuthenticated: true,
                 access: payload.access,
-                refresh: payload.refresh
+                refresh: payload.refresh,
+                error: null,
             }
 
         case SIGNUP_SUCCESS:
             return {
                 ...state,
-                isAuthenticated: true
+                isAuthenticated: true,
+                error: null,
+                signUpStatus: "success",
             }
         case USER_LOADED_SUCCESS:
             return {
@@ -89,6 +95,7 @@ export default function (state = initialState, action) {
                 user: null,
                 userType: null,
                 error: "signup_fail",
+                signUpStatus: "fail",
             }
         case LOGOUT:
             localStorage.removeItem('access');
@@ -113,6 +120,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 user: payload,
+            }
+        case SELECTED_ROLE:
+            return {
+                ...state,
+                selectedRole: payload,
             }
         default:
             return state

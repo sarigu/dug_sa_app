@@ -5,9 +5,10 @@ import StudentDashboard from './StudentDashboard/StudentDashboard';
 import StaffDashboard from './StaffDashboard/StaffDashboard';
 
 const Dashboard = ({ userType, user }) => (
+    console.log(userType, user),
     <div >
-        {userType === "student" ? <StudentDashboard /> :
-            userType === "teacher" ? <TeacherDashboard /> :
+        {userType && userType === "student" ? <StudentDashboard /> :
+            userType && userType === "teacher" ? <TeacherDashboard /> :
                 <StaffDashboard />
         }
     </div>

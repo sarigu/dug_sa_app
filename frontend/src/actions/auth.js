@@ -15,6 +15,7 @@ import {
     LOGOUT,
     TEACHER_UPDATE_SUCCESS,
     TEACHER_UPDATE_FAIL,
+    SELECTED_ROLE,
 } from './types';
 
 export const load_user = () => async dispatch => {
@@ -96,7 +97,6 @@ export const signup = (first_name, last_name, email, access_code, password, re_p
     };
 
     const body = JSON.stringify({ first_name, last_name, email, access_code, password, re_password, role });
-
     try {
         const res = await axios.post('http://localhost:8000/auth/users/', body, config);
         dispatch({
@@ -181,4 +181,12 @@ export const update_teacher = (uid, degree, university, last_position, last_scho
             type: TEACHER_UPDATE_FAIL,
         })
     }
+};
+
+
+export const update_selected_role = (role) => dispatch => {
+    dispatch({
+        type: SELECTED_ROLE,
+        payload: role,
+    });
 };

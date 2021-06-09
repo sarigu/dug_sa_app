@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signup } from '../../actions/auth';
 
-const StudentSignUpForm = ({ signup, isAuthenticated, error }) => {
-    const [accountWasCreated, setAccountWasCreated] = useState(false);
+const SignUpForm = ({ signup, error, selectedRole, signUpStatus }) => {
     const [showError, setShowError] = useState(false);
-
+    const [errorMessage, setErrorMessage] = useState("");
+    const history = useHistory();
 
     const [formData, setFormData] = useState({
         first_name: '',
@@ -15,7 +15,7 @@ const StudentSignUpForm = ({ signup, isAuthenticated, error }) => {
         access_code: '',
         password: '',
         re_password: '',
-        role: 'student',
+        role: selectedRole,
     });
 
     const { first_name, last_name, email, access_code, password, re_password, role, } = formData;
@@ -23,33 +23,30 @@ const StudentSignUpForm = ({ signup, isAuthenticated, error }) => {
     const handleChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
         setShowError(false);
+        setErrorMessage("");
     };
 
-    const handleSubmit = e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (password === re_password) {
+
+        if (password !== re_password) {
+            setShowError(true);
+            setErrorMessage("Please make sure the passwords match");
+        } else {
             signup(first_name, last_name, email, access_code, password, re_password, role);
-            if (error) {
-                setShowError(true);
-                setAccountWasCreated(false);
-            } else {
-                setAccountWasCreated(true);
-            }
         }
     };
 
-    if (isAuthenticated) {
-        return <Redirect to='/dashboard' />
-    }
+    useEffect(() => {
+        if (signUpStatus === "success") {
+            history.push("/");
+        }
+    }, [signUpStatus]);
 
-    if (accountWasCreated && showError !== true) {
-        return <Redirect to='/' />
-    }
 
     return (
         <div>
-
-            {error === "signup_fail" && showError ? <div className="error-message">Oops, something went wrong. Please try again</div> : null}
+            {error ? <div className="error-message">Oops, something went wrong. Please try again</div> : showError && errorMessage ? <div className="error-message">{errorMessage}</div> : null}
             <form onSubmit={e => handleSubmit(e)}>
                 <input
                     type='text'
@@ -108,8 +105,10 @@ const StudentSignUpForm = ({ signup, isAuthenticated, error }) => {
 };
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated,
     error: state.auth.error,
+    selectedRole: state.auth.selectedRole,
+    isAuthenticated: state.auth.isAuthenticated,
+    signUpStatus: state.auth.signUpStatus,
 });
 
-export default connect(mapStateToProps, { signup })(StudentSignUpForm);
+export default connect(mapStateToProps, { signup })(SignUpForm);
