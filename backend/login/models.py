@@ -24,7 +24,8 @@ class CustomAccountManager(BaseUserManager):
             raise ValueError('Users must have an email address')
 
         code = extra_fields.get('access_code')
-        if AccessCode.objects.filter(code=code).exists():
+        print(AccessCode.objects.all())
+        if AccessCode.objects.filter(code=code).filter(is_active=True).exists():
             email = self.normalize_email(email)
             user = self.model(email=email, **extra_fields)
             user.set_password(password)

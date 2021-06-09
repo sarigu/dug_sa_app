@@ -3,8 +3,11 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signup } from '../../actions/auth';
 
-const StudentSignUpForm = ({ signup, isAuthenticated }) => {
+const StudentSignUpForm = ({ signup, isAuthenticated, error }) => {
     const [accountWasCreated, setAccountWasCreated] = useState(false);
+    const [showError, setShowError] = useState(false);
+
+
     const [formData, setFormData] = useState({
         first_name: '',
         last_name: '',
@@ -19,13 +22,19 @@ const StudentSignUpForm = ({ signup, isAuthenticated }) => {
 
     const handleChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        setShowError(false);
     };
 
     const handleSubmit = e => {
         e.preventDefault();
         if (password === re_password) {
             signup(first_name, last_name, email, access_code, password, re_password, role);
-            setAccountWasCreated(true);
+            if (error) {
+                setShowError(true);
+                setAccountWasCreated(false);
+            } else {
+                setAccountWasCreated(true);
+            }
         }
     };
 
@@ -33,12 +42,14 @@ const StudentSignUpForm = ({ signup, isAuthenticated }) => {
         return <Redirect to='/dashboard' />
     }
 
-    if (accountWasCreated) {
+    if (accountWasCreated && showError !== true) {
         return <Redirect to='/' />
     }
 
     return (
         <div>
+
+            {error === "signup_fail" && showError ? <div className="error-message">Oops, something went wrong. Please try again</div> : null}
             <form onSubmit={e => handleSubmit(e)}>
                 <input
                     type='text'
@@ -97,7 +108,8 @@ const StudentSignUpForm = ({ signup, isAuthenticated }) => {
 };
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    error: state.auth.error,
 });
 
 export default connect(mapStateToProps, { signup })(StudentSignUpForm);
