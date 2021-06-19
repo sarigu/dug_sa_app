@@ -2,40 +2,8 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { update_teacher } from '../../../actions/auth';
 import Carousel, { CarouselItem } from "../../Carousel/Carousel";
-import Resizer from "react-image-file-resizer";
-import './TeacherSignUpFlow.css';
+import '../SignUpForms.css';
 
-const resizeFileProfileImage = (file) =>
-    new Promise((resolve) => {
-        Resizer.imageFileResizer(
-            file,
-            400,
-            400,
-            "JPEG",
-            100,
-            0,
-            (blob) => {
-                resolve(blob);
-            },
-            "base64"
-        );
-    });
-
-const resizeFileAdressProof = (file) =>
-    new Promise((resolve) => {
-        Resizer.imageFileResizer(
-            file,
-            1000,
-            1000,
-            "JPEG",
-            100,
-            0,
-            (blob) => {
-                resolve(blob);
-            },
-            "base64"
-        );
-    });
 
 
 const TeacherSignUpFlow = ({ update_teacher, user }) => {
@@ -77,46 +45,12 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
 
     const handleChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        console.log("form data", formData);
     };
 
-    const handleImageChange2 = e => {
+    const handleImageChange = e => {
         setFormData({ ...formData, [e.target.name]: e.target.files[0] });
-        console.log("form data", formData);
     }
 
-    const handleImageChange = async (e, type) => {
-
-        const file = e.target.files[0];
-
-        console.log("FILE", e.target.files[0].name)
-
-
-        if (type === "proof_of_address") {
-            console.log("IMG ----- proof_of_address");
-            try {
-                const image = await resizeFileAdressProof(file);
-                const imageFile = new File([image], e.target.files[0].name)
-                console.log("IMG FILE", imageFile);
-                setFormData({ ...formData, [e.target.name]: imageFile });
-
-            } catch (err) {
-                setAddressProofError(true);
-            }
-
-        } else if (type === "profile_image") {
-            console.log("IMG ----- profile_image");
-            try {
-                const image = await resizeFileProfileImage(file);
-                const imageFile = new File([image], e.target.files[0].name);
-                console.log("IMG FILE", imageFile);
-                setFormData({ ...formData, [e.target.name]: imageFile });
-
-            } catch (err) {
-                setProfileImageError(true);
-            }
-        }
-    };
 
     const handleSubmit = () => {
         setErrors(false);
@@ -306,7 +240,7 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
                         {addressProofError ? <p className="errorMsg">Please upload a proof of address</p> : null}
                         <img id="proof-of-address" src="" width="100" height="100"></img>
                         <button onClick={() => { setAddressProofError(false); hiddenFileInputAddress.current.click() }} style={{ width: "250px", margin: "1rem 0 2rem 0" }}>Upload a proof of address</button>
-                        <input type="file" ref={hiddenFileInputAddress} style={{ display: "none" }} placeholder="Proof of Address" name="proof_of_address" accept="image/*" onChange={e => { handleImageChange2(e); document.getElementById('proof-of-address').src = window.URL.createObjectURL(e.target.files[0]) }} />
+                        <input type="file" ref={hiddenFileInputAddress} style={{ display: "none" }} placeholder="Proof of Address" name="proof_of_address" accept="image/*" onChange={e => { handleImageChange(e); document.getElementById('proof-of-address').src = window.URL.createObjectURL(e.target.files[0]) }} />
 
                     </div>
                 </CarouselItem>
@@ -316,7 +250,7 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
                         {profileImageError ? <p className="errorMsg">Please upload a profile image</p> : null}
                         <img id="profile-image" src="" width="300" height="300"></img>
                         <button onClick={() => { setProfileImageError(false); hiddenFileInputProfileImage.current.click() }} style={{ width: "250px", margin: "1rem 0 2rem 0" }}>Upload a proof of address</button>
-                        <input type="file" ref={hiddenFileInputProfileImage} style={{ display: "none" }} placeholder="Profile Image" name="profile_image" accept="image/*" onChange={e => { handleImageChange2(e); document.getElementById('profile-image').src = window.URL.createObjectURL(e.target.files[0]) }} />
+                        <input type="file" ref={hiddenFileInputProfileImage} style={{ display: "none" }} placeholder="Profile Image" name="profile_image" accept="image/*" onChange={e => { handleImageChange(e); document.getElementById('profile-image').src = window.URL.createObjectURL(e.target.files[0]) }} />
                         <input
                             className={phoneNumberError ? "notValidated" : null}
                             placeholder="Phone number"
