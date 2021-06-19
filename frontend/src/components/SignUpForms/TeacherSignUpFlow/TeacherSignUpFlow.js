@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { update_teacher } from '../../../actions/auth';
 import Carousel, { CarouselItem } from "../../Carousel/Carousel";
 import '../SignUpForms.css';
-
+import { validateYear, validateExperince, validatePhone } from '../utils';
 
 
 const TeacherSignUpFlow = ({ update_teacher, user }) => {
@@ -59,6 +59,13 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
             setPhoneNumberError(true);
             setErrors(true);
             setCarouselIndex(4);
+        } else {
+            const isValidated = validatePhone(phone_number);
+            console.log("---adter phone", isValidated);
+            if (!isValidated) {
+                setPhoneNumberError(true);
+                setErrors(true);
+            }
         }
 
         if (!profile_image) {
@@ -108,6 +115,12 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
             setExperienceError(true);
             setErrors(true);
             setCarouselIndex(1);
+        } else {
+            const isValidated = validateExperince(years_of_experience);
+            if (!isValidated) {
+                setExperienceError(true);
+                setErrors(true);
+            }
         }
 
         if (!degree) {
@@ -126,6 +139,12 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
             setGraduationDateError(true);
             setErrors(true);
             setCarouselIndex(5);
+        } else {
+            const isValidated = validateYear(year_of_graduation);
+            if (!isValidated) {
+                setGraduationDateError(true);
+                setErrors(true);
+            }
         }
 
         if (!errors) {
@@ -223,7 +242,7 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
                         <input
                             className={poastalCodeError ? "notValidated" : null}
                             placeholder="Postal Code"
-                            type="number"
+                            type="text"
                             name='postal_code'
                             value={postal_code}
                             onChange={e => { setPoastalCodeError(false); handleChange(e) }}

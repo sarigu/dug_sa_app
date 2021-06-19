@@ -60,7 +60,7 @@ class Teacher(models.Model):
     phone = PhoneNumberField(blank=True)
     #address
     street = models.CharField(max_length=255, blank=True, null=True)
-    postal_code = models.PositiveIntegerField( blank=True, null=True)
+    postal_code = models.CharField( max_length=50, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
     proof_of_address = models.ImageField( upload_to="teachers/addressProof/" , blank=True, null=True)
     #education

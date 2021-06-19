@@ -15,20 +15,21 @@ export const validatePassword = (password) => {
 
 
 export const validateYear = (year) => {
-    console.log("VALIDAROR", year);
-    var text = /^[0-9]+$/;
-    if (year.length == 4) {
-        if (year != 0) {
-            if (!text.test(year)) {
-                return false;
-            }
 
-            if (year.length != 4) {
-                return false;
-            }
-            return true;
-        }
+    var text = /^[0-9]+$/;
+
+    if (!text.test(year)) {
+        return false;
     }
+
+    if (year.length == 4) {
+        return true;
+    } else {
+        return false;
+    }
+
+
+
 }
 
 export const validateExperince = (year) => {
