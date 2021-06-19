@@ -10,7 +10,15 @@ class UserSerializer(UserCreateSerializer):
         fields = ('id', 'email', 'first_name', 'last_name', 'password', 'role')
 
 class TeacherSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = Teacher
         fields = '__all__'
-        depth = 1
+      
+    def to_representation(self, instance):
+        data = super(TeacherSerializer, self).to_representation(instance)
+        user = data.pop('user')
+        for key, val in user.items():
+            data.update({key: val})
+        return data
+

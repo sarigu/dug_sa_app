@@ -36,7 +36,7 @@ export const load_user = () => async dispatch => {
             }
             dispatch({
                 type: USER_LOADED_SUCCESS,
-                payload: res.data
+                payload: res.data,
             });
         } catch (err) {
             dispatch({
@@ -161,16 +161,37 @@ export const logout = () => dispatch => {
     });
 };
 
-export const update_teacher = (uid, degree, university, last_position, last_school, street, postal_code, city, provided_information) => async dispatch => {
+export const update_teacher = (userID, degree, university, year_of_graduation, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, provided_information) => async dispatch => {
     const config = {
         headers: {
-            'Content-Type': 'application/json'
+
+            'Authorization': `JWT ${localStorage.getItem('access')}`,
+
         }
     };
 
-    const body = JSON.stringify({ uid, degree, university, last_position, last_school, street, postal_code, city, provided_information });
+    const formData = new FormData();
+    formData.append("degree", degree);
+    formData.append("university", university);
+    formData.append("year_of_graduation", year_of_graduation);
+    formData.append("last_position", last_position);
+    formData.append("last_workplace", last_school);
+
+    formData.append("years_of_experience", years_of_experience);
+    formData.append("street", street);
+    formData.append("postal_code", postal_code);
+    formData.append("city", city);
+    formData.append("proof_of_address", proof_of_address);
+    formData.append("profile_image", profile_image);
+    formData.append("phone", phone_number);
+    formData.append("provided_information", provided_information);
+
+
+    //const body = JSON.stringify({ degree, university, graduation_date, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, provided_information });
+    console.log(formData, "ACTION");
+
     try {
-        const res = await axios.put(`http://localhost:8000/api/teachers/${uid}/`, body, config);
+        const res = await axios.patch(`http://localhost:8000/api/teachers/${userID}/`, formData, config);
         dispatch({
             type: TEACHER_UPDATE_SUCCESS,
             payload: res.data,

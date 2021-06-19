@@ -1,5 +1,5 @@
 .signup-flow-wrapper{
-    width: 30%;
+    width: 40%;
     height:fit-content;
     margin: 0;
     position: absolute;
@@ -7,4 +7,11 @@
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+}
+
+.notValidated{
+    border: 1px red solid;
+}
+.errorMsg{
+    color:red;
 }

@@ -15,7 +15,7 @@ const Navbar = ({ logout, user, userType }) => {
     return (
         <div className="navbar-wrapper">
             <div className="navbar">
-                <h2>Hi, {user && userType && userType === "teacher" ? user.user.first_name : user ? user.first_name : null}<span>&#128075;&#127998;</span> </h2>
+                <h2>Hi, {user ? user.first_name : null}<span>&#128075;&#127998;</span> </h2>
                 <div>Burger</div>
             </div>
             <nav>
@@ -29,7 +29,6 @@ const Navbar = ({ logout, user, userType }) => {
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
-    userType: state.auth.userType,
 });
 
 export default connect(mapStateToProps, { logout })(Navbar);

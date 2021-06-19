@@ -59,7 +59,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 user: payload,
-                userType: payload.role || payload.user.role
+                userType: payload.role,
             }
         case AUTHENTICATED_FAIL:
             return {

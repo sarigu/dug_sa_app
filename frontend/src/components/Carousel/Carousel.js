@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Carousel.css";
 
 export const CarouselItem = ({ children }) => {
@@ -10,9 +10,19 @@ export const CarouselItem = ({ children }) => {
 };
 
 const Carousel = (props) => {
-    const { children } = props;
+    const { children, backToIndex } = props;
+    console.log("backToIndex", backToIndex, React.Children.count(children));
+
+
+    useEffect(() => {
+        if (backToIndex) {
+            updateIndex(backToIndex);
+        }
+    }, [backToIndex]);
+
 
     const [activeIndex, setActiveIndex] = useState(0);
+
 
     const updateIndex = (newIndex) => {
         if (newIndex < 0) {
@@ -55,7 +65,7 @@ const Carousel = (props) => {
                     return React.cloneElement(child, { width: "100%" });
                 })}
             </div>
-            {activeIndex == 2 ?
+            {activeIndex == React.Children.count(children) - 1 ?
                 <button onClick={() => { props.onSubmit(); }} >
                     Submit
             </button>

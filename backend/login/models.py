@@ -60,18 +60,19 @@ class Teacher(models.Model):
     phone = PhoneNumberField(blank=True)
     #address
     street = models.CharField(max_length=255, blank=True, null=True)
-    postal_code = models.IntegerField( blank=True, null=True)
+    postal_code = models.PositiveIntegerField( blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
+    proof_of_address = models.ImageField( upload_to="teachers/addressProof/" , blank=True, null=True)
     #education
     degree = models.CharField(max_length=255, blank=True, null=True)
     university = models.CharField(max_length=255, blank=True, null=True)
+    year_of_graduation = models.PositiveIntegerField( blank=True, null=True)
     #experience
     years_of_experience = models.IntegerField( blank=True, null=True)
-    workplace = models.CharField(max_length=255, blank=True, null=True)
-    position = models.CharField(max_length=255, blank=True, null=True)
+    last_workplace = models.CharField(max_length=255, blank=True, null=True)
+    last_position = models.CharField(max_length=255, blank=True, null=True)
     #profile image
     profile_image = models.ImageField( upload_to="teachers/profileImages/" , blank=True, null=True)
-    proof_of_address = models.ImageField( upload_to="teachers/addressProof/" , blank=True, null=True)
     #others
     is_retired = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
