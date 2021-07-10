@@ -4,10 +4,9 @@ import { update_teacher, load_subjects } from '../../../actions/auth';
 import Carousel, { CarouselItem } from "../../Carousel/Carousel";
 import '../SignUpForms.css';
 import { validateYear, validateExperince, validatePhone } from '../utils';
-import axios from 'axios';
 
 
-const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user }) => {
+const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, error }) => {
 
     useEffect(() => {
         load_subjects();
@@ -26,8 +25,8 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user }) =>
     const [profileImageError, setProfileImageError] = useState(false);
     const [phoneNumberError, setPhoneNumberError] = useState(false);
     const [carouselIndex, setCarouselIndex] = useState();
-    const [errors, setErrors] = useState(false);
     const [selectedSubjects, setSelectedSubjects] = useState([]);
+    const [graduationDate, setGraduationDate] = useState();
 
     const [formData, setFormData] = useState({
         degree: '',
@@ -58,104 +57,112 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user }) =>
         setFormData({ ...formData, [e.target.name]: e.target.files[0] });
     }
 
-
     const handleSubmit = () => {
-        setErrors(false);
+        const dataIsChecked = checkData();
+        console.log("dataIsChecked", dataIsChecked);
+        if (dataIsChecked) {
+            console.log("no errors")
+            update_teacher(user.id, degree, university, graduationDate, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, true, selectedSubjects);
+
+        }
+    }
+
+    const checkData = () => {
 
         if (!phone_number) {
             setPhoneNumberError(true);
-            setErrors(true);
             setCarouselIndex(4);
+            return false;
         } else {
             const isValidated = validatePhone(phone_number);
             if (!isValidated) {
                 setPhoneNumberError(true);
-                setErrors(true);
+                return false;
             }
         }
 
         if (!profile_image) {
             setProfileImageError(true);
-            setErrors(true);
             setCarouselIndex(4);
+            return false;
         }
 
         if (!proof_of_address) {
             setAddressProofError(true);
-            setErrors(true);
             setCarouselIndex(3);
+            return false;
         }
-
 
         if (!street) {
             setStreetError(true);
-            setErrors(true);
             setCarouselIndex(3);
+            return false;
         }
 
         if (!postal_code) {
             setPoastalCodeError(true);
-            setErrors(true);
             setCarouselIndex(3);
+            return false;
         }
 
         if (!city) {
             setCityError(true);
-            setErrors(true);
             setCarouselIndex(3);
+            return false;
         }
 
         if (!last_position) {
             setPositionError(true);
-            setErrors(true);
             setCarouselIndex(1);
+            return false;
         }
 
         if (!last_school) {
             setSchoolError(true);
-            setErrors(true);
             setCarouselIndex(1);
+            return false;
         }
 
         if (!years_of_experience) {
             setExperienceError(true);
-            setErrors(true);
             setCarouselIndex(1);
+            return false;
         } else {
             const isValidated = validateExperince(years_of_experience);
             if (!isValidated) {
                 setExperienceError(true);
-                setErrors(true);
+                setCarouselIndex(1);
+                return false;
             }
         }
 
         if (!degree) {
             setDegreeError(true);
-            setErrors(true);
             setCarouselIndex(5);
+            return false;
         }
 
         if (!university) {
             setUniversityError(true);
-            setErrors(true);
             setCarouselIndex(5);
+            return false;
         }
 
-        if (!year_of_graduation) {
+        if (!graduationDate) {
             setGraduationDateError(true);
-            setErrors(true);
             setCarouselIndex(5);
+            return false;
         } else {
-            const isValidated = validateYear(year_of_graduation);
+            const isValidated = validateYear(graduationDate);
             if (!isValidated) {
                 setGraduationDateError(true);
-                setErrors(true);
+                setCarouselIndex(5);
+                return false;
             }
         }
 
-        if (!errors) {
-            update_teacher(user.id, degree, university, year_of_graduation, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, true, selectedSubjects);
-        }
+        return true;
+
     }
 
 
@@ -175,7 +182,6 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user }) =>
             allSubjects.push(subjectId);
         }
 
-        console.log("AFTER ----- SUBJECTS", allSubjects);
         setSelectedSubjects(allSubjects);
 
     }
@@ -186,6 +192,7 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user }) =>
         <div className="signup-flow-wrapper" >
             <h2>Great to have you onboard</h2>
             <p>We need some more information to make sure ..</p>
+            {error === "teacher_update_fail" ? <div className="error-message">Oops, something went wrong. Please try again</div> : null}
             <Carousel onSubmit={handleSubmit} backToIndex={carouselIndex}>
                 <CarouselItem>
                     <div>
@@ -209,12 +216,20 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user }) =>
                         />
                         <input
                             className={graduationDateError ? "notValidated" : null}
-                            placeholder="Graduation Date"
-                            type="number"
+                            placeholder="Graduation Date (DD.MM.YYYY)"
+                            type="text"
                             name='year_of_graduation'
-                            value={year_of_graduation}
-                            onChange={e => { setGraduationDateError(false); handleChange(e) }}
-
+                            value={graduationDate}
+                            onChange={e => {
+                                setGraduationDateError(false);
+                                handleChange(e);
+                                let changedGraduationDate = e.target.value;
+                                changedGraduationDate = changedGraduationDate
+                                    .replace(/^(\d\d)(\d)$/g, "$1/$2")
+                                    .replace(/^(\d\d\/\d\d)(\d+)$/g, "$1/$2")
+                                    .replace(/[^\d\/]/g, "");
+                                setGraduationDate(changedGraduationDate);
+                            }}
                         />
                     </div>
                 </CarouselItem>
@@ -285,7 +300,8 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user }) =>
                             onChange={e => { setCityError(false); handleChange(e) }}
                         />
                         {addressProofError ? <p className="errorMsg">Please upload a proof of address</p> : null}
-                        <img id="proof-of-address" src="" width="100" height="100"></img>
+
+                        <img id="proof-of-address" style={{ width: "100px", height: "100px" }}></img>
                         <button onClick={() => { setAddressProofError(false); hiddenFileInputAddress.current.click() }} style={{ width: "250px", margin: "1rem 0 2rem 0" }}>Upload a proof of address</button>
                         <input type="file" ref={hiddenFileInputAddress} style={{ display: "none" }} placeholder="Proof of Address" name="proof_of_address" accept="image/*" onChange={e => { handleImageChange(e); document.getElementById('proof-of-address').src = window.URL.createObjectURL(e.target.files[0]) }} />
 
@@ -315,7 +331,8 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user }) =>
 
 const mapStateToProps = state => ({
     user: state.auth.user,
-    subjects: state.auth.subjects
+    subjects: state.auth.subjects,
+    error: state.auth.error,
 });
 
 export default connect(mapStateToProps, { update_teacher, load_subjects })(TeacherSignUpFlow);

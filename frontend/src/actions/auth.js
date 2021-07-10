@@ -169,10 +169,19 @@ export const update_teacher = (userID, degree, university, year_of_graduation, l
         }
     };
 
+
+    console.log("IN UPDATE DATE");
+    console.log(year_of_graduation);
+    let [day, month, year] = year_of_graduation.split('/');
+    //Django needs YYYY-MM-DD
+    console.log(day, month, year);
+    const formattedDate = year + "-" + month + "-" + day;
+    console.log("<<y formattedDate", formattedDate);
+
     const formData = new FormData();
     formData.append("degree", degree);
     formData.append("university", university);
-    formData.append("year_of_graduation", year_of_graduation);
+    formData.append("year_of_graduation", formattedDate);
     formData.append("last_position", last_position);
     formData.append("last_workplace", last_school);
 

@@ -9,7 +9,7 @@ const Login = ({ login, isAuthenticated, error }) => {
         email: '',
         password: ''
     });
-    const [showError, setShowError] = useState();
+    const [showError, setShowError] = useState(false);
     const { email, password } = formData;
 
     const handleChange = e => {
@@ -23,9 +23,6 @@ const Login = ({ login, isAuthenticated, error }) => {
         setShowError(true);
     };
 
-    const handleGoToSignUp = () => {
-        setShowError(false);
-    }
 
     if (isAuthenticated) {
         return <Redirect to='/dashboard' />
@@ -54,7 +51,7 @@ const Login = ({ login, isAuthenticated, error }) => {
                 <button type='submit'>Login</button>
             </form>
             <div className="login-links-container">
-                <Link to='/signup' onClick={handleGoToSignUp}>Create an account</Link>
+                <Link to='/signup' >Create an account</Link>
                 <Link to='/reset-password'>Forgot password?</Link>
             </div>
         </div>

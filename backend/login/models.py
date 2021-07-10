@@ -65,7 +65,7 @@ class Teacher(models.Model):
     #education
     degree = models.CharField(max_length=255, blank=True, null=True)
     university = models.CharField(max_length=255, blank=True, null=True)
-    year_of_graduation = models.PositiveIntegerField( blank=True, null=True)
+    year_of_graduation = models.DateField( blank=True, null=True)
     #experience
     years_of_experience = models.IntegerField( blank=True, null=True)
     last_workplace = models.CharField(max_length=255, blank=True, null=True)

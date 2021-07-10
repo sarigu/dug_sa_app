@@ -31,3 +31,7 @@
 .active{
     filter: none !important;
 }
+
+input:focus{
+    outline: none;
+}

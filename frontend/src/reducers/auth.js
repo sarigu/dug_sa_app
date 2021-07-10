@@ -117,11 +117,13 @@ export default function (state = initialState, action) {
         case TEACHER_UPDATE_FAIL:
             return {
                 ...state,
+                error: "teacher_update_fail",
             }
         case TEACHER_UPDATE_SUCCESS:
             return {
                 ...state,
                 user: payload,
+                error: null,
             }
         case SELECTED_ROLE:
             return {

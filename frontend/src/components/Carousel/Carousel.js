@@ -14,9 +14,14 @@ const Carousel = (props) => {
 
 
     useEffect(() => {
+        console.log("USE EFFECT CAROUSEL")
         if (backToIndex) {
             updateIndex(backToIndex);
         }
+
+        const carousel = document.getElementById('carousel');
+        console.log("USE EFFECT CAROUSEL", carousel, carousel.scrollTop)
+        carousel.scrollTop = 0;
     }, [backToIndex]);
 
 
@@ -30,11 +35,14 @@ const Carousel = (props) => {
             newIndex = 0;
         }
         setActiveIndex(newIndex);
+        const carousel = document.getElementById('carousel');
+        carousel.scrollTop = 0;
     };
 
     return (
         <div
             className="carousel"
+            id="carousel"
         >
             <div
                 onClick={() => {

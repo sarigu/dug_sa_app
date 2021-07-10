@@ -8,7 +8,6 @@ import { validateEmail, validatePassword } from './utils';
 const SignUpForm = ({ signup, error, selectedRole, signUpStatus }) => {
     const [showError, setShowError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-
     const [firstNameError, setFirstNameError] = useState(false);
     const [lastNameError, setLastNameError] = useState(false);
     const [emailError, setEmailError] = useState(false);
@@ -16,6 +15,7 @@ const SignUpForm = ({ signup, error, selectedRole, signUpStatus }) => {
     const [passwordError, setPasswordError] = useState(false);
     const [repasswordError, setRePasswordError] = useState(false);
     const [errors, setErrors] = useState(false);
+    const [displayPasswordInfo, setDisplayPasswordInfo] = useState(false);
 
     const history = useHistory();
 
@@ -113,7 +113,7 @@ const SignUpForm = ({ signup, error, selectedRole, signUpStatus }) => {
 
     return (
         <div>
-            {error ? <div className="error-message">Oops, something went wrong. Please try again</div> : showError && errorMessage ? <div className="error-message">{errorMessage}</div> : null}
+            {error === "signup_fail" ? <div className="error-message">Oops, something went wrong. Please try again</div> : showError && errorMessage ? <div className="error-message">{errorMessage}</div> : null}
             <div>
                 <input
                     className={firstNameError ? "notValidated" : null}
@@ -153,9 +153,11 @@ const SignUpForm = ({ signup, error, selectedRole, signUpStatus }) => {
                     placeholder='Password*'
                     name='password'
                     value={password}
-                    onChange={e => { setPasswordError(false); handleChange(e) }}
+                    onChange={e => { setPasswordError(false); handleChange(e); setDisplayPasswordInfo(true) }}
+                    onBlur={() => setDisplayPasswordInfo(false)}
                     minLength='8'
                 />
+                {displayPasswordInfo ? <div>Your password needs to include the following: <br></br><ul><li>Min 8 characters</li><li>A mix of numbers and letters</li></ul></div> : null}
                 <input
                     className={repasswordError ? "notValidated" : null}
                     type='password'
