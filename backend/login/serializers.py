@@ -1,7 +1,8 @@
 from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Teacher
+from .models import Teacher, Subject, Teacher_Subject
+
 User = get_user_model()
 
 class UserSerializer(UserCreateSerializer):
@@ -22,3 +23,12 @@ class TeacherSerializer(serializers.ModelSerializer):
             data.update({key: val})
         return data
 
+class SubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subject
+        fields = '__all__'
+
+class TeacherSubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher_Subject
+        fields = '__all__'

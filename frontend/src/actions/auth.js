@@ -16,6 +16,7 @@ import {
     TEACHER_UPDATE_SUCCESS,
     TEACHER_UPDATE_FAIL,
     SELECTED_ROLE,
+    SUBJECTS_LOADED_SUCCESS
 } from './types';
 
 export const load_user = () => async dispatch => {
@@ -161,12 +162,10 @@ export const logout = () => dispatch => {
     });
 };
 
-export const update_teacher = (userID, degree, university, year_of_graduation, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, provided_information) => async dispatch => {
+export const update_teacher = (userID, degree, university, year_of_graduation, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, provided_information, selectedSubjects) => async dispatch => {
     const config = {
         headers: {
-
             'Authorization': `JWT ${localStorage.getItem('access')}`,
-
         }
     };
 
@@ -192,6 +191,22 @@ export const update_teacher = (userID, degree, university, year_of_graduation, l
 
     try {
         const res = await axios.patch(`http://localhost:8000/api/teachers/${userID}/`, formData, config);
+        console.log(res, "sign up in general");
+        if (res.status === 200) {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `JWT ${localStorage.getItem('access')}`,
+                    'Accept': 'application/json'
+                }
+            };
+
+            const body = JSON.stringify({ subjects: selectedSubjects });
+
+            let res = axios.post('http://localhost:8000/api/subjects_to_teach/', body, config);
+            console.log("subjects", res);
+        }
+
         dispatch({
             type: TEACHER_UPDATE_SUCCESS,
             payload: res.data,
@@ -211,3 +226,21 @@ export const update_selected_role = (role) => dispatch => {
         payload: role,
     });
 };
+
+export const load_subjects = () => async dispatch => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${localStorage.getItem('access')}`,
+            'Accept': 'application/json'
+        }
+    };
+
+    let res = await axios.get('http://localhost:8000/api/subjects/', config);
+
+    dispatch({
+        type: SUBJECTS_LOADED_SUCCESS,
+        payload: res.data,
+    });
+};
+

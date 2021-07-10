@@ -24,7 +24,6 @@ class CustomAccountManager(BaseUserManager):
             raise ValueError('Users must have an email address')
 
         code = extra_fields.get('access_code')
-        print(AccessCode.objects.all())
         if AccessCode.objects.filter(code=code).filter(is_active=True).exists():
             email = self.normalize_email(email)
             user = self.model(email=email, **extra_fields)
@@ -98,8 +97,12 @@ class Subject(models.Model):
 class Teacher_Subject(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('teacher', 'subject',)
+
     def __str__(self):
-        return f"{self.teacher_id} - {self.subject_id}"
+        return f"{self.teacher} - {self.subject}"
 
 class AccessCode(models.Model):
     code = models.CharField(max_length=255)

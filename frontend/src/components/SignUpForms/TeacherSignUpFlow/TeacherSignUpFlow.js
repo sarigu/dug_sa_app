@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { update_teacher } from '../../../actions/auth';
+import { update_teacher, load_subjects } from '../../../actions/auth';
 import Carousel, { CarouselItem } from "../../Carousel/Carousel";
 import '../SignUpForms.css';
 import { validateYear, validateExperince, validatePhone } from '../utils';
+import axios from 'axios';
 
 
-const TeacherSignUpFlow = ({ update_teacher, user }) => {
+const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user }) => {
+
+    useEffect(() => {
+        load_subjects();
+    }, []);
 
     const [degreeError, setDegreeError] = useState(false);
     const [universityError, setUniversityError] = useState(false);
@@ -22,6 +27,7 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
     const [phoneNumberError, setPhoneNumberError] = useState(false);
     const [carouselIndex, setCarouselIndex] = useState();
     const [errors, setErrors] = useState(false);
+    const [selectedSubjects, setSelectedSubjects] = useState([]);
 
     const [formData, setFormData] = useState({
         degree: '',
@@ -37,6 +43,7 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
         profile_image: undefined,
         phone_number: null
     });
+
 
     const hiddenFileInputAddress = React.useRef(null);
     const hiddenFileInputProfileImage = React.useRef(null);
@@ -61,7 +68,6 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
             setCarouselIndex(4);
         } else {
             const isValidated = validatePhone(phone_number);
-            console.log("---adter phone", isValidated);
             if (!isValidated) {
                 setPhoneNumberError(true);
                 setErrors(true);
@@ -148,10 +154,33 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
         }
 
         if (!errors) {
-            console.log(formData, "NO ERR");
-            update_teacher(user.id, degree, university, year_of_graduation, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, true);
+            update_teacher(user.id, degree, university, year_of_graduation, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, true, selectedSubjects);
         }
     }
+
+
+    const handleSubjects = e => {
+        let allSubjects = selectedSubjects;
+        e.preventDefault();
+        let subjectId = e.target.getAttribute("data-id");
+
+        if (e.target.classList.contains("active")) {
+            e.target.classList.remove("active");
+            let index = allSubjects.indexOf(subjectId);
+            if (index !== -1) {
+                allSubjects.splice(index, 1);
+            }
+        } else {
+            e.target.classList.add("active");
+            allSubjects.push(subjectId);
+        }
+
+        console.log("AFTER ----- SUBJECTS", allSubjects);
+        setSelectedSubjects(allSubjects);
+
+    }
+
+    const subjectsList = subjects.map((subject) => <div onClick={handleSubjects} className="subjectCard" data-id={subject.id}>{subject.name}</div>);
 
     return (
         <div className="signup-flow-wrapper" >
@@ -178,7 +207,6 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
                             onChange={e => { setUniversityError(false); handleChange(e) }}
 
                         />
-
                         <input
                             className={graduationDateError ? "notValidated" : null}
                             placeholder="Graduation Date"
@@ -224,7 +252,7 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
                 <CarouselItem>
                     <div>
                         <h3>Subjects you want to teach</h3>
-
+                        {subjectsList}
                     </div>
                 </CarouselItem>
                 <CarouselItem>
@@ -268,7 +296,7 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
                         <h3>Details about you</h3>
                         {profileImageError ? <p className="errorMsg">Please upload a profile image</p> : null}
                         <img id="profile-image" src="" width="300" height="300"></img>
-                        <button onClick={() => { setProfileImageError(false); hiddenFileInputProfileImage.current.click() }} style={{ width: "250px", margin: "1rem 0 2rem 0" }}>Upload a proof of address</button>
+                        <button onClick={() => { setProfileImageError(false); hiddenFileInputProfileImage.current.click() }} style={{ width: "250px", margin: "1rem 0 2rem 0" }}>Upload a profile image</button>
                         <input type="file" ref={hiddenFileInputProfileImage} style={{ display: "none" }} placeholder="Profile Image" name="profile_image" accept="image/*" onChange={e => { handleImageChange(e); document.getElementById('profile-image').src = window.URL.createObjectURL(e.target.files[0]) }} />
                         <input
                             className={phoneNumberError ? "notValidated" : null}
@@ -286,7 +314,8 @@ const TeacherSignUpFlow = ({ update_teacher, user }) => {
 };
 
 const mapStateToProps = state => ({
-    user: state.auth.user
+    user: state.auth.user,
+    subjects: state.auth.subjects
 });
 
-export default connect(mapStateToProps, { update_teacher })(TeacherSignUpFlow);
+export default connect(mapStateToProps, { update_teacher, load_subjects })(TeacherSignUpFlow);

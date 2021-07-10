@@ -99,7 +99,7 @@ const SignUpForm = ({ signup, error, selectedRole, signUpStatus }) => {
 
 
         if (!errors) {
-            //signup(first_name, last_name, email, access_code, password, re_password, role);
+            signup(first_name, last_name, email, access_code, password, re_password, selectedRole);
         }
 
     };

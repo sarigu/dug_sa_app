@@ -11,7 +11,6 @@ export const CarouselItem = ({ children }) => {
 
 const Carousel = (props) => {
     const { children, backToIndex } = props;
-    console.log("backToIndex", backToIndex, React.Children.count(children));
 
 
     useEffect(() => {

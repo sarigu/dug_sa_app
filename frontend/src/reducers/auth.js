@@ -15,6 +15,7 @@ import {
     TEACHER_UPDATE_SUCCESS,
     TEACHER_UPDATE_FAIL,
     SELECTED_ROLE,
+    SUBJECTS_LOADED_SUCCESS,
 } from '../actions/types';
 
 const initialState = {
@@ -26,6 +27,7 @@ const initialState = {
     error: null,
     selectedRole: "student",
     signUpStatus: "",
+    subjects: [],
 };
 
 export default function (state = initialState, action) {
@@ -125,6 +127,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 selectedRole: payload,
+            }
+        case SUBJECTS_LOADED_SUCCESS:
+            return {
+                ...state,
+                subjects: payload,
             }
         default:
             return state

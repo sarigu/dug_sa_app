@@ -6,6 +6,8 @@ from login import views
         
 router = routers.DefaultRouter()                     
 router.register(r'teachers', views.TeacherView, 'teacher') 
+router.register(r'subjects', views.SubjectView, 'subjects') 
+router.register(r'subjects_to_teach', views.TeacherSubjectView, 'subjects_to_teach') 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,4 +17,3 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
-urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]

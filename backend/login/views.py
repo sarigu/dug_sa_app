@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .serializers import TeacherSerializer
-from .models import Teacher, CustomUser
+from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer
+from .models import Teacher, CustomUser, Subject, Teacher_Subject
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -12,3 +12,37 @@ class TeacherView(viewsets.ModelViewSet):
     permissions_classes=[DjangoModelPermissions]
     serializer_class = TeacherSerializer
     queryset = Teacher.objects.all()
+
+
+
+class SubjectView(viewsets.ModelViewSet):
+    permissions_classes=[DjangoModelPermissions]
+    serializer_class = SubjectSerializer
+    queryset = Subject.objects.all()
+
+class TeacherSubjectView(viewsets.ViewSet):
+    permissions_classes=[DjangoModelPermissions]
+    serializer_class = TeacherSubjectSerializer
+
+    def create(self, request):
+        print("create")
+        print(self.request.user, request.data)
+        subjects = request.data["subjects"]
+        print(subjects)
+        user = CustomUser.objects.get(email=self.request.user)
+        teacher = Teacher.objects.get(user=user)
+        for elem in subjects:
+            subject = Subject.objects.get(pk=elem)
+            print(subject, "elem subject")
+            if Teacher_Subject.objects.filter(subject=subject).filter(teacher=teacher).exists():
+                print("exists", subject, teacher)
+                continue
+            else:
+                teachers_subject = Teacher_Subject()
+                teachers_subject.teacher = teacher
+                teachers_subject.subject = subject
+                print(teachers_subject.teacher)
+                print(teachers_subject.subject)
+                teachers_subject.save()
+
+        return Response({'status': 'ok'})
