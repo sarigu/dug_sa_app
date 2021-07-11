@@ -14,6 +14,8 @@ import {
     LOGOUT,
     TEACHER_UPDATE_SUCCESS,
     TEACHER_UPDATE_FAIL,
+    SELECTED_ROLE,
+    SUBJECTS_LOADED_SUCCESS,
 } from '../actions/types';
 
 const initialState = {
@@ -23,6 +25,9 @@ const initialState = {
     user: null,
     userType: null,
     error: null,
+    selectedRole: "student",
+    signUpStatus: "",
+    subjects: [],
 };
 
 export default function (state = initialState, action) {
@@ -41,19 +46,22 @@ export default function (state = initialState, action) {
                 ...state,
                 isAuthenticated: true,
                 access: payload.access,
-                refresh: payload.refresh
+                refresh: payload.refresh,
+                error: null,
             }
 
         case SIGNUP_SUCCESS:
             return {
                 ...state,
-                isAuthenticated: true
+                isAuthenticated: true,
+                error: null,
+                signUpStatus: "success",
             }
         case USER_LOADED_SUCCESS:
             return {
                 ...state,
                 user: payload,
-                userType: payload.role || payload.user.role
+                userType: payload.role,
             }
         case AUTHENTICATED_FAIL:
             return {
@@ -89,6 +97,7 @@ export default function (state = initialState, action) {
                 user: null,
                 userType: null,
                 error: "signup_fail",
+                signUpStatus: "fail",
             }
         case LOGOUT:
             localStorage.removeItem('access');
@@ -108,11 +117,23 @@ export default function (state = initialState, action) {
         case TEACHER_UPDATE_FAIL:
             return {
                 ...state,
+                error: "teacher_update_fail",
             }
         case TEACHER_UPDATE_SUCCESS:
             return {
                 ...state,
                 user: payload,
+                error: null,
+            }
+        case SELECTED_ROLE:
+            return {
+                ...state,
+                selectedRole: payload,
+            }
+        case SUBJECTS_LOADED_SUCCESS:
+            return {
+                ...state,
+                subjects: payload,
             }
         default:
             return state

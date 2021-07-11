@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import BackButton from '../../icons/BackButton';
 import "./Carousel.css";
 
 export const CarouselItem = ({ children }) => {
@@ -10,7 +11,13 @@ export const CarouselItem = ({ children }) => {
 };
 
 const Carousel = (props) => {
-    const { children } = props;
+    const { children, backToIndex } = props;
+
+    useEffect(() => {
+        if (backToIndex) {
+            updateIndex(backToIndex);
+        }
+    }, [backToIndex]);
 
     const [activeIndex, setActiveIndex] = useState(0);
 
@@ -24,16 +31,15 @@ const Carousel = (props) => {
     };
 
     return (
-        <div
-            className="carousel"
-        >
+        <div className="carousel" id="carousel">
             <div
                 onClick={() => {
                     updateIndex(activeIndex - 1);
                 }}
+                style={{ cursor: "pointer" }}
             >
-                Back
-                </div>
+                <BackButton padding={"20px 0"} />
+            </div>
             <div className="indicators">
                 {React.Children.map(children, (child, index) => {
                     return (
@@ -55,12 +61,12 @@ const Carousel = (props) => {
                     return React.cloneElement(child, { width: "100%" });
                 })}
             </div>
-            {activeIndex == 2 ?
-                <button onClick={() => { props.onSubmit(); }} >
+            {activeIndex == React.Children.count(children) - 1 ?
+                <button style={{ marginTop: "30px" }} onClick={() => { props.onSubmit(); }} >
                     Submit
             </button>
                 :
-                <button onClick={() => { updateIndex(activeIndex + 1); }} >
+                <button style={{ marginTop: "30px" }} onClick={() => { updateIndex(activeIndex + 1); }} >
                     Continue
             </button>
             }

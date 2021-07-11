@@ -1,7 +1,8 @@
 from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Teacher
+from .models import Teacher, Subject, Teacher_Subject
+
 User = get_user_model()
 
 class UserSerializer(UserCreateSerializer):
@@ -10,7 +11,24 @@ class UserSerializer(UserCreateSerializer):
         fields = ('id', 'email', 'first_name', 'last_name', 'password', 'role')
 
 class TeacherSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = Teacher
         fields = '__all__'
-        depth = 1
+      
+    def to_representation(self, instance):
+        data = super(TeacherSerializer, self).to_representation(instance)
+        user = data.pop('user')
+        for key, val in user.items():
+            data.update({key: val})
+        return data
+
+class SubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subject
+        fields = '__all__'
+
+class TeacherSubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher_Subject
+        fields = '__all__'

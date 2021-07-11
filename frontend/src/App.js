@@ -6,10 +6,8 @@ import SignUp from './pages/SignUp/SignUp';
 import ResetPassword from './pages/PasswordReset/ResetPassword';
 import ResetPasswordConfirm from './pages/PasswordReset/ResetPasswordConfirm';
 import FindTeachers from './pages/FindTeachers/FindTeachers';
-
 import { Provider } from 'react-redux';
 import store from './store';
-
 import AuthWrapper from './AuthWrappers/AuthWrapper';
 import PrivateRoute from './AuthWrappers/PrivateRoute';
 

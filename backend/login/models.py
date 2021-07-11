@@ -24,7 +24,7 @@ class CustomAccountManager(BaseUserManager):
             raise ValueError('Users must have an email address')
 
         code = extra_fields.get('access_code')
-        if AccessCode.objects.filter(code=code).exists():
+        if AccessCode.objects.filter(code=code).filter(is_active=True).exists():
             email = self.normalize_email(email)
             user = self.model(email=email, **extra_fields)
             user.set_password(password)
@@ -59,18 +59,19 @@ class Teacher(models.Model):
     phone = PhoneNumberField(blank=True)
     #address
     street = models.CharField(max_length=255, blank=True, null=True)
-    postal_code = models.IntegerField( blank=True, null=True)
+    postal_code = models.CharField( max_length=50, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
+    proof_of_address = models.ImageField( upload_to="teachers/addressProof/" , blank=True, null=True)
     #education
     degree = models.CharField(max_length=255, blank=True, null=True)
     university = models.CharField(max_length=255, blank=True, null=True)
+    year_of_graduation = models.DateField( blank=True, null=True)
     #experience
     years_of_experience = models.IntegerField( blank=True, null=True)
-    workplace = models.CharField(max_length=255, blank=True, null=True)
-    position = models.CharField(max_length=255, blank=True, null=True)
+    last_workplace = models.CharField(max_length=255, blank=True, null=True)
+    last_position = models.CharField(max_length=255, blank=True, null=True)
     #profile image
     profile_image = models.ImageField( upload_to="teachers/profileImages/" , blank=True, null=True)
-    proof_of_address = models.ImageField( upload_to="teachers/addressProof/" , blank=True, null=True)
     #others
     is_retired = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
@@ -96,8 +97,12 @@ class Subject(models.Model):
 class Teacher_Subject(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('teacher', 'subject',)
+
     def __str__(self):
-        return f"{self.teacher_id} - {self.subject_id}"
+        return f"{self.teacher} - {self.subject}"
 
 class AccessCode(models.Model):
     code = models.CharField(max_length=255)

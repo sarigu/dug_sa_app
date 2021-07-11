@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { checkAuthenticated, load_user } from '../actions/auth';
-import { load_teachers } from '../actions/data';
 import '../App.css'
 
-const AuthWrapper = ({ checkAuthenticated, load_user, load_teachers, children }) => {
+const AuthWrapper = ({ checkAuthenticated, load_user, children }) => {
     useEffect(() => {
         checkAuthenticated();
         load_user();
-        load_teachers();
     }, []);
 
     return (
@@ -18,4 +16,4 @@ const AuthWrapper = ({ checkAuthenticated, load_user, load_teachers, children })
     );
 };
 
-export default connect(null, { checkAuthenticated, load_user, load_teachers })(AuthWrapper);
+export default connect(null, { checkAuthenticated, load_user })(AuthWrapper);
