@@ -73,6 +73,7 @@ export default function (state = initialState, action) {
                 ...state,
                 user: null,
                 userType: null,
+                isAuthenticated: false
             }
         case LOGIN_FAIL:
             localStorage.removeItem('access');

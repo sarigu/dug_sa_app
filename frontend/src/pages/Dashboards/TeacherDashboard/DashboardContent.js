@@ -1,5 +1,5 @@
 import React from 'react';
-import './TeacherDashboard.css'
+import '../Dashboard.css'
 import Card from '../../../components/Cards/Cards'
 
 const DashboardContent = () => {

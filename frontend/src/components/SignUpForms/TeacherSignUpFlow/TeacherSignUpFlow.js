@@ -124,6 +124,7 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
         } else {
             const isValidated = validateExperince(years_of_experience);
             if (!isValidated) {
+                console.log("experience is not validated")
                 setExperienceError(true);
                 setCarouselIndex(1);
                 return false;
@@ -164,22 +165,22 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
         let allSubjects = selectedSubjects;
         e.preventDefault();
         let subjectId = e.target.getAttribute("data-id");
-
-        if (e.target.classList.contains("active")) {
-            e.target.classList.remove("active");
+        let subjectCard = document.querySelector(`[data-id="${subjectId}"]`)
+        if (subjectCard.classList.contains("active")) {
+            subjectCard.classList.remove("active");
             let index = allSubjects.indexOf(subjectId);
             if (index !== -1) {
                 allSubjects.splice(index, 1);
             }
         } else {
-            e.target.classList.add("active");
+            subjectCard.classList.add("active");
             allSubjects.push(subjectId);
         }
 
         setSelectedSubjects(allSubjects);
     }
 
-    const subjectsList = subjects.map((subject) => <div onClick={handleSubjects} className="subject-card" data-id={subject.id}><p>{subject.name}</p></div>);
+    const subjectsList = subjects.map((subject) => <div onClick={handleSubjects} className="subject-card" data-id={subject.id}>{subject.name}</div>);
 
     return (
         <div className="signup-flow-wrapper" >

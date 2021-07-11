@@ -53,6 +53,7 @@ export const load_user = () => async dispatch => {
 
 
 export const checkAuthenticated = () => async dispatch => {
+    console.log("localStorage.getItem('access')", localStorage.getItem('access'))
     if (localStorage.getItem('access')) {
         dispatch({
             type: AUTHENTICATED_SUCCESS

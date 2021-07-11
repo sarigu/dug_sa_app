@@ -1,34 +1,27 @@
-import React, { Fragment, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import React from 'react';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/auth';
+import Burgermenu from '../../icons/Burgermenu';
+import CloseButton from '../../icons/CloseButton';
 import './Navbar.css';
 
-const Navbar = ({ logout, user, userType }) => {
-    const [redirect, setRedirect] = useState(false);
-
-    const handleLogout = () => {
-        logout();
-        setRedirect(true);
-    };
+const Navbar = ({ user, onMenuClick, menuShows }) => {
 
     return (
         <div className="navbar-wrapper">
             <div className="navbar">
                 <h2>Hi, {user ? user.first_name : null}<span>&#128075;&#127998;</span> </h2>
-                <div>Burger</div>
+                <div onClick={() => { onMenuClick() }}>{menuShows ? <CloseButton /> : <Burgermenu />}</div>
             </div>
-            <nav>
-                <a href='/' onClick={handleLogout}>Logout</a>
-            </nav>
-            {redirect ? <Redirect to='/' /> : <Fragment></Fragment>}
         </div >
     );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, props) => ({
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
+    onMenuClick: props.onMenuClick,
+    menuShows: props.menuShows
 });
 
-export default connect(mapStateToProps, { logout })(Navbar);
+export default connect(mapStateToProps, null)(Navbar);
