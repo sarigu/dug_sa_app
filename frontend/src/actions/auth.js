@@ -169,14 +169,9 @@ export const update_teacher = (userID, degree, university, year_of_graduation, l
         }
     };
 
-
-    console.log("IN UPDATE DATE");
-    console.log(year_of_graduation);
+    //format date because Django expects YYYY-MM-DD
     let [day, month, year] = year_of_graduation.split('/');
-    //Django needs YYYY-MM-DD
-    console.log(day, month, year);
     const formattedDate = year + "-" + month + "-" + day;
-    console.log("<<y formattedDate", formattedDate);
 
     const formData = new FormData();
     formData.append("degree", degree);
@@ -194,13 +189,8 @@ export const update_teacher = (userID, degree, university, year_of_graduation, l
     formData.append("phone", phone_number);
     formData.append("provided_information", provided_information);
 
-
-    //const body = JSON.stringify({ degree, university, graduation_date, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, provided_information });
-    console.log(formData, "ACTION");
-
     try {
         const res = await axios.patch(`http://localhost:8000/api/teachers/${userID}/`, formData, config);
-        console.log(res, "sign up in general");
         if (res.status === 200) {
             const config = {
                 headers: {
@@ -213,9 +203,7 @@ export const update_teacher = (userID, degree, university, year_of_graduation, l
             const body = JSON.stringify({ subjects: selectedSubjects });
 
             let res = axios.post('http://localhost:8000/api/subjects_to_teach/', body, config);
-            console.log("subjects", res);
         }
-
         dispatch({
             type: TEACHER_UPDATE_SUCCESS,
             payload: res.data,

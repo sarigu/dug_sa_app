@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import NoAccess from '../pages/NoAccess/NoAccess';
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
-
-
     return (
         <Route {...rest} render={props => (
             isAuthenticated ?

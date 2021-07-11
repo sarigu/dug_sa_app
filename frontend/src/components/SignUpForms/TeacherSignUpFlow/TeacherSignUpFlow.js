@@ -5,7 +5,6 @@ import Carousel, { CarouselItem } from "../../Carousel/Carousel";
 import '../SignUpForms.css';
 import { validateYear, validateExperince, validatePhone } from '../utils';
 
-
 const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, error }) => {
 
     useEffect(() => {
@@ -43,7 +42,6 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
         phone_number: null
     });
 
-
     const hiddenFileInputAddress = React.useRef(null);
     const hiddenFileInputProfileImage = React.useRef(null);
 
@@ -59,16 +57,12 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
 
     const handleSubmit = () => {
         const dataIsChecked = checkData();
-        console.log("dataIsChecked", dataIsChecked);
         if (dataIsChecked) {
-            console.log("no errors")
             update_teacher(user.id, degree, university, graduationDate, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, true, selectedSubjects);
-
         }
     }
 
     const checkData = () => {
-
         if (!phone_number) {
             setPhoneNumberError(true);
             setCarouselIndex(4);
@@ -183,7 +177,6 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
         }
 
         setSelectedSubjects(allSubjects);
-
     }
 
     const subjectsList = subjects.map((subject) => <div onClick={handleSubjects} className="subject-card" data-id={subject.id}><p>{subject.name}</p></div>);

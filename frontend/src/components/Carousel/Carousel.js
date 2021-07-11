@@ -13,21 +13,13 @@ export const CarouselItem = ({ children }) => {
 const Carousel = (props) => {
     const { children, backToIndex } = props;
 
-
     useEffect(() => {
-        console.log("USE EFFECT CAROUSEL")
         if (backToIndex) {
             updateIndex(backToIndex);
         }
-
-        const carousel = document.getElementById('carousel');
-        console.log("USE EFFECT CAROUSEL", carousel, carousel.scrollTop)
-        carousel.scrollTop = 0;
     }, [backToIndex]);
 
-
     const [activeIndex, setActiveIndex] = useState(0);
-
 
     const updateIndex = (newIndex) => {
         if (newIndex < 0) {
@@ -36,20 +28,14 @@ const Carousel = (props) => {
             newIndex = 0;
         }
         setActiveIndex(newIndex);
-        const carousel = document.getElementById('carousel');
-        carousel.scrollTop = 0;
     };
 
     return (
-        <div
-            className="carousel"
-            id="carousel"
-        >
+        <div className="carousel" id="carousel">
             <div
                 onClick={() => {
                     updateIndex(activeIndex - 1);
                 }}
-
                 style={{ cursor: "pointer" }}
             >
                 <BackButton padding={"20px 0"} />

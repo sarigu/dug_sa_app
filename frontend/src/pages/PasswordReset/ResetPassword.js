@@ -5,7 +5,6 @@ import { reset_password } from '../../actions/auth';
 import './PasswordReset.css';
 import BackButton from '../../icons/BackButton';
 
-
 const ResetPassword = ({ reset_password }) => {
     const [requestSent, setRequestSent] = useState(false);
     const [formData, setFormData] = useState({

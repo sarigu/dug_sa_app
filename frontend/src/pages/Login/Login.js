@@ -23,10 +23,10 @@ const Login = ({ login, isAuthenticated, error }) => {
         setShowError(true);
     };
 
-
     if (isAuthenticated) {
         return <Redirect to='/dashboard' />
     }
+
     return (
         <div className="login-page">
             <div className="login-wrapper">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signup } from '../../actions/auth';
 import './SignUpForms.css';
@@ -97,7 +97,6 @@ const SignUpForm = ({ signup, error, selectedRole, signUpStatus }) => {
             setErrors(true);
         }
 
-
         if (!errors) {
             signup(first_name, last_name, email, access_code, password, re_password, selectedRole);
         }
@@ -109,7 +108,6 @@ const SignUpForm = ({ signup, error, selectedRole, signUpStatus }) => {
             history.push("/");
         }
     }, [signUpStatus]);
-
 
     return (
         <div>
