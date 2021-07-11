@@ -114,7 +114,7 @@ const SignUpForm = ({ signup, error, selectedRole, signUpStatus }) => {
     return (
         <div>
             {error === "signup_fail" ? <div className="error-message">Oops, something went wrong. Please try again</div> : showError && errorMessage ? <div className="error-message">{errorMessage}</div> : null}
-            <div>
+            <div className="signup-form">
                 <input
                     className={firstNameError ? "notValidated" : null}
                     type='text'

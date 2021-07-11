@@ -1,6 +1,11 @@
+.login-page{
+    background-color: #FFF5F4;
+    width: 100vw;
+    height:100vh;
+}
 .login-wrapper{
-    width: 30%;
-    height:fit-content;
+    width:80%;
+    max-width: 400px;
     margin: 0;
     position: absolute;
     top: 50%;
@@ -10,7 +15,7 @@
 }
 
 .login-wrapper button{
-    margin-top:35px;
+    margin-top:30px;
 }
 
 .login-links-container{
@@ -18,7 +23,7 @@
     flex-direction: row;
     width:100%;
     justify-content: space-between;
-    margin-top:35px;
+    margin-top:30px;
 }
 
 .login-links-container * {

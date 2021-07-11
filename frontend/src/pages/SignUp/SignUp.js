@@ -17,23 +17,24 @@ const SignUp = ({ update_selected_role }) => {
         update_selected_role(role);
     }
 
-    const staffSignUp = <div><h3>Nice to have you here!</h3><p>You need to be added by the DUG administration if you are staff. Please contact ..</p></div>;
+    const staffSignUp = <div><h3>Nice to have you here!</h3><p>You need to be added by the Designers Withou Borders South Africa administration if you are staff.</p></div>;
 
     return (
-        <div className="signup-wrapper">
-            <h1>Welcome <span>&#128075;&#127998;</span> </h1>
-            <p>Do you want to sign up as
+        <div className="signup-page">
+            <div className="signup-wrapper">
+                <h1>Welcome <span>&#128075;&#127998;</span> </h1>
+                <p>Do you want to sign up as
                 a student, teacher or staff? </p>
-            <div className="signup-options">
-                <div className="shadow active" data-role="student" onClick={handleSignUpOption}>Student</div>
-                <div className="shadow" data-role="teacher" onClick={handleSignUpOption}>Teacher</div>
-                <div className="shadow" data-role="staff" onClick={handleSignUpOption}>Staff</div>
+                <div className="signup-options">
+                    <div className="shadow active" data-role="student" onClick={handleSignUpOption}>Student</div>
+                    <div className="shadow" data-role="teacher" onClick={handleSignUpOption}>Teacher</div>
+                    <div className="shadow" data-role="staff" onClick={handleSignUpOption}>Staff</div>
+                </div>
+                <div>
+                    {selectedRole === "student" || selectedRole === "teacher" ? <SignUpForm /> : staffSignUp}
+                </div>
+                <Link to='/' className="signup-link">  Already have an account? </Link>
             </div>
-            <div>
-                {selectedRole === "student" || selectedRole === "teacher" ? <SignUpForm /> : staffSignUp}
-            </div>
-
-            <Link to='/' className="signup-link">  Already have an account? </Link>
         </div>
     );
 };

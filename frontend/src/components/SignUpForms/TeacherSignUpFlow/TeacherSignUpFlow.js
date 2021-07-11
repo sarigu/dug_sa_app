@@ -186,12 +186,12 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
 
     }
 
-    const subjectsList = subjects.map((subject) => <div onClick={handleSubjects} className="subjectCard" data-id={subject.id}>{subject.name}</div>);
+    const subjectsList = subjects.map((subject) => <div onClick={handleSubjects} className="subject-card" data-id={subject.id}><p>{subject.name}</p></div>);
 
     return (
         <div className="signup-flow-wrapper" >
             <h2>Great to have you onboard</h2>
-            <p>We need some more information to make sure ..</p>
+            <p >We need some more information to verify you as a teacher.</p>
             {error === "teacher_update_fail" ? <div className="error-message">Oops, something went wrong. Please try again</div> : null}
             <Carousel onSubmit={handleSubmit} backToIndex={carouselIndex}>
                 <CarouselItem>
@@ -266,13 +266,15 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
                 </CarouselItem>
                 <CarouselItem>
                     <div>
-                        <h3>Subjects you want to teach</h3>
-                        {subjectsList}
+                        <h3>Subjects you would <br></br>want to teach</h3>
+                        <div className="scroll-container">{subjectsList}</div>
+
                     </div>
                 </CarouselItem>
                 <CarouselItem>
                     <div>
-                        <h3>Address and proof of identity</h3>
+                        <h3>Your address</h3>
+
                         <input
                             className={streetError ? "notValidated" : null}
                             placeholder="Street"
@@ -300,10 +302,11 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
                             onChange={e => { setCityError(false); handleChange(e) }}
                         />
                         {addressProofError ? <p className="errorMsg">Please upload a proof of address</p> : null}
-
-                        <img id="proof-of-address" style={{ width: "100px", height: "100px" }}></img>
-                        <button onClick={() => { setAddressProofError(false); hiddenFileInputAddress.current.click() }} style={{ width: "250px", margin: "1rem 0 2rem 0" }}>Upload a proof of address</button>
-                        <input type="file" ref={hiddenFileInputAddress} style={{ display: "none" }} placeholder="Proof of Address" name="proof_of_address" accept="image/*" onChange={e => { handleImageChange(e); document.getElementById('proof-of-address').src = window.URL.createObjectURL(e.target.files[0]) }} />
+                        <div className="proof-of-address-container">
+                            <img id="proof-of-address" style={{ width: "60px", height: "50px", marginRight: "10px" }}></img>
+                            <button onClick={() => { setAddressProofError(false); hiddenFileInputAddress.current.click() }} style={{ width: "100%" }}>Upload a proof of address</button>
+                            <input type="file" ref={hiddenFileInputAddress} style={{ display: "none" }} placeholder="Proof of Address" name="proof_of_address" accept="image/*" onChange={e => { handleImageChange(e); document.getElementById('proof-of-address').src = window.URL.createObjectURL(e.target.files[0]) }} />
+                        </div>
 
                     </div>
                 </CarouselItem>
@@ -311,8 +314,8 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
                     <div>
                         <h3>Details about you</h3>
                         {profileImageError ? <p className="errorMsg">Please upload a profile image</p> : null}
-                        <img id="profile-image" src="" width="300" height="300"></img>
-                        <button onClick={() => { setProfileImageError(false); hiddenFileInputProfileImage.current.click() }} style={{ width: "250px", margin: "1rem 0 2rem 0" }}>Upload a profile image</button>
+                        <img id="profile-image" src="" width="160" height="160"></img>
+                        <button onClick={() => { setProfileImageError(false); hiddenFileInputProfileImage.current.click() }} style={{ width: "250px", margin: "10px 0 20px 0 " }}>Upload a profile image</button>
                         <input type="file" ref={hiddenFileInputProfileImage} style={{ display: "none" }} placeholder="Profile Image" name="profile_image" accept="image/*" onChange={e => { handleImageChange(e); document.getElementById('profile-image').src = window.URL.createObjectURL(e.target.files[0]) }} />
                         <input
                             className={phoneNumberError ? "notValidated" : null}
@@ -326,6 +329,7 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
                 </CarouselItem>
             </Carousel>
         </div>
+
     );
 };
 

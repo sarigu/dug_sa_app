@@ -32,33 +32,35 @@ const ResetPasswordConfirm = ({ match, reset_password_confirm }) => {
     }
 
     return (
-        <div className="change-password-wrapper">
-            <h1>Change your password</h1>
-            <form onSubmit={e => handleSubmit(e)}>
-                <div>
-                    <input
-                        type='password'
-                        placeholder='New Password'
-                        name='new_password'
-                        value={new_password}
-                        onChange={e => handleChange(e)}
-                        minLength='8'
-                        required
-                    />
-                </div>
-                <div>
-                    <input
-                        type='password'
-                        placeholder='Confirm New Password'
-                        name='re_new_password'
-                        value={re_new_password}
-                        onChange={e => handleChange(e)}
-                        minLength='8'
-                        required
-                    />
-                </div>
-                <button type='submit'>Reset Password</button>
-            </form>
+        <div className="password-reset-page">
+            <div className="change-password-wrapper">
+                <h1>Change your password</h1>
+                <form onSubmit={e => handleSubmit(e)}>
+                    <div>
+                        <input
+                            type='password'
+                            placeholder='New Password'
+                            name='new_password'
+                            value={new_password}
+                            onChange={e => handleChange(e)}
+                            minLength='8'
+                            required
+                        />
+                    </div>
+                    <div>
+                        <input
+                            type='password'
+                            placeholder='Confirm New Password'
+                            name='re_new_password'
+                            value={re_new_password}
+                            onChange={e => handleChange(e)}
+                            minLength='8'
+                            required
+                        />
+                    </div>
+                    <button type='submit'>Reset Password</button>
+                </form>
+            </div>
         </div>
     );
 };

@@ -1,13 +1,12 @@
+
 .signup-flow-wrapper{
-    width: 40%;
-    height: 50%;
-    overflow: scroll;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    width:80%;
+    max-width: 400px;
+    margin:5% auto 20% auto ;
+}
+
+.signup-form button{
+    margin: 30px 0;
 }
 
 .notValidated{
@@ -17,21 +16,55 @@
     color:red;
 }
 
+.scroll-container{
+    display: block !important;
+    overflow-y: scroll;
+    overflow-x:hidden;
+    height: 300px;
+}
 
-.subjectCard{
+.subject-card{
     filter:drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.199) );
     cursor: pointer;
-    width:50%;
+    width:80% !important;
+    margin:0 0 10px 0;
     height:50px;
     border-radius: 15px;
     background-color: white;
-    margin-bottom: 10px;
+
+}
+
+.subject-card > p {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 500;
+}
+
+.subject-card:nth-last-child(){
+    margin-bottom: 0px !important;
 }
 
 .active{
     filter: none !important;
 }
 
-input:focus{
-    outline: none;
+
+.proof-of-address-container{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row !important;
+    align-items: center;
+    margin-top: 10px;
+ 
 }
+
+
+@media only screen and (max-width: 1024px)  {
+    .signup-flow-wrapper{
+        margin:10% auto 200px auto ;
+    }
+    
+  }

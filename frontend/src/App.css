@@ -24,10 +24,14 @@ input{
     border:none;
     font-size: 15px;
     font-weight: 300;
-    height:42px;
-    width:100%;
-    margin: 0 0 10px 0;
-    padding-left:10px;
+    height:40px;
+    width:calc(100% - 10px);
+    margin:  10px 0;
+    padding: 0 0 0 10px; 
+}
+
+input:focus{
+    outline: none;
 }
 
 button{
@@ -37,6 +41,10 @@ button{
     color:white;
     font-size: 15px;
     font-weight: 600;
-    height:42px;
+    height:40px;
     width:100%;
+}
+
+a{
+    text-decoration: none;
 }
