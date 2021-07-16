@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Card from '../../../components/Cards/Cards'
 import '../Dashboard.css';
-import AllClassesButton from '../../../components/Buttons/AllClassesButton/AllClassesButton'
+import AllClassesButton from '../../../components/Buttons/AllClassesButton'
 
 const StudentDashboard = () => (
     <div>

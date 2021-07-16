@@ -1,5 +1,7 @@
 import React from 'react';
 import './TeacherCard.css';
+import Heart from '../../icons/Heart';
+import FilledHeart from '../../icons/FilledHeart';
 
 const TeacherCard = (props) => {
     return (
@@ -15,7 +17,7 @@ const TeacherCard = (props) => {
             :
             <div className="teacher-card big" >
                 <div className="teacher-information-container big-container">
-                    <div className="teacher-img"></div>
+                    <div className="teacher-image" style={{ backgroundImage: `url(${props.profileImage})` }}></div>
                     <div className="teacher-details">
                         <h4>{props.firstName} {props.lastName}</h4>
                         <h6>Subjects</h6>
@@ -24,10 +26,10 @@ const TeacherCard = (props) => {
                         <h6>English</h6>
                         <h6>Area</h6>
                         <h6>Grabouw</h6>
-                        <button>Check availibility</button>
+                        <button className="availibility-button">Check availibility</button>
                     </div>
+                    <div style={{ alignSelf: "flex-start", marginRight: "10px" }}> <Heart /></div>
                 </div>
-                <div>heart</div>
             </div>
         }</div>
     );

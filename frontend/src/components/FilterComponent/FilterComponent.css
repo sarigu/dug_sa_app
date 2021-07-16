@@ -1,8 +1,4 @@
-.inline-button p{
-    font-weight: 600;
-}
-
-.inline-button{
+.filter-component{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -13,4 +9,10 @@
     border-radius: 25px;
     height:35px;
     background-color: white;
+    margin-right:30px;
+}
+
+.filter-component p{
+    font-weight: 600;
+    margin-right:10px;
 }

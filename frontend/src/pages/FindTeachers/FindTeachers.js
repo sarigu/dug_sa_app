@@ -1,31 +1,51 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import Navbar from '../../components/Navbar/Navbar';
 import TeacherCard from '../../components/TeacherCard/TeacherCard';
+import BackButton from '../../components/Buttons/BackButton';
+import { load_teachers } from '../../actions/data';
+import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import './FindTeachers.css';
 
-const FindTeachers = ({ teachers }) => {
-    const teachersList = teachers.map((teacher) =>
-        <TeacherCard first_name={teacher.user.first_name} last_name={teacher.user.last_name} />
-    );
+const FindTeachers = ({ load_teachers }) => {
+    const [teachers, setTeachers] = useState();
+
+    useEffect(() => {
+        load_teachers().then((res) => {
+            console.log(res, "RESPOND");
+            setTeachers(res);
+        })
+    }, []);
+
 
     return (
-        <div >
-            <Navbar />
-            <div>
-                <h2>Find a teacher</h2>
-                <ul className="teacher-options"><li className="active">All</li> <li>Bookmarked</li></ul>
-                <div>Filter</div>
-                <div className="teachers-list">
-                    {teachersList}
+        <div className="find-teacher-wrapper">
+            <BackButton buttonWidth={"70px"} />
+            <h2>Find a teacher</h2>
+            <div className="teacher-options"><div className="active">All</div> <div>Bookmarked</div></div>
+            <section >
+                <div className="filter-container">
+                    <FilterComponent title={"Subjects"} />
+                    <FilterComponent title={"Languages"} />
+                    <FilterComponent title={"Area"} />
                 </div>
-            </div>
+            </section>
+            <section className="teachers-list">
+                {teachers ?
+                    teachers.map((teacher) =>
+                        <TeacherCard
+                            firstName={teacher.first_name}
+                            lastName={teacher.last_name}
+                            profileImage={teacher.profile_image} />
+                    )
+                    :
+                    <p>No teachers</p>}
+            </section>
         </div>
     );
 };
 
 const mapStateToProps = state => ({
-    teachers: state.data.teachers
+
 });
 
-export default connect(mapStateToProps, null)(FindTeachers);
+export default connect(mapStateToProps, { load_teachers })(FindTeachers);

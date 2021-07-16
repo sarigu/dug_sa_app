@@ -24,6 +24,8 @@ export const load_teachers = () => async dispatch => {
                 type: TEACHERS_LOADED_SUCCESS,
                 payload: res.data
             });
+
+            return res.data;
         } catch (err) {
             dispatch({
                 type: TEACHERS_LOADED_FAIL

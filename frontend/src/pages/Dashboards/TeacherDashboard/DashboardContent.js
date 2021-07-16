@@ -1,7 +1,7 @@
 import React from 'react';
 import '../Dashboard.css'
 import Card from '../../../components/Cards/Cards'
-import AllClassesButton from '../../../components/Buttons/AllClassesButton/AllClassesButton'
+import AllClassesButton from '../../../components/Buttons/AllClassesButton'
 
 const DashboardContent = () => {
     return (
