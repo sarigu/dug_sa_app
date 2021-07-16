@@ -32,10 +32,17 @@ export const validateExperince = (year) => {
     var text = /^[0-9]+$/;
 
     if (!text.test(year)) {
+        console.log("text false", text.test(year))
         return false;
     }
 
     if (year.length > 2) {
+        console.log("longer than 2")
+        return false;
+    }
+
+    if (year < 0) {
+        console.log("minus years")
         return false;
     }
     return true;

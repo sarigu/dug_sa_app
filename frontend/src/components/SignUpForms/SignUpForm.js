@@ -105,7 +105,7 @@ const SignUpForm = ({ signup, error, selectedRole, signUpStatus }) => {
 
     useEffect(() => {
         if (signUpStatus === "success") {
-            history.push("/");
+            history.push("/dashboard");
         }
     }, [signUpStatus]);
 

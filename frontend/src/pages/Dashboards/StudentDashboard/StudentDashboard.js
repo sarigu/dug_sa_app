@@ -1,31 +1,31 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Navbar from '../../../components/Navbar/Navbar';
 import Card from '../../../components/Cards/Cards'
-import './StudentDashboard.css';
+import '../Dashboard.css';
+import AllClassesButton from '../../../components/Buttons/AllClassesButton/AllClassesButton'
 
-const StudentDashboard = ({ user }) => (
+const StudentDashboard = () => (
     <div>
-        <Navbar />
-        <div className="content-container">
-            <section className="motivational-section">
-                <div className="motivational-quote">
-                    <div className="motivational-quote-content">
-                        <span>&#128170;&#127998;</span>
-                        <p>„Believe in yourself. Your limitation - it’s only your imagination“</p>
-                    </div>
+        <section className="motivational-section">
+            <div className="motivational-quote">
+                <div className="motivational-quote-content">
+                    <span>&#128170;&#127998;</span>
+                    <p>„Believe in yourself. Your limitation - it’s only your imagination“</p>
                 </div>
-            </section>
-            <section className="cards-container">
-                <Card emoji={<span>&#128587;&#127998;</span>} title={"Find a teacher"} link={"/find-teachers"} />
-                <Card emoji={<span>&#128218;</span>} title={"Self Study"} />
-                <Card emoji={<span>&#127793;</span>} title={"Health & Mental Health"} />
-            </section>
-            <section>
+            </div>
+        </section>
+        <section className="cards-container">
+            <Card emoji={<span>&#128587;&#127998;</span>} title={"Find a teacher"} link={"/find-teachers"} />
+            <Card emoji={<span>&#128218;</span>} title={"Self Study"} />
+            <Card emoji={<span>&#127793;</span>} title={"Health & Mental Health"} />
+        </section>
+        <section className="reminder-container">
+            <div className="heading-wrapper">
                 <h2>Reminder</h2>
-                <p>No reminders at the moment</p>
-            </section>
-        </div>
+                <AllClassesButton buttonWidth={"120px"} />
+            </div>
+            <p>No reminders at the moment</p>
+        </section>
     </div>
 );
 
