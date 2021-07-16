@@ -7,7 +7,7 @@ import StaffDashboard from './StaffDashboard/StaffDashboard';
 const Dashboard = ({ userType }) => {
     console.log("USERTYPE", userType)
     return (
-        <div >
+        <div className="dashboard-wrapper">
             {userType && userType === "student" ? <StudentDashboard /> :
                 userType && userType === "teacher" ? <TeacherDashboard /> :
                     <StaffDashboard />

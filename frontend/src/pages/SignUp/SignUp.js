@@ -10,8 +10,8 @@ const SignUp = ({ update_selected_role }) => {
 
     const handleSignUpOption = e => {
         e.preventDefault();
-        e.target.parentElement.querySelectorAll(".active").forEach(e => e.classList.remove("active"));
-        e.target.classList.add("active");
+        e.target.parentElement.querySelectorAll(".clicked").forEach(e => e.classList.remove("clicked"));
+        e.target.classList.add("clicked");
         let role = e.target.getAttribute("data-role");
         setSelectedRole(role);
         update_selected_role(role);
@@ -26,7 +26,7 @@ const SignUp = ({ update_selected_role }) => {
                 <p>Do you want to sign up as
                 a student, teacher or staff? </p>
                 <div className="signup-options">
-                    <div className="shadow active" data-role="student" onClick={handleSignUpOption}>Student</div>
+                    <div className="shadow clicked" data-role="student" onClick={handleSignUpOption}>Student</div>
                     <div className="shadow" data-role="teacher" onClick={handleSignUpOption}>Teacher</div>
                     <div className="shadow" data-role="staff" onClick={handleSignUpOption}>Staff</div>
                 </div>

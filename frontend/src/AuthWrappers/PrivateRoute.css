@@ -1,43 +1,10 @@
 .page-wrapper{
     width: 100vw;
     height:100vh;
-}
-.content-container{
-    width: 90%;
-    height:100%;
-    overflow: scroll;
-    padding:30px;
+    overflow-y: scroll;
 }
 
-
-.menu{
-    height:100%;
-    background-color: #FFF5F4;
-    float: right;
-    margin-top:-15px;
-    padding: 45px 0 0 0;
-    width: 0%;
-}
-
-.active{
-    animation-name: slideIn;
-    animation-duration: .5s;
-    animation-fill-mode: forwards;
-  
-}
-
-.inactive{
-    animation-name: slideBack;
-    animation-duration: .5s;
-    animation-fill-mode: forwards;
-
-}
-@keyframes slideIn {
-    from {width: 0%; }
-    to {width: 100%; }
+.page-wrapper::-webkit-scrollbar {
+    display: none;
   }
 
-  @keyframes slideBack {
-    from {width: 100%;  }
-    to {width: 0%; }
-  }

@@ -23,6 +23,19 @@ class TeacherSerializer(serializers.ModelSerializer):
             data.update({key: val})
         return data
 
+class TeacherShortVersionSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = Teacher
+        fields = ('user', 'profile_image', 'is_approved', 'provided_information')
+      
+    def to_representation(self, instance):
+        data = super(TeacherShortVersionSerializer, self).to_representation(instance)
+        user = data.pop('user')
+        for key, val in user.items():
+            data.update({key: val})
+        return data
+
 class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject

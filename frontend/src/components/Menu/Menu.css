@@ -1,11 +1,51 @@
-.menu-links-container  {
-    width: 90%;
-    margin:auto;
+.menu{
+    height:100%;
+    background-color: #FFF5F4;
+    float: right;
+    padding: 45px 0 0 0;
+    width: 0%;
+    position: absolute;
+    top:105px;
+    right:0;
+    z-index: 99;  
 }
+
+.active{
+    animation-name: slideIn;
+    animation-duration: .25s;
+    animation-fill-mode: forwards;
+}
+
+.inactive{
+    animation-name: slideBack;
+    animation-duration: .25s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes slideIn {
+    from {width: 0%;   display: none; }
+    to {width: 100%;    display: block;}
+}
+
+@keyframes slideBack {
+    from {width: 100%;     display: block;}
+    to {width: 0%;    display: none;}
+}
+  
+.menu-links-container  {
+    width: fit-content;
+    position: relative;
+    float: right;
+}
+
 .menu-links-container * {
     font-weight: bold;
     font-size: 25px;
     text-align: right;
-    margin-bottom: 20px;
+    margin: 0 30px 20px 0;
     cursor: pointer;
+}
+
+.hidden{
+    display: none;
 }

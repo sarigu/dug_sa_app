@@ -20,6 +20,7 @@ import {
 } from './types';
 
 export const load_user = () => async dispatch => {
+    console.log("loads user")
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -82,6 +83,8 @@ export const login = (email, password) => async dispatch => {
             payload: res.data
         });
 
+        console.log("after login success dispatch laod user")
+
         dispatch(load_user());
     } catch (err) {
         dispatch({
@@ -105,6 +108,10 @@ export const signup = (first_name, last_name, email, access_code, password, re_p
             type: SIGNUP_SUCCESS,
             payload: res.data,
         });
+
+        console.log("after sign up success dispatch laod user", res.data)
+
+        dispatch(login(email, password));
 
     } catch (err) {
         dispatch({

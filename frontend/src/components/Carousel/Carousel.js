@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import BackButton from '../../icons/BackButton';
 import "./Carousel.css";
 
 export const CarouselItem = ({ children }) => {
@@ -38,7 +37,7 @@ const Carousel = (props) => {
                 }}
                 style={{ cursor: "pointer" }}
             >
-                <BackButton padding={"20px 0"} />
+
             </div>
             <div className="indicators">
                 {React.Children.map(children, (child, index) => {

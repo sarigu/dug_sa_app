@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Card from '../../../components/Cards/Cards'
 import '../Dashboard.css';
+import AllClassesButton from '../../../components/Buttons/AllClassesButton/AllClassesButton'
 
-const StudentDashboard = ({ user }) => (
+const StudentDashboard = () => (
     <div>
         <section className="motivational-section">
             <div className="motivational-quote">
@@ -18,8 +19,11 @@ const StudentDashboard = ({ user }) => (
             <Card emoji={<span>&#128218;</span>} title={"Self Study"} />
             <Card emoji={<span>&#127793;</span>} title={"Health & Mental Health"} />
         </section>
-        <section>
-            <h2>Reminder</h2>
+        <section className="reminder-container">
+            <div className="heading-wrapper">
+                <h2>Reminder</h2>
+                <AllClassesButton buttonWidth={"120px"} />
+            </div>
             <p>No reminders at the moment</p>
         </section>
     </div>

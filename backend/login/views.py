@@ -1,11 +1,11 @@
 from rest_framework import viewsets
-from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer
+from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer
 from .models import Teacher, CustomUser, Subject, Teacher_Subject
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAdminUser, DjangoModelPermissions
-
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 # Create your views here.
 class TeacherView(viewsets.ModelViewSet):
@@ -13,8 +13,13 @@ class TeacherView(viewsets.ModelViewSet):
     serializer_class = TeacherSerializer
     queryset = Teacher.objects.all()
 
-
-
+class newTeachers(ListAPIView):
+    serializer_class = TeacherShortVersionSerializer
+    def get_queryset(self):
+        newTeachers = Teacher.objects.filter(provided_information=True).filter(is_approved=False)
+        print("newTeachers", newTeachers)
+        return newTeachers
+  
 class SubjectView(viewsets.ModelViewSet):
     permissions_classes=[DjangoModelPermissions]
     serializer_class = SubjectSerializer

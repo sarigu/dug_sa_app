@@ -3,7 +3,7 @@ import { Redirect, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { reset_password } from '../../actions/auth';
 import './PasswordReset.css';
-import BackButton from '../../icons/BackButton';
+
 
 const ResetPassword = ({ reset_password }) => {
     const [requestSent, setRequestSent] = useState(false);
@@ -29,7 +29,7 @@ const ResetPassword = ({ reset_password }) => {
 
     return (
         <div className="password-reset-page">
-            <div > <Link to='/' > <BackButton padding={"20px 0 0 20px"} /></Link></div>
+
             <div className="request-password-reset-wrapper">
                 <h1>Get a password reset link</h1>
                 <form onSubmit={e => handleSubmit(e)}>

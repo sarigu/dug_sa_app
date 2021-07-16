@@ -24,6 +24,7 @@ const Login = ({ login, isAuthenticated, error }) => {
     };
 
     if (isAuthenticated) {
+        console.log("is Authenticated after login in login page", isAuthenticated);
         return <Redirect to='/dashboard' />
     }
 

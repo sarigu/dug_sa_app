@@ -30,7 +30,7 @@
   margin: 20px 20px 20px 0;
 }
 
-.active{
+.clicked{
     filter: none !important;
 }
 
