@@ -21,13 +21,13 @@ section:nth-child(1){
     display: none;
 }
 
- .motivational-quote{
+.motivational-quote{
      filter:drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.199) );
      width:calc(100% - 30px);
      height:100px;
      border-radius: 15px 15px 15px 0px;
      background-color: white;
- }
+}
  
  .motivational-quote-content{
      display: flex;

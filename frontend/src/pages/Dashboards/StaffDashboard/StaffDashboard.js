@@ -14,14 +14,13 @@ const StaffDashboard = ({ load_new_teachers }) => {
     useEffect(() => {
         load_new_teachers().then((res) => {
             if (res.length > 0) {
-                console.log("there is a teachers list use effect", res.slice(0, 5), res)
                 setTeachersListShortened(res.slice(0, 5));
                 setTeachersList(res)
 
                 if (res.length <= index) {
-                    console.log("no more")
                     setHideShowMore(true);
                 }
+
             } else {
                 setHideShowMore(true)
             }
@@ -30,18 +29,13 @@ const StaffDashboard = ({ load_new_teachers }) => {
     }, []);
 
     const loadMoreTeacher = () => {
-        console.log("loadMoreTeacher -- current", teachersListShortened, teachersList);
         const newIndex = index + 5;
-        console.log(newIndex, teachersList.length)
         if (teachersList.length > newIndex - 1) {
-            console.log("there are more")
             const newList = teachersListShortened.concat(teachersList.slice(index, newIndex));
-            console.log("newList", newList)
             setIndex(newList);
             setTeachersListShortened(newList);
         }
         if (teachersList.length <= newIndex || teachersList.length <= index) {
-            console.log("no more")
             setHideShowMore(true);
         }
     }
@@ -53,7 +47,6 @@ const StaffDashboard = ({ load_new_teachers }) => {
                     <h2>New teachers</h2>
                     <div>
                         <div className="numberCircle"><p>{teachersList ? teachersList.length : "0"}</p></div>
-
                     </div>
                 </div>
                 {teachersList ? teachersListShortened.map((teacher, index) =>
@@ -72,13 +65,12 @@ const StaffDashboard = ({ load_new_teachers }) => {
                 <Card emoji={<span>&#128172;</span>} title={"Add motivational quote"} />
                 <Card emoji={<span>&#128272;</span>} title={"Edit access codes"} />
             </section>
-        </div>);
-
+        </div>
+    );
 };
 
 const mapStateToProps = state => ({
     user: state.auth.user,
-
 });
 
 export default connect(mapStateToProps, { load_new_teachers })(StaffDashboard);

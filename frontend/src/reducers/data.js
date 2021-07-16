@@ -24,13 +24,11 @@ export default function (state = initialState, action) {
                 ...state,
             }
         case NEW_TEACHERS_LOADED_SUCCESS:
-            console.log("loaded")
             return {
                 ...state,
                 loadedNewTeachers: true
             }
         case NEW_TEACHERS_LOADED_FAIL:
-            console.log("not loaded")
             return {
                 ...state,
             }

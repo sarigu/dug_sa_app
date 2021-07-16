@@ -11,8 +11,6 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
     const [menuWasSet, setMenuWasSet] = useState(false);
 
     return (
-        console.log("isAuthenticated", isAuthenticated),
-        console.log("openMenu", openMenu),
         <Route {...rest} render={props => (
             isAuthenticated ?
                 <div className="page-wrapper">

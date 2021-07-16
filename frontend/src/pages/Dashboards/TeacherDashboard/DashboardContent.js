@@ -19,9 +19,6 @@ const DashboardContent = () => {
             </section>
         </div>
     );
-
 };
-
-
 
 export default DashboardContent;
