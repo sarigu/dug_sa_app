@@ -30,12 +30,16 @@ const FindTeachers = ({ load_teachers }) => {
                 </div>
             </section>
             <section className="teachers-list">
-                {teachers ?
-                    teachers.map((teacher) =>
+                {teachers && teachers.length > 0 ?
+                    teachers.map((teacher, index) =>
                         <TeacherCard
+                            key={index}
                             firstName={teacher.first_name}
                             lastName={teacher.last_name}
-                            profileImage={teacher.profile_image} />
+                            profileImage={teacher.profile_image}
+                            city={teacher.city}
+                            subjects={teacher.subjects}
+                        />
                     )
                     :
                     <p>No teachers</p>}

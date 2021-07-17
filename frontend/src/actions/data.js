@@ -18,7 +18,7 @@ export const load_teachers = () => async dispatch => {
         };
 
         try {
-            let res = await axios.get('http://localhost:8000/api/teachers/', config);
+            let res = await axios.get('http://localhost:8000/api/find/teachers', config);
 
             dispatch({
                 type: TEACHERS_LOADED_SUCCESS,

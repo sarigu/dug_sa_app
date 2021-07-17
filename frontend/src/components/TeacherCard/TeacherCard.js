@@ -20,12 +20,13 @@ const TeacherCard = (props) => {
                     <div className="teacher-image" style={{ backgroundImage: `url(${props.profileImage})` }}></div>
                     <div className="teacher-details">
                         <h4>{props.firstName} {props.lastName}</h4>
-                        <h6>Subjects</h6>
-                        <h6>Math, Biology</h6>
-                        <h6>Languages</h6>
-                        <h6>English</h6>
-                        <h6>Area</h6>
-                        <h6>Grabouw</h6>
+                        <h5>Subjects</h5>
+                        <h5 className="subtext"></h5>
+                        {props.subjects ? props.subjects.map((subject, index) => <h5 key={index} className="subtext">{subject.name}</h5>) : <h5>No subjects</h5>}
+                        <h5>Languages</h5>
+                        <h5 className="subtext">English</h5>
+                        <h5>Area</h5>
+                        <h5 className="subtext">{props.city}</h5>
                         <button className="availibility-button">Check availibility</button>
                     </div>
                     <div style={{ alignSelf: "flex-start", marginRight: "10px" }}> <Heart /></div>

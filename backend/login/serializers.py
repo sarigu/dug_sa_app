@@ -10,6 +10,11 @@ class UserSerializer(UserCreateSerializer):
         model = User
         fields = ('id', 'email', 'first_name', 'last_name', 'password', 'role')
 
+class UserShortVersionSerializer(UserCreateSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'first_name', 'last_name')
+
 class TeacherSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
@@ -45,3 +50,10 @@ class TeacherSubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher_Subject
         fields = '__all__'
+
+class FindTeacherSerializer(serializers.Serializer):
+    first_name = serializers.CharField(max_length=255)
+    last_name = serializers.CharField(max_length=255)
+    city = serializers.CharField(max_length=255)
+    profile_image = serializers.ImageField()
+    subjects = SubjectSerializer(many=True)

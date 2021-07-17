@@ -47,15 +47,18 @@
     margin-right: 30px;
 }
 
-.teacher-information-container h4, .teacher-information-container h6{
+.teacher-information-container h4, .teacher-information-container h5{
     margin:0;
+}
+.subtext{
+    font-weight: 400 !important;
 }
 
 .teacher-details{
 
 }
 
-.teacher-details h6{
+.teacher-details h5{
     margin-top: 5px;
 }
 
@@ -78,7 +81,6 @@
 @media only screen and (min-width: 600px) {
     .big{
         width:50%;
-        height:180px;
     }
 
     .big-container .teacher-image{

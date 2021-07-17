@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer
+from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer, FindTeacherSerializer
 from .models import Teacher, CustomUser, Subject, Teacher_Subject
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
@@ -16,8 +16,27 @@ class TeacherView(viewsets.ModelViewSet):
 class newTeachers(ListAPIView):
     serializer_class = TeacherShortVersionSerializer
     def get_queryset(self):
-        newTeachers = Teacher.objects.filter(provided_information=True).filter(is_approved=False)
-        return newTeachers
+        all_new_teachers = Teacher.objects.filter(provided_information=True).filter(is_approved=False)
+        return all_new_teachers
+
+class findTeachers(ListAPIView):
+    serializer_class = FindTeacherSerializer
+    def get_queryset(self):
+        all_teachers = []
+        teachers = Teacher.objects.filter(is_approved=True)
+        for teacher in teachers:
+            teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
+            subjects = []
+            for subject in teachers_subjects:
+                print(subject)
+                subjectData = Subject.objects.get(pk=subject.subject.pk)
+                print(subjectData)
+                subjects.append(subjectData)
+            data = {'first_name': teacher.user.first_name,'last_name': teacher.user.last_name, 'city': teacher.city, 'profile_image': teacher.profile_image, 'subjects':subjects }
+            all_teachers.append(data)
+
+        print(all_teachers)
+        return all_teachers
   
 class SubjectView(viewsets.ModelViewSet):
     permissions_classes=[DjangoModelPermissions]

@@ -9,4 +9,5 @@ router.register(r'subjects_to_teach', views.TeacherSubjectView, 'subjects_to_tea
 
 urlpatterns = [
     path("new_teachers", views.newTeachers.as_view()),
+    path("find/teachers", views.findTeachers.as_view()),
 ] + router.urls 

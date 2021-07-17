@@ -13,7 +13,7 @@ const StaffDashboard = ({ load_new_teachers }) => {
 
     useEffect(() => {
         load_new_teachers().then((res) => {
-            if (res.length > 0) {
+            if (res && res.length > 0) {
                 setTeachersListShortened(res.slice(0, 5));
                 setTeachersList(res)
 
