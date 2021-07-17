@@ -8,7 +8,7 @@ import {
     BOOKMARKED_TEACHERS_LOADED_FAIL,
     ADD_BOOKMARK_SUCCESS,
     ADD_BOOKMARK_FAIL,
-
+    UPDATED_TEACHERS
 } from './types';
 
 
@@ -114,4 +114,10 @@ export const create_bookmark = (teacherId) => async dispatch => {
             });
         }
     }
+};
+
+export const teachersAreUpdated = () => dispatch => {
+    dispatch({
+        type: UPDATED_TEACHERS
+    });
 };

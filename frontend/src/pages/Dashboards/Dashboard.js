@@ -5,12 +5,11 @@ import StudentDashboard from './StudentDashboard/StudentDashboard';
 import StaffDashboard from './StaffDashboard/StaffDashboard';
 
 const Dashboard = ({ userType }) => {
-    console.log("USERTYPE", userType)
     return (
         <div className="dashboard-wrapper">
             {userType && userType === "student" ? <StudentDashboard /> :
                 userType && userType === "teacher" ? <TeacherDashboard /> :
-                    <StaffDashboard />
+                    userType && userType === "staff" ? <StaffDashboard /> : <></>
             }
         </div>
     );

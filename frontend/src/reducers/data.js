@@ -6,7 +6,8 @@ import {
     BOOKMARKED_TEACHERS_LOADED_SUCCESS,
     BOOKMARKED_TEACHERS_LOADED_FAIL,
     ADD_BOOKMARK_SUCCESS,
-    ADD_BOOKMARK_FAIL
+    ADD_BOOKMARK_FAIL,
+    UPDATED_TEACHERS
 } from '../actions/types';
 
 const initialState = {
@@ -55,6 +56,11 @@ export default function (state = initialState, action) {
         case ADD_BOOKMARK_FAIL:
             return {
                 ...state,
+            }
+        case UPDATED_TEACHERS:
+            return {
+                ...state,
+                bookmarksUpdated: false
             }
         default:
             return state

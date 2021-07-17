@@ -8,14 +8,11 @@ import { create_bookmark } from '../../actions/data';
 const TeacherCard = ({ create_bookmark, user, profileImage, city, subjects, languages, isBookmarked, teacherId, view }) => {
     const [bookmarkIsSet, setBookmarkIsSet] = useState(false);
 
-
     useEffect(() => {
-        console.log("USE FFECT BOOKMARKS");
         setBookmarkIsSet(isBookmarked);
     }, [isBookmarked]);
 
     const handleBookmark = () => {
-        console.log("---- handle Bookmark", user.id);
         create_bookmark(user.id);
         setBookmarkIsSet(!bookmarkIsSet)
     }
