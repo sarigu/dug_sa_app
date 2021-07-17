@@ -3,11 +3,17 @@ import {
     TEACHERS_LOADED_SUCCESS,
     NEW_TEACHERS_LOADED_FAIL,
     NEW_TEACHERS_LOADED_SUCCESS,
+    BOOKMARKED_TEACHERS_LOADED_SUCCESS,
+    BOOKMARKED_TEACHERS_LOADED_FAIL,
+    ADD_BOOKMARK_SUCCESS,
+    ADD_BOOKMARK_FAIL
 } from '../actions/types';
 
 const initialState = {
     teachers: [],
-    loadedNewTeachers: false
+    newTeachers: [],
+    bookmarkedTeachers: [],
+    bookmarksUpdated: false,
 };
 
 export default function (state = initialState, action) {
@@ -26,9 +32,27 @@ export default function (state = initialState, action) {
         case NEW_TEACHERS_LOADED_SUCCESS:
             return {
                 ...state,
-                loadedNewTeachers: true
+                newTeachers: payload
             }
         case NEW_TEACHERS_LOADED_FAIL:
+            return {
+                ...state,
+            }
+        case BOOKMARKED_TEACHERS_LOADED_SUCCESS:
+            return {
+                ...state,
+                bookmarkedTeachers: payload
+            }
+        case BOOKMARKED_TEACHERS_LOADED_FAIL:
+            return {
+                ...state,
+            }
+        case ADD_BOOKMARK_SUCCESS:
+            return {
+                ...state,
+                bookmarksUpdated: true
+            }
+        case ADD_BOOKMARK_FAIL:
             return {
                 ...state,
             }

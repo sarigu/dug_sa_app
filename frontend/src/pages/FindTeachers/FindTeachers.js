@@ -2,20 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import TeacherCard from '../../components/TeacherCard/TeacherCard';
 import BackButton from '../../components/Buttons/BackButton';
-import { load_teachers } from '../../actions/data';
+import { load_teachers, load_bookmarked_teachers } from '../../actions/data';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import './FindTeachers.css';
 
-const FindTeachers = ({ load_teachers }) => {
-    const [teachers, setTeachers] = useState();
+const FindTeachers = ({ load_teachers, teachers }) => {
+    const [isLoadingData, setIsLoadingData] = useState(false);
+
 
     useEffect(() => {
-        load_teachers().then((res) => {
-            console.log(res, "RESPOND");
-            setTeachers(res);
+        load_teachers().then(res => {
+            if (res) {
+                setIsLoadingData(true);
+            }
         })
     }, []);
-
 
     return (
         <div className="find-teacher-wrapper">
@@ -24,33 +25,36 @@ const FindTeachers = ({ load_teachers }) => {
             <div className="teacher-options"><div className="active">All</div> <div>Bookmarked</div></div>
             <section >
                 <div className="filter-container">
-                    <FilterComponent title={"Subjects"} />
-                    <FilterComponent title={"Languages"} />
+                    <FilterComponent title={"Subjects"} filterBy={"subjects"} />
+                    <FilterComponent title={"Languages"} filterBy={"languages"} />
                     <FilterComponent title={"Area"} />
                 </div>
             </section>
             <section className="teachers-list">
+                {console.log(teachers.user)}
                 {teachers && teachers.length > 0 ?
                     teachers.map((teacher, index) =>
                         <TeacherCard
                             key={index}
-                            firstName={teacher.first_name}
-                            lastName={teacher.last_name}
+                            user={teacher.user}
                             profileImage={teacher.profile_image}
                             city={teacher.city}
                             subjects={teacher.subjects}
                             languages={teacher.languages}
+                            isBookmarked={teacher.isBookmarked}
                         />
                     )
-                    :
-                    <p>No teachers</p>}
+                    : isLoadingData ? <p >Loading</p> :
+                        <p>No teachers</p>}
             </section>
         </div>
     );
 };
 
 const mapStateToProps = state => ({
-
+    teachers: state.data.teachers,
+    user: state.auth.user,
+    bookmarkedTeachers: state.data.bookmarkedTeachers,
 });
 
-export default connect(mapStateToProps, { load_teachers })(FindTeachers);
+export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers })(FindTeachers);

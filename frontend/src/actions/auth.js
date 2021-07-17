@@ -20,7 +20,6 @@ import {
 } from './types';
 
 export const load_user = () => async dispatch => {
-    console.log("loads user")
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -54,7 +53,6 @@ export const load_user = () => async dispatch => {
 
 
 export const checkAuthenticated = () => async dispatch => {
-    console.log("localStorage.getItem('access')", localStorage.getItem('access'))
     if (localStorage.getItem('access')) {
         dispatch({
             type: AUTHENTICATED_SUCCESS

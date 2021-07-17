@@ -6,8 +6,18 @@ import './FilterComponent.css';
 const FilterComponent = (props) => {
     return (
         <div className="filter-component">
-            <p>{props.title}</p>
-            <ArrowDown />
+            <div className="filter-component-content" >
+                <p>{props.title}</p>
+                <ArrowDown />
+            </div>
+            <div className="dropdown-content">
+                Drop Down
+                Drop Down
+                Drop Down
+                Drop Down
+                Drop Down
+                Drop Down
+            </div>
         </div>
     );
 };

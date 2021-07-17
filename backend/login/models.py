@@ -125,3 +125,14 @@ class Teacher_Language(models.Model):
 
     def __str__(self):
         return f"{self.teacher} - {self.language}"
+
+
+class Bookmarked_Teacher(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'teacher',)
+
+    def __str__(self):
+        return f"{self.user} - {self.teacher}"

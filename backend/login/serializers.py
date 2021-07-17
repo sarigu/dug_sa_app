@@ -1,7 +1,7 @@
 from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Teacher, Subject, Teacher_Subject, Language
+from .models import Teacher, Subject, Teacher_Subject, Language, Bookmarked_Teacher
 
 User = get_user_model()
 
@@ -13,7 +13,7 @@ class UserSerializer(UserCreateSerializer):
 class UserShortVersionSerializer(UserCreateSerializer):
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name')
+        fields = ('id', 'email', 'first_name', 'last_name')
 
 class TeacherSerializer(serializers.ModelSerializer):
     user = UserSerializer()
@@ -29,7 +29,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         return data
 
 class TeacherShortVersionSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserShortVersionSerializer()
     class Meta:
         model = Teacher
         fields = ('user', 'profile_image', 'is_approved', 'provided_information')
@@ -57,9 +57,16 @@ class LanguageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class FindTeacherSerializer(serializers.Serializer):
-    first_name = serializers.CharField(max_length=255)
-    last_name = serializers.CharField(max_length=255)
+    user = UserShortVersionSerializer()
     city = serializers.CharField(max_length=255)
     profile_image = serializers.ImageField()
     subjects = SubjectSerializer(many=True)
     languages = LanguageSerializer(many=True)
+    isBookmarked = serializers.BooleanField()
+
+class BookmarkedTeachersSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    teacher = TeacherShortVersionSerializer()
+    class Meta:
+        model = Bookmarked_Teacher
+        fields = '__all__'
