@@ -1,7 +1,7 @@
 from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Teacher, Subject, Teacher_Subject
+from .models import Teacher, Subject, Teacher_Subject, Language
 
 User = get_user_model()
 
@@ -51,9 +51,15 @@ class TeacherSubjectSerializer(serializers.ModelSerializer):
         model = Teacher_Subject
         fields = '__all__'
 
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = '__all__'
+
 class FindTeacherSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=255)
     last_name = serializers.CharField(max_length=255)
     city = serializers.CharField(max_length=255)
     profile_image = serializers.ImageField()
     subjects = SubjectSerializer(many=True)
+    languages = LanguageSerializer(many=True)

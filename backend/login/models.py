@@ -109,3 +109,19 @@ class AccessCode(models.Model):
     is_active = models.BooleanField(default=True)
     def __str__(self):
         return f"{self.code}"
+
+
+class Language(models.Model):
+    language = models.CharField(max_length=255)
+    def __str__(self):
+        return f"{self.language}"
+
+class Teacher_Language(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('teacher', 'language',)
+
+    def __str__(self):
+        return f"{self.teacher} - {self.language}"

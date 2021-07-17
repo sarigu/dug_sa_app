@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer, FindTeacherSerializer
-from .models import Teacher, CustomUser, Subject, Teacher_Subject
+from .models import Teacher, CustomUser, Subject, Teacher_Subject, Teacher_Language, Language
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -26,13 +26,19 @@ class findTeachers(ListAPIView):
         teachers = Teacher.objects.filter(is_approved=True)
         for teacher in teachers:
             teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
+            teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
             subjects = []
+            languages = []
             for subject in teachers_subjects:
                 print(subject)
                 subjectData = Subject.objects.get(pk=subject.subject.pk)
                 print(subjectData)
                 subjects.append(subjectData)
-            data = {'first_name': teacher.user.first_name,'last_name': teacher.user.last_name, 'city': teacher.city, 'profile_image': teacher.profile_image, 'subjects':subjects }
+            for language in teachers_languages:
+                print(language)
+                languageData = Language.objects.get(pk=language.language.pk)
+                languages.append(languageData)
+            data = {'first_name': teacher.user.first_name,'last_name': teacher.user.last_name, 'city': teacher.city, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages}
             all_teachers.append(data)
 
         print(all_teachers)

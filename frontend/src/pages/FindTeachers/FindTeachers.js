@@ -39,6 +39,7 @@ const FindTeachers = ({ load_teachers }) => {
                             profileImage={teacher.profile_image}
                             city={teacher.city}
                             subjects={teacher.subjects}
+                            languages={teacher.languages}
                         />
                     )
                     :

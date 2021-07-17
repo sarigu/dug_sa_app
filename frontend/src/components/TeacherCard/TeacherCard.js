@@ -21,10 +21,9 @@ const TeacherCard = (props) => {
                     <div className="teacher-details">
                         <h4>{props.firstName} {props.lastName}</h4>
                         <h5>Subjects</h5>
-                        <h5 className="subtext"></h5>
                         {props.subjects ? props.subjects.map((subject, index) => <h5 key={index} className="subtext">{subject.name}</h5>) : <h5>No subjects</h5>}
                         <h5>Languages</h5>
-                        <h5 className="subtext">English</h5>
+                        {props.languages ? props.languages.map((language, index) => <h5 key={index} className="subtext">{language.language}</h5>) : <h5>No languages</h5>}
                         <h5>Area</h5>
                         <h5 className="subtext">{props.city}</h5>
                         <button className="availibility-button">Check availibility</button>
