@@ -29,3 +29,14 @@
 .active{
   border-bottom: 5px solid gray;
 }
+
+.bottom-navigation{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.bottom-navigation p {
+  font-weight: 600;
+  margin: 0 30px;
+}

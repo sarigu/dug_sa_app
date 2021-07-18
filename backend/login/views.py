@@ -22,15 +22,12 @@ class NewTeachersView(ListAPIView):
         all_new_teachers = Teacher.objects.filter(provided_information=True).filter(is_approved=False)
         return all_new_teachers
 
-class FindTeachersView(ListAPIView):
+class FindTeachersView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]
-    serializer_class = FindTeacherSerializer
-    def get_queryset(self):
+    def list(self, request):
         all_teachers = []
         teachers = Teacher.objects.filter(is_approved=True)
         for teacher in teachers:
-            print(teacher)
-            print("-----------")
             teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
             teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
             subjects = []
@@ -50,18 +47,17 @@ class FindTeachersView(ListAPIView):
             data = {'user': teacher.user, 'city': teacher.city, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked}
             all_teachers.append(data)
 
-        print("----", all_teachers)
-        paginator = Paginator(all_teachers, 1) 
-
+        paginator = Paginator(all_teachers, 2) 
         page_number = self.request.GET.get('page')
         total_pages = paginator.num_pages
-        print(page_number,paginator.num_pages)
-        if int(page_number) <= total_pages:
-            page_obj = paginator.get_page(page_number)
-            print("page number is smaller than total pages", page_obj)
-            return page_obj
+        print("total_pages--", total_pages)
 
-        return []
+        if int(page_number) <= total_pages:
+            page_obj = paginator.get_page(page_number)       
+            serializer = FindTeacherSerializer(page_obj, many=True)
+            return Response({'total_pages': total_pages, 'data': serializer.data})
+
+        return Response([])
   
 class SubjectView(viewsets.ModelViewSet):
     serializer_class = SubjectSerializer
@@ -93,10 +89,25 @@ class TeacherSubjectView(viewsets.ViewSet):
 
 class BookmarkedTeachersView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]
-
     def list(self, request):
+        all_teachers = []
         bookmarked_teachers = Bookmarked_Teacher.objects.filter(user=request.user)
-        serializer = BookmarkedTeachersSerializer(bookmarked_teachers, many=True)
+        for teacher in bookmarked_teachers:
+            teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher.teacher)
+            teachers_languages = Teacher_Language.objects.filter(teacher=teacher.teacher)
+            subjects = []
+            languages = []
+            for subject in teachers_subjects:
+                subjectData = Subject.objects.get(pk=subject.subject.pk)
+                subjects.append(subjectData)
+            for language in teachers_languages:
+                languageData = Language.objects.get(pk=language.language.pk)
+                languages.append(languageData)
+
+            isBookmarked = True
+            data = {'user': teacher.teacher.user, 'city': teacher.teacher.city, 'profile_image': teacher.teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked}
+            all_teachers.append(data)
+        serializer = FindTeacherSerializer(all_teachers, many=True)
         return Response(serializer.data)
 
     def create(self, request):

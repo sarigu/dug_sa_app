@@ -13,7 +13,6 @@ import {
 
 
 export const load_teachers = (index) => async dispatch => {
-    console.log(index, "in load")
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -108,6 +107,7 @@ export const create_bookmark = (teacherId) => async dispatch => {
             dispatch({
                 type: ADD_BOOKMARK_SUCCESS,
             });
+
         } catch (err) {
             dispatch({
                 type: ADD_BOOKMARK_FAIL

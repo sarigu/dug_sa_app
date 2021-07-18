@@ -15,6 +15,7 @@ const initialState = {
     newTeachers: [],
     bookmarkedTeachers: [],
     bookmarksUpdated: false,
+    totalTeacherPages: null,
 };
 
 export default function (state = initialState, action) {
@@ -22,26 +23,10 @@ export default function (state = initialState, action) {
 
     switch (type) {
         case TEACHERS_LOADED_SUCCESS:
-            function arrayUnique(array) {
-                var a = array.concat();
-                for (var i = 0; i < a.length; ++i) {
-                    for (var j = i + 1; j < a.length; ++j) {
-                        if (a[i].user.id === a[j].user.id)
-                            a.splice(i--, 1);
-                    }
-                }
-
-                return a;
-            }
-
-            let new_teachers_list = arrayUnique(state.teachers.concat(payload));
-            //is payload item in state.teacher
-            //if not add it
-            console.log("new teachers list", new_teachers_list)
-
             return {
                 ...state,
-                teachers: new_teachers_list
+                teachers: payload.data.length > 0 ? payload.data : state.teachers,
+                totalTeacherPages: payload.total_pages
             }
         case TEACHERS_LOADED_FAIL:
             return {
@@ -59,7 +44,7 @@ export default function (state = initialState, action) {
         case BOOKMARKED_TEACHERS_LOADED_SUCCESS:
             return {
                 ...state,
-                bookmarkedTeachers: payload
+                bookmarkedTeachers: payload.reverse()
             }
         case BOOKMARKED_TEACHERS_LOADED_FAIL:
             return {

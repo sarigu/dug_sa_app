@@ -5,55 +5,79 @@ import BackButton from '../../components/Buttons/BackButton';
 import { load_teachers, load_bookmarked_teachers, teachersAreUpdated } from '../../actions/data';
 import { load_languages, load_subjects } from '../../actions/auth';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
+import NextButton from '../../components/Buttons/NextButton';
+import PrevButton from '../../components/Buttons/PrevButton';
 import './FindTeachers.css';
 
-const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUpdated, totalTeacherPages }) => {
-    const [isLoadingData, setIsLoadingData] = useState(false);
+const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUpdated, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages }) => {
     const [sortByAll, setSortByAll] = useState(true);
     const [sortByBookmarks, setSortByBookmarks] = useState(false);
-    const [allTeachers, setAllTeachers] = useState(false);
+    const [allTeachers, setAllTeachers] = useState([]);
+    const [allBookmarkTeachers, setAllBookmarkTeachers] = useState([]);
     const [index, setIndex] = useState(1);
 
     useEffect(() => {
-        load_teachers(index).then(res => {
-            if (res) {
-                setIsLoadingData(true);
-            }
-        })
+        load_teachers(index)
+        load_bookmarked_teachers();
     }, []);
 
     useEffect(() => {
-        console.log("bookmarksUpdated----->", bookmarksUpdated, index)
+        if (sortByAll) {
+            setIndex(1)
+            load_teachers(1)
+        }
+    }, [sortByAll]);
+
+    useEffect(() => {
+        if (sortByBookmarks) {
+            console.log("get updated bookmarks")
+            load_bookmarked_teachers();
+        }
+    }, [sortByBookmarks]);
+
+    useEffect(() => {
         if (bookmarksUpdated) {
-            console.log("load teachers again")
-            load_teachers(index)
+            load_bookmarked_teachers()
             teachersAreUpdated()
         }
     }, [bookmarksUpdated]);
 
     useEffect(() => {
-        setAllTeachers(teachers);
-        if (sortByBookmarks) {
-            handleSortByBookmarks();
-        }
+        setAllBookmarkTeachers(bookmarkedTeachers)
+    }, [bookmarkedTeachers]);
+
+    useEffect(() => {
+        setAllTeachers(teachers)
     }, [teachers]);
 
-    const handleSortByBookmarks = () => {
+    const handleBookmarks = () => {
         setSortByAll(false);
         setSortByBookmarks(true);
-        let allBookmarkedTeachers = teachers.filter(teacher => teacher.isBookmarked === true);
-        setAllTeachers(allBookmarkedTeachers)
     }
 
     const handleSortByAll = () => {
         setSortByAll(true);
         setSortByBookmarks(false);
-        setAllTeachers(teachers);
     }
 
-    const handleAdditionalDataLoad = () => {
-        setIndex(index + 1);
-        load_teachers(index + 1)
+    const handleNextPage = () => {
+        console.log("next", index, "t0tal", totalTeacherPages)
+        if (index + 1 <= totalTeacherPages) {
+            load_teachers(index + 1);
+            setIndex(index + 1);
+        }
+    }
+
+    const handlePrevPage = () => {
+        console.log("prev")
+        if (index - 1 > 0) {
+            load_teachers(index - 1);
+            setIndex(index - 1);
+        } else {
+            console.log("0000")
+            load_teachers(1);
+            setIndex(1);
+        }
     }
 
     return (
@@ -62,7 +86,7 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUp
             <h2>Find a teacher</h2>
             <div className="teacher-options">
                 <div className={sortByAll ? "active" : null} onClick={handleSortByAll}>All</div>
-                <div className={sortByBookmarks ? "active" : null} onClick={handleSortByBookmarks}>Bookmarked</div>
+                <div className={sortByBookmarks ? "active" : null} onClick={handleBookmarks}>Bookmarked</div>
             </div>
             <section >
                 <div className="filter-container">
@@ -72,20 +96,48 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUp
                 </div>
             </section>
             <section className="teachers-list">
-                {allTeachers && allTeachers.length > 0 ?
-                    allTeachers.map((teacher, index) =>
-                        <TeacherCard
-                            key={index}
-                            user={teacher.user}
-                            profileImage={teacher.profile_image}
-                            city={teacher.city}
-                            subjects={teacher.subjects}
-                            languages={teacher.languages}
-                        />
-                    )
-                    : isLoadingData ? <p >Loading</p> :
+                <div>{sortByBookmarks ?
+                    <div> {allBookmarkTeachers && allBookmarkTeachers.length > 0 ?
+                        allBookmarkTeachers.map((teacher, index) =>
+                            <TeacherCard
+                                key={index}
+                                user={teacher.user}
+                                profileImage={teacher.profile_image}
+                                city={teacher.city}
+                                subjects={teacher.subjects}
+                                languages={teacher.languages}
+                                isBookmarked={teacher.isBookmarked}
+                            />
+                        )
+                        :
                         <p>No teachers</p>}
-                {allTeachers.length > 0 ? <p onClick={handleAdditionalDataLoad}>Show More</p> : null}
+
+                    </div>
+                    :
+                    <div> {allTeachers && allTeachers.length > 0 ?
+                        allTeachers.map((teacher, index) =>
+                            <TeacherCard
+                                key={index}
+                                user={teacher.user}
+                                profileImage={teacher.profile_image}
+                                city={teacher.city}
+                                subjects={teacher.subjects}
+                                languages={teacher.languages}
+                                isBookmarked={teacher.isBookmarked}
+                                sortByBookmarks={sortByBookmarks}
+                            />
+                        )
+                        :
+                        <p>No teachers</p>}
+                        <div className="bottom-navigation">
+                            <div onClick={handlePrevPage}><PrevButton /></div>
+                            <p> {index <= totalTeacherPages && index > 0 ? index : index <= 0 ? 1 : totalTeacherPages}</p>
+                            <div onClick={handleNextPage}><NextButton /></div>
+                        </div>
+                    </div>
+
+                }
+                </div>
             </section>
         </div>
     );
@@ -98,6 +150,8 @@ const mapStateToProps = state => ({
     bookmarksUpdated: state.data.bookmarksUpdated,
     languages: state.auth.languages,
     subjects: state.auth.subjects,
+    totalTeacherPages: state.data.totalTeacherPages,
+    bookmarkedTeachers: state.data.bookmarkedTeachers,
     totalTeacherPages: state.data.totalTeacherPages,
 });
 
