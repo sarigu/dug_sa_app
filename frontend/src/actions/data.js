@@ -12,7 +12,8 @@ import {
 } from './types';
 
 
-export const load_teachers = () => async dispatch => {
+export const load_teachers = (index) => async dispatch => {
+    console.log(index, "in load")
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -23,8 +24,7 @@ export const load_teachers = () => async dispatch => {
         };
 
         try {
-            let res = await axios.get('http://localhost:8000/api/find/teachers', config);
-
+            let res = await axios.get(`http://localhost:8000/api/find/teachers/?page=${index}`, config);
             dispatch({
                 type: TEACHERS_LOADED_SUCCESS,
                 payload: res.data
@@ -51,7 +51,7 @@ export const load_new_teachers = () => async dispatch => {
         };
 
         try {
-            let res = await axios.get('http://localhost:8000/api/new_teachers', config);
+            let res = await axios.get('http://localhost:8000/api/new_teachers/', config);
 
             dispatch({
                 type: NEW_TEACHERS_LOADED_SUCCESS,

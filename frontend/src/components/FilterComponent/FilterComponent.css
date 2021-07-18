@@ -8,6 +8,7 @@
     margin-right:30px;
     position: relative;
     min-width: 120px;
+    z-index: 1;
 }
 .filter-component-content{
     display: flex;

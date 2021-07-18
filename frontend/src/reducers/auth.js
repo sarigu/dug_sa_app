@@ -16,6 +16,7 @@ import {
     TEACHER_UPDATE_FAIL,
     SELECTED_ROLE,
     SUBJECTS_LOADED_SUCCESS,
+    LANGUAGES_LOADED_SUCCESS
 } from '../actions/types';
 
 const initialState = {
@@ -28,6 +29,7 @@ const initialState = {
     selectedRole: "student",
     signUpStatus: "",
     subjects: [],
+    languages: [],
 };
 
 export default function (state = initialState, action) {
@@ -135,6 +137,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 subjects: payload,
+            }
+        case LANGUAGES_LOADED_SUCCESS:
+            return {
+                ...state,
+                languages: payload,
             }
         default:
             return state

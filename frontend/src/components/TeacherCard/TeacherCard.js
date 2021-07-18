@@ -5,7 +5,7 @@ import FilledHeart from '../../icons/FilledHeart';
 import { connect } from 'react-redux';
 import { create_bookmark } from '../../actions/data';
 
-const TeacherCard = ({ create_bookmark, user, profileImage, city, subjects, languages, isBookmarked, teacherId, view }) => {
+const TeacherCard = ({ create_bookmark, user, profileImage, city, subjects, languages, isBookmarked, view }) => {
     const [bookmarkIsSet, setBookmarkIsSet] = useState(false);
 
     useEffect(() => {

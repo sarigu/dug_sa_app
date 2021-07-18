@@ -16,7 +16,8 @@ import {
     TEACHER_UPDATE_SUCCESS,
     TEACHER_UPDATE_FAIL,
     SELECTED_ROLE,
-    SUBJECTS_LOADED_SUCCESS
+    SUBJECTS_LOADED_SUCCESS,
+    LANGUAGES_LOADED_SUCCESS
 } from './types';
 
 export const load_user = () => async dispatch => {
@@ -246,4 +247,23 @@ export const load_subjects = () => async dispatch => {
         payload: res.data,
     });
 };
+
+export const load_languages = () => async dispatch => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${localStorage.getItem('access')}`,
+            'Accept': 'application/json'
+        }
+    };
+
+    let res = await axios.get('http://localhost:8000/api/languages/', config);
+
+    dispatch({
+        type: LANGUAGES_LOADED_SUCCESS,
+        payload: res.data,
+    });
+};
+
+
 

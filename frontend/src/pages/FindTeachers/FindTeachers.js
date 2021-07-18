@@ -3,17 +3,19 @@ import { connect } from 'react-redux';
 import TeacherCard from '../../components/TeacherCard/TeacherCard';
 import BackButton from '../../components/Buttons/BackButton';
 import { load_teachers, load_bookmarked_teachers, teachersAreUpdated } from '../../actions/data';
+import { load_languages, load_subjects } from '../../actions/auth';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import './FindTeachers.css';
 
-const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUpdated }) => {
+const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUpdated, totalTeacherPages }) => {
     const [isLoadingData, setIsLoadingData] = useState(false);
     const [sortByAll, setSortByAll] = useState(true);
     const [sortByBookmarks, setSortByBookmarks] = useState(false);
     const [allTeachers, setAllTeachers] = useState(false);
+    const [index, setIndex] = useState(1);
 
     useEffect(() => {
-        load_teachers().then(res => {
+        load_teachers(index).then(res => {
             if (res) {
                 setIsLoadingData(true);
             }
@@ -21,10 +23,10 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUp
     }, []);
 
     useEffect(() => {
-        console.log("bookmarksUpdated----->", bookmarksUpdated)
+        console.log("bookmarksUpdated----->", bookmarksUpdated, index)
         if (bookmarksUpdated) {
             console.log("load teachers again")
-            load_teachers()
+            load_teachers(index)
             teachersAreUpdated()
         }
     }, [bookmarksUpdated]);
@@ -47,6 +49,11 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUp
         setSortByAll(true);
         setSortByBookmarks(false);
         setAllTeachers(teachers);
+    }
+
+    const handleAdditionalDataLoad = () => {
+        setIndex(index + 1);
+        load_teachers(index + 1)
     }
 
     return (
@@ -74,11 +81,11 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUp
                             city={teacher.city}
                             subjects={teacher.subjects}
                             languages={teacher.languages}
-                            isBookmarked={teacher.isBookmarked}
                         />
                     )
                     : isLoadingData ? <p >Loading</p> :
                         <p>No teachers</p>}
+                {allTeachers.length > 0 ? <p onClick={handleAdditionalDataLoad}>Show More</p> : null}
             </section>
         </div>
     );
@@ -89,6 +96,9 @@ const mapStateToProps = state => ({
     user: state.auth.user,
     bookmarkedTeachers: state.data.bookmarkedTeachers,
     bookmarksUpdated: state.data.bookmarksUpdated,
+    languages: state.auth.languages,
+    subjects: state.auth.subjects,
+    totalTeacherPages: state.data.totalTeacherPages,
 });
 
-export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, teachersAreUpdated })(FindTeachers);
+export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, teachersAreUpdated, load_languages, load_subjects })(FindTeachers);

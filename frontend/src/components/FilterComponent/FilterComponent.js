@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ArrowDown from '../../icons/ArrowDown'
 import './FilterComponent.css';
 
 
 const FilterComponent = (props) => {
+
     return (
         <div className="filter-component">
             <div className="filter-component-content" >
@@ -11,12 +12,7 @@ const FilterComponent = (props) => {
                 <ArrowDown />
             </div>
             <div className="dropdown-content">
-                Drop Down
-                Drop Down
-                Drop Down
-                Drop Down
-                Drop Down
-                Drop Down
+                drop down contents
             </div>
         </div>
     );
