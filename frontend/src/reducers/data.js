@@ -18,7 +18,8 @@ const initialState = {
     bookmarkedTeachers: [],
     bookmarksUpdated: false,
     totalTeacherPages: null,
-    filteredTeachers: []
+    filteredTeachers: [],
+    totalFilterPages: null,
 };
 
 export default function (state = initialState, action) {
@@ -70,7 +71,8 @@ export default function (state = initialState, action) {
         case FILTER_TEACHERS_SUCCESS:
             return {
                 ...state,
-                filteredTeachers: payload,
+                filteredTeachers: payload.data,
+                totalFilterPages: payload.total_pages
             }
         case FILTER_TEACHERS_FAIL:
             return {

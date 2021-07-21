@@ -13,7 +13,6 @@ const Checkbox = ({ optionValue, onSelected, optionId }) => {
                 checked={checked}
                 onChange={() => { onSelected(optionId); setChecked(!checked) }}
             />
-
             <label >{optionValue}</label>
         </div>
     );

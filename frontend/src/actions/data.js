@@ -140,7 +140,7 @@ export const filter_teachers = (selectedOptions, filterBy, index) => async dispa
             console.log("filter--", res.data)
             dispatch({
                 type: FILTER_TEACHERS_SUCCESS,
-                payload: res.data.data
+                payload: res.data
             });
 
         } catch (err) {

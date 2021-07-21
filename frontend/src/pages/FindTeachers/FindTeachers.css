@@ -25,7 +25,6 @@
   align-items: center;
 }
 
-
 .active{
   border-bottom: 5px solid gray;
 }
@@ -39,4 +38,8 @@
 .bottom-navigation p {
   font-weight: 600;
   margin: 0 30px;
+}
+
+input[type="checkbox"]{
+  filter:none;
 }

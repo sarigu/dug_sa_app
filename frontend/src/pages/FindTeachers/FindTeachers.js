@@ -9,12 +9,16 @@ import NextButton from '../../components/Buttons/NextButton';
 import PrevButton from '../../components/Buttons/PrevButton';
 import './FindTeachers.css';
 
-const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_updated, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers }) => {
+const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_updated, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers, totalFilterPages }) => {
     const [sortByAll, setSortByAll] = useState(true);
     const [sortByBookmarks, setSortByBookmarks] = useState(false);
+    const [activeFilter, setActiveFilter] = useState(false);
     const [allTeachers, setAllTeachers] = useState([]);
     const [allBookmarkTeachers, setAllBookmarkTeachers] = useState([]);
     const [index, setIndex] = useState(1);
+    const [filterIndex, setFilterIndex] = useState(1);
+    const [filterOptions, setFilterOptions] = useState();
+    const [filteredBy, setFilteredBy] = useState();
 
     useEffect(() => {
         load_teachers(index)
@@ -24,7 +28,6 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
     }, []);
 
     useEffect(() => {
-        console.log(sortByAll)
         if (sortByAll) {
             setIndex(1)
             load_teachers(1)
@@ -49,12 +52,10 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
     }, [bookmarkedTeachers]);
 
     useEffect(() => {
-        console.log("new---", teachers)
         setAllTeachers(teachers)
     }, [teachers]);
 
     useEffect(() => {
-        console.log("new filter_teachers---", filteredTeachers)
         setAllTeachers(filteredTeachers)
     }, [filteredTeachers]);
 
@@ -69,7 +70,6 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
     }
 
     const handleNextPage = () => {
-        console.log("next", index, "t0tal", totalTeacherPages)
         if (index + 1 <= totalTeacherPages) {
             load_teachers(index + 1);
             setIndex(index + 1);
@@ -77,22 +77,43 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
     }
 
     const handlePrevPage = () => {
-        console.log("prev")
         if (index - 1 > 0) {
             load_teachers(index - 1);
             setIndex(index - 1);
         } else {
-            console.log("0000")
             load_teachers(1);
             setIndex(1);
         }
     }
 
+    const handleNextFilterPage = () => {
+        if (filterIndex + 1 <= totalFilterPages) {
+            filter_teachers(filterOptions, filteredBy, filterIndex + 1);
+            setFilterIndex(filterIndex + 1);
+        }
+    }
+
+    const handlePrevFilterPage = () => {
+        if (filterIndex - 1 > 0) {
+            filter_teachers(filterOptions, filteredBy, filterIndex - 1);
+            setFilterIndex(filterIndex - 1);
+        } else {
+            filter_teachers(filterOptions, filteredBy, 1);
+            setFilterIndex(1);
+        }
+    }
+
     const handleFilter = (selectedOptions, filterBy) => {
         console.log("in FIND", selectedOptions, filterBy)
+        setFilterOptions(selectedOptions);
+        setFilteredBy(filterBy);
+        setActiveFilter(true);
         if (selectedOptions.length > 0 && filterBy) {
             console.log("get filtered teacher")
-            filter_teachers(selectedOptions, filterBy, 0);
+            filter_teachers(selectedOptions, filterBy, filterIndex);
+        } else {
+            setAllTeachers(teachers)
+            setActiveFilter(false);
         }
     }
 
@@ -105,11 +126,13 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
                 <div className={sortByBookmarks ? "active" : null} onClick={handleBookmarks}>Bookmarked</div>
             </div>
             <section >
-                <div className="filter-container">
-                    <FilterComponent title={"Subjects"} filterBy={"subjects"} options={subjects} onSelectedFilter={(selectedOptions, filterBy) => { handleFilter(selectedOptions, filterBy) }} />
-                    <FilterComponent title={"Languages"} filterBy={"languages"} options={languages} />
-                    <FilterComponent title={"Area"} />
-                </div>
+                {sortByBookmarks ? null :
+                    <div className="filter-container">
+                        <FilterComponent title={"Subjects"} filterBy={"subjects"} options={subjects} onSelectedFilter={(selectedOptions, filterBy) => { handleFilter(selectedOptions, filterBy) }} />
+                        <FilterComponent title={"Languages"} filterBy={"languages"} options={languages} />
+                        <FilterComponent title={"Area"} />
+                    </div>
+                }
             </section>
             <section className="teachers-list">
                 <div>{sortByBookmarks ?
@@ -130,25 +153,43 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
 
                     </div>
                     :
-                    <div> {allTeachers && allTeachers.length > 0 ?
-                        allTeachers.map((teacher, index) =>
-                            <TeacherCard
-                                key={index}
-                                user={teacher.user}
-                                profileImage={teacher.profile_image}
-                                city={teacher.city}
-                                subjects={teacher.subjects}
-                                languages={teacher.languages}
-                                isBookmarked={teacher.isBookmarked}
-                                sortByBookmarks={sortByBookmarks}
-                            />
-                        )
-                        :
-                        <p>No teachers</p>}
+                    <div>
+                        {allTeachers && allTeachers.length > 0 ?
+                            allTeachers.map((teacher, index) =>
+                                <TeacherCard
+                                    key={index}
+                                    user={teacher.user}
+                                    profileImage={teacher.profile_image}
+                                    city={teacher.city}
+                                    subjects={teacher.subjects}
+                                    languages={teacher.languages}
+                                    isBookmarked={teacher.isBookmarked}
+                                    sortByBookmarks={sortByBookmarks}
+                                />
+                            )
+                            :
+                            <p>No teachers</p>
+                        }
                         <div className="bottom-navigation">
-                            <div onClick={handlePrevPage}><PrevButton /></div>
-                            <p> {index <= totalTeacherPages && index > 0 ? index : index <= 0 ? 1 : totalTeacherPages}</p>
-                            <div onClick={handleNextPage}><NextButton /></div>
+                            {sortByAll && !activeFilter ?
+                                <>
+                                    {index <= 1 ? null :
+                                        <div onClick={handlePrevPage}><PrevButton /></div>
+                                    }
+                                    <p> {index <= totalTeacherPages && index > 0 ? index : index <= 0 ? 1 : totalTeacherPages}</p>
+                                    {index >= totalTeacherPages ? null :
+                                        <div onClick={handleNextPage}><NextButton /></div>
+                                    }
+                                </>
+                                : <>
+                                    {filterIndex <= 1 ? null :
+                                        <div onClick={handlePrevFilterPage}><PrevButton /></div>
+                                    }
+                                    <p> {filterIndex <= totalFilterPages && filterIndex > 0 ? filterIndex : filterIndex <= 0 ? 1 : totalFilterPages}</p>
+                                    {filterIndex >= totalFilterPages ? null :
+                                        <div onClick={handleNextFilterPage}><NextButton /></div>
+                                    }
+                                </>}
                         </div>
                     </div>
 
@@ -169,7 +210,8 @@ const mapStateToProps = state => ({
     totalTeacherPages: state.data.totalTeacherPages,
     bookmarkedTeachers: state.data.bookmarkedTeachers,
     totalTeacherPages: state.data.totalTeacherPages,
-    filteredTeachers: state.data.filteredTeachers
+    filteredTeachers: state.data.filteredTeachers,
+    totalFilterPages: state.data.totalFilterPages
 });
 
 export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, teachers_are_updated, load_languages, load_subjects, filter_teachers })(FindTeachers);
