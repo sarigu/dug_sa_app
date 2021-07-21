@@ -7,7 +7,7 @@
     background-color: white;
     margin-right:30px;
     position: relative;
-    min-width: 120px;
+    min-width: 160px;
     z-index: 1;
 }
 .filter-component-content{
@@ -33,8 +33,14 @@
     border-radius: 0 0 25px 25px;
     height:fit-content;
     background-color: white;
-    width: inherit;
+    width: calc(100% - 20px);
     z-index: 99;
+  
+}
+
+.dropdown-content p {
+
+    font-weight: 500 !important;
 }
 
 .filter-component:hover .dropdown-content {
@@ -43,5 +49,17 @@
 
 .filter-component:hover {
     border-radius: 25px 25px 0 0;
+}
+
+.checkbox-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.checkbox-container input{
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
 }
 

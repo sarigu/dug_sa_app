@@ -8,7 +8,9 @@ import {
     BOOKMARKED_TEACHERS_LOADED_FAIL,
     ADD_BOOKMARK_SUCCESS,
     ADD_BOOKMARK_FAIL,
-    UPDATED_TEACHERS
+    UPDATED_TEACHERS,
+    FILTER_TEACHERS_SUCCESS,
+    FILTER_TEACHERS_FAIL,
 } from './types';
 
 
@@ -28,8 +30,6 @@ export const load_teachers = (index) => async dispatch => {
                 type: TEACHERS_LOADED_SUCCESS,
                 payload: res.data
             });
-
-            return { status: "ok" };
         } catch (err) {
             dispatch({
                 type: TEACHERS_LOADED_FAIL
@@ -116,8 +116,37 @@ export const create_bookmark = (teacherId) => async dispatch => {
     }
 };
 
-export const teachersAreUpdated = () => dispatch => {
+export const teachers_are_updated = () => dispatch => {
     dispatch({
         type: UPDATED_TEACHERS
     });
+};
+
+
+export const filter_teachers = (selectedOptions, filterBy, index) => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        const body = JSON.stringify({ selectedOptions, filterBy });
+
+        try {
+            const res = await axios.post(`http://localhost:8000/api/filter/teachers/?page=${index}`, body, config);
+            console.log("filter--", res.data)
+            dispatch({
+                type: FILTER_TEACHERS_SUCCESS,
+                payload: res.data.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: FILTER_TEACHERS_FAIL
+            });
+        }
+    }
 };

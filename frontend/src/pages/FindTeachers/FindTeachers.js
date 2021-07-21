@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import TeacherCard from '../../components/TeacherCard/TeacherCard';
 import BackButton from '../../components/Buttons/BackButton';
-import { load_teachers, load_bookmarked_teachers, teachersAreUpdated } from '../../actions/data';
+import { load_teachers, load_bookmarked_teachers, teachers_are_updated, filter_teachers } from '../../actions/data';
 import { load_languages, load_subjects } from '../../actions/auth';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import NextButton from '../../components/Buttons/NextButton';
 import PrevButton from '../../components/Buttons/PrevButton';
 import './FindTeachers.css';
 
-const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUpdated, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages }) => {
+const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_updated, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers }) => {
     const [sortByAll, setSortByAll] = useState(true);
     const [sortByBookmarks, setSortByBookmarks] = useState(false);
     const [allTeachers, setAllTeachers] = useState([]);
@@ -19,9 +19,12 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUp
     useEffect(() => {
         load_teachers(index)
         load_bookmarked_teachers();
+        load_languages();
+        load_subjects();
     }, []);
 
     useEffect(() => {
+        console.log(sortByAll)
         if (sortByAll) {
             setIndex(1)
             load_teachers(1)
@@ -30,7 +33,6 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUp
 
     useEffect(() => {
         if (sortByBookmarks) {
-            console.log("get updated bookmarks")
             load_bookmarked_teachers();
         }
     }, [sortByBookmarks]);
@@ -38,7 +40,7 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUp
     useEffect(() => {
         if (bookmarksUpdated) {
             load_bookmarked_teachers()
-            teachersAreUpdated()
+            teachers_are_updated()
         }
     }, [bookmarksUpdated]);
 
@@ -47,8 +49,14 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUp
     }, [bookmarkedTeachers]);
 
     useEffect(() => {
+        console.log("new---", teachers)
         setAllTeachers(teachers)
     }, [teachers]);
+
+    useEffect(() => {
+        console.log("new filter_teachers---", filteredTeachers)
+        setAllTeachers(filteredTeachers)
+    }, [filteredTeachers]);
 
     const handleBookmarks = () => {
         setSortByAll(false);
@@ -80,6 +88,14 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUp
         }
     }
 
+    const handleFilter = (selectedOptions, filterBy) => {
+        console.log("in FIND", selectedOptions, filterBy)
+        if (selectedOptions.length > 0 && filterBy) {
+            console.log("get filtered teacher")
+            filter_teachers(selectedOptions, filterBy, 0);
+        }
+    }
+
     return (
         <div className="find-teacher-wrapper">
             <BackButton buttonWidth={"70px"} />
@@ -90,8 +106,8 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachersAreUp
             </div>
             <section >
                 <div className="filter-container">
-                    <FilterComponent title={"Subjects"} filterBy={"subjects"} />
-                    <FilterComponent title={"Languages"} filterBy={"languages"} />
+                    <FilterComponent title={"Subjects"} filterBy={"subjects"} options={subjects} onSelectedFilter={(selectedOptions, filterBy) => { handleFilter(selectedOptions, filterBy) }} />
+                    <FilterComponent title={"Languages"} filterBy={"languages"} options={languages} />
                     <FilterComponent title={"Area"} />
                 </div>
             </section>
@@ -153,6 +169,7 @@ const mapStateToProps = state => ({
     totalTeacherPages: state.data.totalTeacherPages,
     bookmarkedTeachers: state.data.bookmarkedTeachers,
     totalTeacherPages: state.data.totalTeacherPages,
+    filteredTeachers: state.data.filteredTeachers
 });
 
-export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, teachersAreUpdated, load_languages, load_subjects })(FindTeachers);
+export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, teachers_are_updated, load_languages, load_subjects, filter_teachers })(FindTeachers);

@@ -7,7 +7,7 @@ import { create_bookmark, load_bookmarked_teachers } from '../../actions/data';
 
 
 const TeacherCard = ({ create_bookmark, user, profileImage, city, subjects, languages, isBookmarked, view, sortByBookmarks }) => {
-    const [bookmarkIsSet, setBookmarkIsSet] = useState(false);
+    const [bookmarkIsSet, setBookmarkIsSet] = useState();
     const [backgroundImage, setBackgroundImage] = useState()
 
 
@@ -18,6 +18,10 @@ const TeacherCard = ({ create_bookmark, user, profileImage, city, subjects, lang
             setBackgroundImage("http://localhost:8000" + profileImage);
         }
     }, [profileImage]);
+
+    useEffect(() => {
+        setBookmarkIsSet(isBookmarked);
+    }, [isBookmarked]);
 
     const handleBookmark = () => {
         create_bookmark(user.id);
@@ -51,7 +55,7 @@ const TeacherCard = ({ create_bookmark, user, profileImage, city, subjects, lang
                             <h5 className="subtext">{city}</h5>
                             <button className="availibility-button">Check availibility</button>
                         </div>
-                        <div onClick={handleBookmark} style={{ alignSelf: "flex-start", marginRight: "10px" }}>{bookmarkIsSet ? <FilledHeart /> : isBookmarked ? <FilledHeart /> : <Heart />}</div>
+                        <div onClick={handleBookmark} style={{ alignSelf: "flex-start", marginRight: "10px" }}>{bookmarkIsSet ? <FilledHeart /> : <Heart />}</div>
                     </div>
                 </div>
 

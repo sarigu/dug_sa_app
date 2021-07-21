@@ -7,7 +7,9 @@ import {
     BOOKMARKED_TEACHERS_LOADED_FAIL,
     ADD_BOOKMARK_SUCCESS,
     ADD_BOOKMARK_FAIL,
-    UPDATED_TEACHERS
+    UPDATED_TEACHERS,
+    FILTER_TEACHERS_SUCCESS,
+    FILTER_TEACHERS_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -16,6 +18,7 @@ const initialState = {
     bookmarkedTeachers: [],
     bookmarksUpdated: false,
     totalTeacherPages: null,
+    filteredTeachers: []
 };
 
 export default function (state = initialState, action) {
@@ -63,6 +66,15 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 bookmarksUpdated: false
+            }
+        case FILTER_TEACHERS_SUCCESS:
+            return {
+                ...state,
+                filteredTeachers: payload,
+            }
+        case FILTER_TEACHERS_FAIL:
+            return {
+                ...state,
             }
         default:
             return state

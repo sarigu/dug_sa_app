@@ -12,4 +12,5 @@ urlpatterns = [
     path("new_teachers/", views.NewTeachersView.as_view()),
     path("find/teachers/", views.FindTeachersView.as_view({'get': 'list'})),
     path("bookmarked/teachers/", views.BookmarkedTeachersView.as_view({'get': 'list', 'post': 'create'})),
+    path("filter/teachers/", views.FilterTeachersView.as_view({ 'post': 'list'})),
 ] + router.urls 
