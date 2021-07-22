@@ -123,7 +123,7 @@ export const teachers_are_updated = () => dispatch => {
 };
 
 
-export const filter_teachers = (selectedOptions, filterBy, index) => async dispatch => {
+export const filter_teachers = (subjectsFilter, languageFilter, index) => async dispatch => {
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -133,11 +133,12 @@ export const filter_teachers = (selectedOptions, filterBy, index) => async dispa
             }
         };
 
-        const body = JSON.stringify({ selectedOptions, filterBy });
+        const body = JSON.stringify({ subjectsFilter, languageFilter });
+
+        console.log("BODY", body);
 
         try {
             const res = await axios.post(`http://localhost:8000/api/filter/teachers/?page=${index}`, body, config);
-            console.log("filter--", res.data)
             dispatch({
                 type: FILTER_TEACHERS_SUCCESS,
                 payload: res.data

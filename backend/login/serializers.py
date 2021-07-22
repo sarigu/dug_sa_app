@@ -63,6 +63,7 @@ class FindTeacherSerializer(serializers.Serializer):
     subjects = SubjectSerializer(many=True)
     languages = LanguageSerializer(many=True)
     isBookmarked = serializers.BooleanField()
+    experience = serializers.IntegerField()
 
 class BookmarkedTeachersSerializer(serializers.ModelSerializer):
     user = UserSerializer()

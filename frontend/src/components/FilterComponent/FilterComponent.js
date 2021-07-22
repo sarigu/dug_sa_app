@@ -21,6 +21,7 @@ const Checkbox = ({ optionValue, onSelected, optionId }) => {
 
 const FilterComponent = (props) => {
     const [selectedOptions, setSelectedOptions] = useState([]);
+    const [buttonText, setButtonText] = useState("Apply");
 
     const addOrRemove = (value) => {
         let index = selectedOptions.indexOf(value);
@@ -31,6 +32,8 @@ const FilterComponent = (props) => {
             selectedOptions.splice(index, 1);
             setSelectedOptions(selectedOptions)
         }
+
+        props.setSelectedFilter(selectedOptions)
     }
 
     return (
@@ -46,7 +49,7 @@ const FilterComponent = (props) => {
                         props.options.map((option, index) =>
                             <Checkbox key={index} optionId={option.id} optionValue={option.language} onSelected={(optionId) => { addOrRemove(optionId) }} />
                         ) : null}
-                <button onClick={() => props.onSelectedFilter(selectedOptions, props.filterBy)} style={{ margin: "10px 0", height: "30px" }}>Apply</button>
+                <button onClick={() => { props.onApplyFilter(); setButtonText("Applied") }} style={{ margin: "10px 0", height: "30px" }}>{buttonText}</button>
             </div>
         </div>
     );

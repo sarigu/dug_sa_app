@@ -17,8 +17,8 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
     const [allBookmarkTeachers, setAllBookmarkTeachers] = useState([]);
     const [index, setIndex] = useState(1);
     const [filterIndex, setFilterIndex] = useState(1);
-    const [filterOptions, setFilterOptions] = useState();
-    const [filteredBy, setFilteredBy] = useState();
+    const [subjectsFilter, setSubjectsFilter] = useState([]);
+    const [languageFilter, setLanguageFilter] = useState([]);
 
     useEffect(() => {
         load_teachers(index)
@@ -89,35 +89,32 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
 
     const handleNextFilterPage = () => {
         if (filterIndex + 1 <= totalFilterPages) {
-            filter_teachers(filterOptions, filteredBy, filterIndex + 1);
+            filter_teachers(subjectsFilter, languageFilter, filterIndex + 1);
             setFilterIndex(filterIndex + 1);
         }
     }
 
     const handlePrevFilterPage = () => {
         if (filterIndex - 1 > 0) {
-            filter_teachers(filterOptions, filteredBy, filterIndex - 1);
+            filter_teachers(subjectsFilter, languageFilter, filterIndex - 1);
             setFilterIndex(filterIndex - 1);
         } else {
-            filter_teachers(filterOptions, filteredBy, 1);
+            filter_teachers(subjectsFilter, languageFilter, 1);
             setFilterIndex(1);
         }
     }
 
-    const handleFilter = (selectedOptions, filterBy) => {
-        console.log("-------------------")
-        console.log("in FIND", selectedOptions, filterBy)
-        setFilterOptions(selectedOptions);
-        setFilteredBy(filterBy);
+    const handleFilter = () => {
         setActiveFilter(true);
-        if (selectedOptions.length > 0 && filterBy) {
-            console.log("get filtered teacher")
-            filter_teachers(selectedOptions, filterBy, filterIndex);
+        setFilterIndex(1);
+        if (subjectsFilter && subjectsFilter.length > 0 || languageFilter && languageFilter.length > 0) {
+            filter_teachers(subjectsFilter, languageFilter, 1);
         } else {
             setAllTeachers(teachers)
             setActiveFilter(false);
         }
     }
+
 
     return (
         <div className="find-teacher-wrapper">
@@ -130,9 +127,8 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
             <section >
                 {sortByBookmarks ? null :
                     <div className="filter-container">
-                        <FilterComponent title={"Subjects"} filterBy={"subjects"} options={subjects} onSelectedFilter={(selectedOptions, filterBy) => { handleFilter(selectedOptions, filterBy) }} />
-                        <FilterComponent title={"Languages"} filterBy={"languages"} options={languages} onSelectedFilter={(selectedOptions, filterBy) => { handleFilter(selectedOptions, filterBy) }} />
-                        <FilterComponent title={"Area"} />
+                        <FilterComponent title={"Subjects"} filterBy={"subjects"} options={subjects} setSelectedFilter={setSubjectsFilter} selectedFilter={subjectsFilter} onApplyFilter={handleFilter} />
+                        <FilterComponent title={"Languages"} filterBy={"languages"} options={languages} setSelectedFilter={setLanguageFilter} selectedFilter={languageFilter} onApplyFilter={handleFilter} />
                     </div>
                 }
             </section>
@@ -144,7 +140,6 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
                                 key={index}
                                 user={teacher.user}
                                 profileImage={teacher.profile_image}
-                                city={teacher.city}
                                 subjects={teacher.subjects}
                                 languages={teacher.languages}
                                 isBookmarked={teacher.isBookmarked}
@@ -167,6 +162,7 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
                                     languages={teacher.languages}
                                     isBookmarked={teacher.isBookmarked}
                                     sortByBookmarks={sortByBookmarks}
+                                    experience={teacher.experience}
                                 />
                             )
                             :

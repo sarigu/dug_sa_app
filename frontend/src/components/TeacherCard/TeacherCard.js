@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import { create_bookmark, load_bookmarked_teachers } from '../../actions/data';
 
 
-const TeacherCard = ({ create_bookmark, user, profileImage, city, subjects, languages, isBookmarked, view, sortByBookmarks }) => {
+const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages, isBookmarked, view, sortByBookmarks, experience }) => {
+
     const [bookmarkIsSet, setBookmarkIsSet] = useState();
     const [backgroundImage, setBackgroundImage] = useState()
 
@@ -30,7 +31,6 @@ const TeacherCard = ({ create_bookmark, user, profileImage, city, subjects, lang
     return (
         <div>
             <div> {view === "overview" ?
-
                 <div className="teacher-card small" >
                     <div className="teacher-information-container small-container">
                         <div className="teacher-image" style={{ backgroundImage: `url(${backgroundImage})` }}></div>
@@ -51,15 +51,15 @@ const TeacherCard = ({ create_bookmark, user, profileImage, city, subjects, lang
                             {subjects ? subjects.map((subject, index) => <h5 key={index} className="subtext">{subject.name}</h5>) : <h5>No subjects</h5>}
                             <h5>Languages</h5>
                             {languages ? languages.map((language, index) => <h5 key={index} className="subtext">{language.language}</h5>) : <h5>No languages</h5>}
-                            <h5>Area</h5>
-                            <h5 className="subtext">{city}</h5>
+                            <h5>Teaching Location</h5>
+                            <h5 className="subtext">Dug SA facility</h5>
+                            <h5>Teaching Experience</h5>
+                            <h5 className="subtext">{experience} years</h5>
                             <button className="availibility-button">Check availibility</button>
                         </div>
                         <div onClick={handleBookmark} style={{ alignSelf: "flex-start", marginRight: "10px" }}>{bookmarkIsSet ? <FilledHeart /> : <Heart />}</div>
                     </div>
                 </div>
-
-
             }
             </div>
         </div>
@@ -69,13 +69,13 @@ const TeacherCard = ({ create_bookmark, user, profileImage, city, subjects, lang
 
 const mapStateToProps = (state, props) => ({
     subjects: props.subjects,
-    city: props.city,
     languages: props.languages,
     profileImage: props.profileImage,
     isBookmarked: props.isBookmarked,
     view: props.view,
     user: props.user,
     sortByBookmarks: props.sortByBookmarks,
+    experience: props.experience
 });
 
 export default connect(mapStateToProps, { create_bookmark, load_bookmarked_teachers })(TeacherCard);
