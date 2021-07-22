@@ -144,16 +144,24 @@ class FilterTeachersView(viewsets.ViewSet):
         all_teachers = []
         print("hello", selectedOptions, filteredBy)
         if filteredBy == "subjects": 
-            for subject in selectedOptions: 
+            for subjectId in selectedOptions: 
                 print("---------")
-                subjectObj = Subject.objects.get(pk =subject)
-                print(subjectObj)
-                test = Teacher_Subject.objects.filter(subject=subjectObj)
-                ids = test.values_list('teacher', flat=True).distinct()
+                subject = Subject.objects.get(pk = subjectId)
+                print(subject)
+                teacher_subjects = Teacher_Subject.objects.filter(subject=subject)
+                ids = teacher_subjects.values_list('teacher', flat=True).distinct()
                 for elem in ids:
                     teacher_id_list.append(elem)
         elif filteredBy == "languages": 
             print("languages")
+            for languageId in selectedOptions: 
+                print("---------")
+                language = Language.objects.get(pk =languageId)
+                print(language)
+                teacher_language = Teacher_Language.objects.filter(language=language)
+                ids = teacher_language.values_list('teacher', flat=True).distinct()
+                for elem in ids:
+                    teacher_id_list.append(elem)
         teacher_id_list = list(set(teacher_id_list))
         for elem in teacher_id_list:
             teacher = Teacher.objects.get(pk = elem)

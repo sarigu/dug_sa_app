@@ -41,9 +41,12 @@ const FilterComponent = (props) => {
             </div>
             <div className="dropdown-content">
                 {props.options && props.filterBy === "subjects" ? props.options.map((option, index) =>
-                    <Checkbox optionId={option.id} optionValue={option.name} onSelected={(optionId) => { addOrRemove(optionId) }} />
-                ) : null}
-                <button onClick={() => props.onSelectedFilter(selectedOptions, props.filterBy)} style={{ margin: "20px 0", height: "30px" }}>Apply</button>
+                    <Checkbox key={index} optionId={option.id} optionValue={option.name} onSelected={(optionId) => { addOrRemove(optionId) }} />
+                ) : props.options && props.filterBy === "languages" ?
+                        props.options.map((option, index) =>
+                            <Checkbox key={index} optionId={option.id} optionValue={option.language} onSelected={(optionId) => { addOrRemove(optionId) }} />
+                        ) : null}
+                <button onClick={() => props.onSelectedFilter(selectedOptions, props.filterBy)} style={{ margin: "10px 0", height: "30px" }}>Apply</button>
             </div>
         </div>
     );

@@ -62,6 +62,7 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
     const handleBookmarks = () => {
         setSortByAll(false);
         setSortByBookmarks(true);
+        setActiveFilter(false);
     }
 
     const handleSortByAll = () => {
@@ -104,6 +105,7 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
     }
 
     const handleFilter = (selectedOptions, filterBy) => {
+        console.log("-------------------")
         console.log("in FIND", selectedOptions, filterBy)
         setFilterOptions(selectedOptions);
         setFilteredBy(filterBy);
@@ -129,7 +131,7 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
                 {sortByBookmarks ? null :
                     <div className="filter-container">
                         <FilterComponent title={"Subjects"} filterBy={"subjects"} options={subjects} onSelectedFilter={(selectedOptions, filterBy) => { handleFilter(selectedOptions, filterBy) }} />
-                        <FilterComponent title={"Languages"} filterBy={"languages"} options={languages} />
+                        <FilterComponent title={"Languages"} filterBy={"languages"} options={languages} onSelectedFilter={(selectedOptions, filterBy) => { handleFilter(selectedOptions, filterBy) }} />
                         <FilterComponent title={"Area"} />
                     </div>
                 }

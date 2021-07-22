@@ -10,6 +10,7 @@
     min-width: 160px;
     z-index: 1;
 }
+
 .filter-component-content{
     display: flex;
     flex-direction: row;
@@ -18,6 +19,7 @@
     margin: 0 10px;
     width: 100%;
 }
+
 .filter-component p{
     font-weight: 600;
     margin-right: 10px;
@@ -35,11 +37,9 @@
     background-color: white;
     width: calc(100% - 20px);
     z-index: 99;
-  
 }
 
 .dropdown-content p {
-
     font-weight: 500 !important;
 }
 
