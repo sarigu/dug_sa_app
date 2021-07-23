@@ -9,6 +9,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 import json
 from django.core.paginator import Paginator
 
+PAGINATION_LIMIT = 15; 
 
 class TeacherView(viewsets.ModelViewSet):
     permissions_classes=[IsAuthenticated]
@@ -80,12 +81,13 @@ class FindTeachersView(viewsets.ViewSet):
             data = {'user': teacher.user, 'facilities': teaching_facilities, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
             all_teachers.append(data)
 
-        paginator = Paginator(all_teachers, 2) 
+        paginator = Paginator(all_teachers, PAGINATION_LIMIT) 
         page_number = self.request.GET.get('page')
         total_pages = paginator.num_pages
 
         if int(page_number) <= total_pages:
-            page_obj = paginator.get_page(page_number)       
+            page_obj = paginator.get_page(page_number)  
+            print(page_obj)     
             serializer = FindTeacherSerializer(page_obj, many=True)
             return Response({'total_pages': total_pages, 'data': serializer.data})
 
@@ -217,12 +219,13 @@ class FilterTeachersView(viewsets.ViewSet):
                 all_teachers.append(data)
 
         if(all_teachers): 
-            paginator = Paginator(all_teachers, 2) 
+            paginator = Paginator(all_teachers, PAGINATION_LIMIT) 
             page_number = self.request.GET.get('page')
             total_pages = paginator.num_pages
 
             if int(page_number) <= total_pages:
-                page_obj = paginator.get_page(page_number)       
+                page_obj = paginator.get_page(page_number)     
+                print(page_obj)      
                 serializer = FindTeacherSerializer(page_obj, many=True)
                 return Response({'total_pages': total_pages, 'data': serializer.data})
 
