@@ -13,7 +13,7 @@ const StaffDashboard = ({ load_new_teachers }) => {
 
     useEffect(() => {
         load_new_teachers().then((res) => {
-            if (res.length > 0) {
+            if (res && res.length > 0) {
                 setTeachersListShortened(res.slice(0, 5));
                 setTeachersList(res)
 
@@ -53,8 +53,7 @@ const StaffDashboard = ({ load_new_teachers }) => {
                     <TeacherCard
                         key={index}
                         view={"overview"}
-                        firstName={teacher.first_name}
-                        lastName={teacher.last_name}
+                        user={teacher}
                         profileImage={teacher.profile_image}
                     />) : <p>No new teachers applied</p>}
                 {hideShowMore ? null : <p onClick={loadMoreTeacher} style={{ cursor: "pointer" }}>Show more</p>}

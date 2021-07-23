@@ -4,9 +4,9 @@
     border-radius: 15px;
     background-color: white;
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
 .small{
@@ -16,8 +16,10 @@
 }
 
 .big{
-    width:50%;
-    height:180px;
+    width:100%;
+    height:fit-content;
+    padding:20px 0;
+    margin-bottom: 20px;
 }
 
 .teacher-information-container{
@@ -25,13 +27,17 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-    justify-content: flex-start;
-    width: 100%;
 }
 
 .small-container{
     padding: 10px 10px;
 }
+
+.big-container{
+    justify-content: space-around;
+    width: 100%;
+}
+
 
 .small-container .teacher-image{
     width:65px;
@@ -42,13 +48,45 @@
     margin-right: 30px;
 }
 
-.teacher-information-container h4, .teacher-information-container h6{
+.teacher-information-container h4, .teacher-information-container h5{
     margin:0;
 }
-
-.teacher-img{
-    width:80px;
-    height:80px;
-    border-radius: 15px;
+.subtext{
+    font-weight: 400 !important;
 }
 
+.teacher-details h5{
+    margin-top: 8px;
+}
+
+.subtext{
+    margin-top: 4px !important;
+}
+
+
+.big-container .teacher-image{
+    width:90px;
+    height:90px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    margin: 0 10px;
+}
+
+.availibility-button{
+    padding:0 10px;
+    height:30px;
+    margin-top: 10px;
+}
+
+@media only screen and (min-width: 600px) {
+    .big{
+        width:550px;
+    }
+
+    .big-container .teacher-image{
+        width:190px;
+        height:190px;
+
+    }
+}

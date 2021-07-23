@@ -109,3 +109,48 @@ class AccessCode(models.Model):
     is_active = models.BooleanField(default=True)
     def __str__(self):
         return f"{self.code}"
+
+
+class Language(models.Model):
+    language = models.CharField(max_length=255)
+    def __str__(self):
+        return f"{self.language}"
+
+class Teacher_Language(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('teacher', 'language',)
+
+    def __str__(self):
+        return f"{self.teacher} - {self.language}"
+
+
+class BookmarkedTeacher(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'teacher',)
+
+    def __str__(self):
+        return f"{self.user} - {self.teacher}"
+
+class TeachingFacility(models.Model):
+    name = models.CharField(max_length=255)
+    street = models.CharField(max_length=255, blank=True, null=True)
+    postal_code = models.CharField(max_length=50, blank=True, null=True)
+    city = models.CharField(max_length=255, blank=True, null=True)
+    def __str__(self):
+        return f"{self.name}"
+
+class Teacher_TeachingFacility(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teaching_facility = models.ForeignKey(TeachingFacility, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('teacher', 'teaching_facility',)
+
+    def __str__(self):
+        return f"{self.teacher} - {self.teaching_facility}"

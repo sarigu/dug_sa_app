@@ -1,4 +1,4 @@
-p{
+.inline-button p{
     font-weight: 600;
 }
 
@@ -12,5 +12,18 @@ p{
     cursor: pointer;
     border-radius: 25px;
     height:35px;
+    background-color: white;
+}
+
+.prev-button, .next-button{
+    width:20px;
+    height:20px;
+    padding:10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    filter:drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.199) );
+    cursor: pointer;
+    border-radius: 50%;
     background-color: white;
 }

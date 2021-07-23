@@ -1,6 +1,6 @@
 import React from 'react';
-import ArrowRight from '../../../icons/ArrowRight'
-import '../../Buttons/Buttons.css'
+import ArrowRight from '../../icons/ArrowRight'
+import './Buttons.css'
 
 const AllClassesButton = (props) => {
     return (
@@ -10,6 +10,5 @@ const AllClassesButton = (props) => {
         </div>
     );
 };
-
 
 export default AllClassesButton;
