@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import TeacherCard from '../../components/TeacherCard/TeacherCard';
 import BackButton from '../../components/Buttons/BackButton';
-import { load_teachers, load_bookmarked_teachers, teachers_are_updated, filter_teachers } from '../../actions/data';
+import { load_teachers, load_bookmarked_teachers, filter_teachers } from '../../actions/data';
 import { load_languages, load_subjects } from '../../actions/auth';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import NextButton from '../../components/Buttons/NextButton';
@@ -11,7 +11,7 @@ import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 import { useHistory } from "react-router-dom";
 import './FindTeachers.css';
 
-const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_updated, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers, totalFilterPages }) => {
+const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers, totalFilterPages }) => {
     const [sortByAll, setSortByAll] = useState(true);
     const [sortByBookmarks, setSortByBookmarks] = useState(false);
     const [activeFilter, setActiveFilter] = useState(false);
@@ -46,13 +46,6 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
             load_bookmarked_teachers();
         }
     }, [sortByBookmarks]);
-
-    useEffect(() => {
-        if (bookmarksUpdated) {
-            load_bookmarked_teachers()
-            teachers_are_updated()
-        }
-    }, [bookmarksUpdated]);
 
     useEffect(() => {
         if (sortByBookmarks) {
@@ -168,6 +161,7 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
                                         languages={teacher.languages}
                                         isBookmarked={teacher.isBookmarked}
                                         teachingFacilities={teacher.facilities}
+                                        sortByBookmarks={sortByBookmarks}
                                     />
                                 )
                                 :
@@ -186,16 +180,16 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
                                             subjects={teacher.subjects}
                                             languages={teacher.languages}
                                             isBookmarked={teacher.isBookmarked}
-                                            sortByBookmarks={sortByBookmarks}
                                             experience={teacher.experience}
                                             teachingFacilities={teacher.facilities}
+                                            sortByBookmarks={sortByBookmarks}
                                         />
                                     )
                                     :
                                     <p style={{ fontWeight: 600 }}>No teachers</p>
                                 }
                                 <div className="bottom-navigation">
-                                    {sortByAll && !activeFilter && allTeachers.length > 0 ?
+                                    {sortByAll && !activeFilter && allTeachers && allTeachers.length > 0 ?
                                         <>
                                             {index <= 1 ? null :
                                                 <div onClick={handlePrevPage}><PrevButton /></div>
@@ -205,7 +199,7 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
                                                 <div onClick={handleNextPage}><NextButton /></div>
                                             }
                                         </>
-                                        : sortByAll && activeFilter && allTeachers.length > 0 ? <>
+                                        : sortByAll && activeFilter && allTeachers && allTeachers.length > 0 ? <>
                                             {filterIndex <= 1 ? null :
                                                 <div onClick={handlePrevFilterPage}><PrevButton /></div>
                                             }
@@ -227,8 +221,6 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
 const mapStateToProps = state => ({
     teachers: state.data.teachers,
     user: state.auth.user,
-    bookmarkedTeachers: state.data.bookmarkedTeachers,
-    bookmarksUpdated: state.data.bookmarksUpdated,
     languages: state.auth.languages,
     subjects: state.auth.subjects,
     totalTeacherPages: state.data.totalTeacherPages,
@@ -238,4 +230,4 @@ const mapStateToProps = state => ({
     totalFilterPages: state.data.totalFilterPages
 });
 
-export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, teachers_are_updated, load_languages, load_subjects, filter_teachers })(FindTeachers);
+export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, load_languages, load_subjects, filter_teachers })(FindTeachers);

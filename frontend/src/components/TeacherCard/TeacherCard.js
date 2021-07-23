@@ -6,8 +6,7 @@ import { connect } from 'react-redux';
 import { create_bookmark, load_bookmarked_teachers } from '../../actions/data';
 
 
-const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages, isBookmarked, view, sortByBookmarks, experience, teachingFacilities }) => {
-    console.log("teachingFacilities", teachingFacilities)
+const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages, isBookmarked, view, experience, teachingFacilities, sortByBookmarks }) => {
     const [bookmarkIsSet, setBookmarkIsSet] = useState();
     const [backgroundImage, setBackgroundImage] = useState()
 
@@ -21,10 +20,12 @@ const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages,
     }, [profileImage]);
 
     useEffect(() => {
+        console.log("USE EFFECT teacher card bookmark", isBookmarked)
         setBookmarkIsSet(isBookmarked);
     }, [isBookmarked]);
 
     const handleBookmark = () => {
+        console.log("handle", user.first_name)
         create_bookmark(user.id);
         setBookmarkIsSet(!bookmarkIsSet);
     }
@@ -41,25 +42,63 @@ const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages,
                 </div>
 
                 :
+                <>
 
-                <div className="teacher-card big" >
-                    <div className="teacher-information-container big-container">
-                        <div className="teacher-image" style={{ backgroundImage: `url( ${backgroundImage})` }}></div>
-                        <div className="teacher-details">
-                            <h4>{user.first_name} {user.last_name}</h4>
-                            <h5>Subjects</h5>
-                            {subjects ? subjects.map((subject, index) => <h5 key={index} className="subtext">{subject.name}</h5>) : <h5 className="subtext">No subjects</h5>}
-                            <h5>Languages</h5>
-                            {languages ? languages.map((language, index) => <h5 key={index} className="subtext">{language.language}</h5>) : <h5 className="subtext">No languages</h5>}
-                            <h5>Teaching Location</h5>
-                            {teachingFacilities ? teachingFacilities.map((facility, index) => <h5 key={index} className="subtext">{facility.name}</h5>) : <h5 className="subtext">No facilities</h5>}
-                            <h5>Teaching Experience</h5>
-                            <h5 className="subtext">{experience} years</h5>
-                            <button className="availibility-button">Check availibility</button>
+                    {sortByBookmarks ?
+                        <>
+                            {bookmarkIsSet ? <div className="teacher-card big" >
+                                <div className="teacher-information-container big-container">
+                                    <div className="teacher-image" style={{ backgroundImage: `url( ${backgroundImage})` }}></div>
+                                    <div className="teacher-details">
+                                        <h4>{user.first_name} {user.last_name}</h4>
+                                        <h5>Subjects</h5>
+                                        {subjects ? subjects.map((subject, index) => <h5 key={index} className="subtext">{subject.name}</h5>) : <h5 className="subtext">No subjects</h5>}
+                                        <h5>Languages</h5>
+                                        {languages ? languages.map((language, index) => <h5 key={index} className="subtext">{language.language}</h5>) : <h5 className="subtext">No languages</h5>}
+                                        <h5>Teaching Location</h5>
+                                        {teachingFacilities ? teachingFacilities.map((facility, index) => <h5 key={index} className="subtext">{facility.name}</h5>) : <h5 className="subtext">No facilities</h5>}
+                                        <h5>Teaching Experience</h5>
+                                        <h5 className="subtext">{experience} years</h5>
+                                        <button className="availibility-button">Check availibility</button>
+                                    </div>
+                                    {console.log("in render", bookmarkIsSet)}
+                                    <div onClick={handleBookmark} style={{ alignSelf: "flex-start", marginRight: "10px" }}> <FilledHeart /></div>
+                                </div>
+                            </div> :
+                                null
+
+                            }
+
+
+
+                        </>
+
+                        :
+                        <div className="teacher-card big" >
+                            <div className="teacher-information-container big-container">
+                                <div className="teacher-image" style={{ backgroundImage: `url( ${backgroundImage})` }}></div>
+                                <div className="teacher-details">
+                                    <h4>{user.first_name} {user.last_name}</h4>
+                                    <h5>Subjects</h5>
+                                    {subjects ? subjects.map((subject, index) => <h5 key={index} className="subtext">{subject.name}</h5>) : <h5 className="subtext">No subjects</h5>}
+                                    <h5>Languages</h5>
+                                    {languages ? languages.map((language, index) => <h5 key={index} className="subtext">{language.language}</h5>) : <h5 className="subtext">No languages</h5>}
+                                    <h5>Teaching Location</h5>
+                                    {teachingFacilities ? teachingFacilities.map((facility, index) => <h5 key={index} className="subtext">{facility.name}</h5>) : <h5 className="subtext">No facilities</h5>}
+                                    <h5>Teaching Experience</h5>
+                                    <h5 className="subtext">{experience} years</h5>
+                                    <button className="availibility-button">Check availibility</button>
+                                </div>
+                                {console.log("in render", bookmarkIsSet)}
+                                <div onClick={handleBookmark} style={{ alignSelf: "flex-start", marginRight: "10px" }}>{bookmarkIsSet ? <FilledHeart /> : <Heart />}</div>
+                            </div>
                         </div>
-                        <div onClick={handleBookmark} style={{ alignSelf: "flex-start", marginRight: "10px" }}>{bookmarkIsSet ? <FilledHeart /> : <Heart />}</div>
-                    </div>
-                </div>
+                    }
+
+
+
+                </>
+
             }
             </div>
         </div>
@@ -74,9 +113,9 @@ const mapStateToProps = (state, props) => ({
     isBookmarked: props.isBookmarked,
     view: props.view,
     user: props.user,
-    sortByBookmarks: props.sortByBookmarks,
     experience: props.experience,
-    teachingFacilities: props.teachingFacilities
+    teachingFacilities: props.teachingFacilities,
+    sortByBookmarks: props.sortByBookmarks
 });
 
 export default connect(mapStateToProps, { create_bookmark, load_bookmarked_teachers })(TeacherCard);
