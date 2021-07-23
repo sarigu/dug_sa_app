@@ -43,7 +43,7 @@ const Carousel = (props) => {
                 {React.Children.map(children, (child, index) => {
                     return (
                         <div
-                            className={`${index === activeIndex ? "circle active" : "circle"}`}
+                            className={`${index === activeIndex ? "circle active-circle" : "circle"}`}
                             onClick={() => {
                                 updateIndex(index);
                             }}

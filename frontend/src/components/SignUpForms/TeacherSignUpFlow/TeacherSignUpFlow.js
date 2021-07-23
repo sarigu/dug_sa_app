@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { update_teacher, load_subjects } from '../../../actions/auth';
+import { update_teacher, load_subjects, load_languages } from '../../../actions/auth';
 import Carousel, { CarouselItem } from "../../Carousel/Carousel";
 import '../SignUpForms.css';
 import { validateYear, validateExperince, validatePhone } from '../utils';
 
-const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, error }) => {
+const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subjects, languages, user, error }) => {
 
     useEffect(() => {
         load_subjects();
+        load_languages();
     }, []);
 
     const [degreeError, setDegreeError] = useState(false);
@@ -21,10 +22,13 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
     const [poastalCodeError, setPoastalCodeError] = useState(false);
     const [cityError, setCityError] = useState(false);
     const [addressProofError, setAddressProofError] = useState(false);
+    const [subjectsError, setSubjectsError] = useState(false);
+    const [languagesError, setLanguagesError] = useState(false);
     const [profileImageError, setProfileImageError] = useState(false);
     const [phoneNumberError, setPhoneNumberError] = useState(false);
     const [carouselIndex, setCarouselIndex] = useState();
     const [selectedSubjects, setSelectedSubjects] = useState([]);
+    const [selectedLanguages, setSelectedLanguages] = useState([]);
     const [graduationDate, setGraduationDate] = useState();
 
     const [formData, setFormData] = useState({
@@ -58,7 +62,7 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
     const handleSubmit = () => {
         const dataIsChecked = checkData();
         if (dataIsChecked) {
-            update_teacher(user.id, degree, university, graduationDate, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, true, selectedSubjects);
+            update_teacher(user.id, degree, university, graduationDate, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, true, selectedSubjects, selectedLanguages);
         }
     }
 
@@ -156,31 +160,77 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
             }
         }
 
+        if (!selectedSubjects || selectedSubjects.length <= 0) {
+            setSubjectsError(true);
+            setCarouselIndex(2);
+            return false;
+        }
+
+        if (!selectedLanguages || selectedLanguages.length <= 0) {
+            setLanguagesError(true);
+            setCarouselIndex(3);
+            return false;
+        }
+
         return true;
 
     }
 
 
-    const handleSubjects = e => {
-        let allSubjects = selectedSubjects;
+    const handleSelectedOptions = e => {
         e.preventDefault();
-        let subjectId = e.target.getAttribute("data-id");
-        let subjectCard = document.querySelector(`[data-id="${subjectId}"]`)
-        if (subjectCard.classList.contains("active")) {
-            subjectCard.classList.remove("active");
-            let index = allSubjects.indexOf(subjectId);
-            if (index !== -1) {
-                allSubjects.splice(index, 1);
-            }
+        let allSubjects = selectedSubjects;
+        let allLanguages = selectedLanguages;
+
+        let optionId = e.target.getAttribute("data-id");
+        console.log(optionId, "optionId")
+        let optionType = e.target.getAttribute("data-type");
+        console.log(optionType, "optionType")
+        if (optionType === "subject") {
+            setSubjectsError(false);
         } else {
-            subjectCard.classList.add("active");
-            allSubjects.push(subjectId);
+            setLanguagesError(false);
+        }
+        let optionCards = document.querySelectorAll(`[data-type="${optionType}"]`)
+        let card;
+        optionCards.forEach((elem) => { console.log(elem.dataset.id); if (elem.dataset.id == optionId) { card = elem } })
+        console.log(card, "--optionCard")
+        if (card.classList.contains("active-card")) {
+            if (optionType === "subject") {
+                card.classList.remove("active-card");
+                let index = allSubjects.indexOf(optionId);
+                if (index !== -1) {
+                    allSubjects.splice(index, 1);
+                }
+            }
+            else {
+                card.classList.remove("active-card");
+                let index = allLanguages.indexOf(optionId);
+                if (index !== -1) {
+                    allLanguages.splice(index, 1);
+                }
+            }
+
+        } else {
+            if (optionType === "subject") {
+                card.classList.add("active-card");
+                allSubjects.push(optionId);
+            }
+            else {
+                card.classList.add("active-card");
+                allLanguages.push(optionId);
+            }
         }
 
+        console.log("HANDLE", "sub", allSubjects, "lang", allLanguages)
+
         setSelectedSubjects(allSubjects);
+        setSelectedLanguages(allLanguages);
     }
 
-    const subjectsList = subjects.map((subject) => <div onClick={handleSubjects} className="subject-card" data-id={subject.id}>{subject.name}</div>);
+    const subjectsList = subjects.map((subject) => <div onClick={handleSelectedOptions} className="options-card" data-type="subject" data-id={subject.id}>{subject.name}</div>);
+    const languageList = languages.map((language) => <div onClick={handleSelectedOptions} className="options-card" data-type="language" data-id={language.id}>{language.language}</div>);
+
 
     return (
         <div className="signup-flow-wrapper" >
@@ -260,8 +310,17 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
                 </CarouselItem>
                 <CarouselItem>
                     <div>
+                        {subjectsError ? <div className="error-message">Please select at least one subject</div> : null}
                         <h3>Subjects you would <br></br>want to teach</h3>
                         <div className="scroll-container">{subjectsList}</div>
+
+                    </div>
+                </CarouselItem>
+                <CarouselItem>
+                    <div>
+                        {languagesError ? <div className="error-message">Please select at least one language</div> : null}
+                        <h3>Languages you would <br></br>want to teach in</h3>
+                        <div className="scroll-container">{languageList}</div>
 
                     </div>
                 </CarouselItem>
@@ -331,6 +390,7 @@ const mapStateToProps = state => ({
     user: state.auth.user,
     subjects: state.auth.subjects,
     error: state.auth.error,
+    languages: state.auth.languages,
 });
 
-export default connect(mapStateToProps, { update_teacher, load_subjects })(TeacherSignUpFlow);
+export default connect(mapStateToProps, { update_teacher, load_subjects, load_languages })(TeacherSignUpFlow);

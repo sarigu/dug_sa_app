@@ -169,7 +169,7 @@ export const logout = () => dispatch => {
     });
 };
 
-export const update_teacher = (userID, degree, university, year_of_graduation, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, provided_information, selectedSubjects) => async dispatch => {
+export const update_teacher = (userID, degree, university, year_of_graduation, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, provided_information, selectedSubjects, selectedLanguages) => async dispatch => {
     const config = {
         headers: {
             'Authorization': `JWT ${localStorage.getItem('access')}`,
@@ -207,9 +207,12 @@ export const update_teacher = (userID, degree, university, year_of_graduation, l
                 }
             };
 
-            const body = JSON.stringify({ subjects: selectedSubjects });
+            const subjects = JSON.stringify({ subjects: selectedSubjects });
+            const languages = JSON.stringify({ languages: selectedLanguages });
 
-            let res = axios.post('http://localhost:8000/api/subjects_to_teach/', body, config);
+            axios.post('http://localhost:8000/api/subjects_to_teach/', subjects, config);
+            axios.post('http://localhost:8000/api/languages_to_teach_in/', languages, config);
+
         }
         dispatch({
             type: TEACHER_UPDATE_SUCCESS,

@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer, FindTeacherSerializer, BookmarkedTeachersSerializer, LanguageSerializer
+from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherLanguageSerializer, TeacherShortVersionSerializer, FindTeacherSerializer, BookmarkedTeachersSerializer, LanguageSerializer
 from .models import Teacher, CustomUser, Subject, Teacher_Subject, Teacher_Language, Language, BookmarkedTeacher,TeachingFacility, Teacher_TeachingFacility
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
@@ -48,6 +48,30 @@ class TeacherSubjectView(viewsets.ViewSet):
                 teachers_subject.teacher = teacher
                 teachers_subject.subject = subject
                 teachers_subject.save()
+
+        return Response({'status': 'ok'})
+
+class TeacherLanguageView(viewsets.ViewSet):
+    permissions_classes=[DjangoModelPermissions]
+    serializer_class = TeacherLanguageSerializer
+
+    def create(self, request):
+        languages = request.data["languages"]
+        print(languages, "languages from request")
+        user = CustomUser.objects.get(email=self.request.user)
+        teacher = Teacher.objects.get(user=user)
+        for elem in languages:
+            language = Language.objects.get(pk=elem)
+            print(language, "language")
+            if Teacher_Language.objects.filter(language=language).filter(teacher=teacher).exists():
+                print("exists")
+                continue
+            else:
+                teachers_language = Teacher_Language()
+                teachers_language.teacher = teacher
+                teachers_language.language = language
+                print(teachers_language, "teachers_language NEW OBJ")
+                teachers_language.save()
 
         return Response({'status': 'ok'})
 
