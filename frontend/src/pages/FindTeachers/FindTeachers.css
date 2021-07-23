@@ -25,6 +25,10 @@
   align-items: center;
 }
 
+.filter-container::-webkit-scrollbar {
+  display: none;
+}
+
 .active{
   border-bottom: 5px solid gray;
 }
@@ -33,6 +37,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-top: 30px;
 }
 
 .bottom-navigation p {
@@ -43,3 +48,4 @@
 input[type="checkbox"]{
   filter:none;
 }
+

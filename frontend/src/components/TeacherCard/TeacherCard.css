@@ -55,10 +55,6 @@
     font-weight: 400 !important;
 }
 
-.teacher-details{
-
-}
-
 .teacher-details h5{
     margin-top: 8px;
 }
@@ -85,7 +81,7 @@
 
 @media only screen and (min-width: 600px) {
     .big{
-        width:50%;
+        width:550px;
     }
 
     .big-container .teacher-image{

@@ -7,7 +7,7 @@
     background-color: white;
     margin-right:30px;
     position: relative;
-    min-width: 160px;
+    min-width: 140px;
     z-index: 1;
 }
 
@@ -63,3 +63,9 @@
     margin-right: 10px;
 }
 
+
+@media only screen and (min-width: 600px){
+    .filter-component{
+        min-width: 160px;
+    }
+}

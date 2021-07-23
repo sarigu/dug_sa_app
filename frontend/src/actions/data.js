@@ -135,8 +135,6 @@ export const filter_teachers = (subjectsFilter, languageFilter, index) => async 
 
         const body = JSON.stringify({ subjectsFilter, languageFilter });
 
-        console.log("BODY", body);
-
         try {
             const res = await axios.post(`http://localhost:8000/api/filter/teachers/?page=${index}`, body, config);
             dispatch({

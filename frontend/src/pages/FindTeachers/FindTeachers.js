@@ -66,7 +66,6 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
         setIsLoaded(true)
     }, [teachers]);
 
-
     useEffect(() => {
         if (activeFilter) {
             setAllTeachers(filteredTeachers)
@@ -142,7 +141,7 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
     return (
         <div className="find-teacher-wrapper">
             <BackButton buttonWidth={"70px"} selectedCallback={() => history.push("/dashboard")} />
-            <h2>Find a teacher</h2>
+            <h2 style={{ marginTop: "40px" }}>Find a teacher</h2>
             <div className="teacher-options">
                 <div className={sortByAll ? "active" : null} onClick={handleSortByAll}>All</div>
                 <div className={sortByBookmarks ? "active" : null} onClick={handleBookmarks}>Bookmarked</div>

@@ -91,10 +91,8 @@ class BookmarkedTeachersView(viewsets.ViewSet):
     def list(self, request):
         all_teachers = []
         bookmarked_teachers = Bookmarked_Teacher.objects.filter(user=request.user)
-        print("bookmarked_teachers", bookmarked_teachers)
         if bookmarked_teachers:
             for elem in bookmarked_teachers:
-                print("teacher in bookmarked_teachers", elem.teacher, elem.teacher.pk)
                 teacher = Teacher.objects.get(pk = elem.teacher.pk)
                 if teacher.is_approved: 
                     teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
@@ -142,7 +140,6 @@ class FilterTeachersView(viewsets.ViewSet):
         teacher_id_list = []
         all_teachers = []
         if subjectsFilter and languageFilter:
-            print("both")
             all_teacher_subjects = []
             all_teacher_languages= []
             for subjectId in subjectsFilter: 
@@ -157,32 +154,22 @@ class FilterTeachersView(viewsets.ViewSet):
                 for elem in teacher_languages:
                     all_teacher_languages.append(elem)
 
-            print(all_teacher_languages, "---", all_teacher_subjects)
 
             for elemLanguage in all_teacher_languages:
-                print(elemLanguage.teacher , "<--last")
                 for elemSubject in all_teacher_subjects:
-                    print(elemSubject.teacher, "sub")
                     if elemSubject.teacher.pk == elemLanguage.teacher.pk:
-                        print("MATCH")
                         teacher_id_list.append(elemSubject.teacher.pk)
 
         elif subjectsFilter: 
-            print("only subjects")
             for subjectId in subjectsFilter: 
-                print("---------")
                 subject = Subject.objects.get(pk = subjectId)
-                print(subject)
                 teacher_subjects = Teacher_Subject.objects.filter(subject=subject)
                 ids = teacher_subjects.values_list('teacher', flat=True).distinct()
                 for elem in ids:
                     teacher_id_list.append(elem)
         elif languageFilter:
-            print("only language") 
             for languageId in languageFilter: 
-                print("---------")
                 language = Language.objects.get(pk =languageId)
-                print(language)
                 teacher_languages = Teacher_Language.objects.filter(language=language)
                 ids = teacher_languages.values_list('teacher', flat=True).distinct()
                 for elem in ids:
@@ -190,14 +177,11 @@ class FilterTeachersView(viewsets.ViewSet):
         else:
             return Response([])
       
-        print(teacher_id_list, "teacher_id_list BEFORE")
-    
+
         teacher_id_list = list(set(teacher_id_list))
-        print(teacher_id_list)
         for elem in teacher_id_list:
             teacher = Teacher.objects.get(pk = elem)
             if teacher.is_approved: 
-                print(teacher)
                 teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
                 teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
                 subjects = []
@@ -216,15 +200,13 @@ class FilterTeachersView(viewsets.ViewSet):
 
                 data = {'user': teacher.user, 'city': teacher.city, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
                 all_teachers.append(data)
-        print(all_teachers, "all_teachers")
+
         if(all_teachers): 
             paginator = Paginator(all_teachers, 2) 
             page_number = self.request.GET.get('page')
             total_pages = paginator.num_pages
-            print("total_pages--", total_pages)
 
             if int(page_number) <= total_pages:
-                print("send", page_number)
                 page_obj = paginator.get_page(page_number)       
                 serializer = FindTeacherSerializer(page_obj, many=True)
                 return Response({'total_pages': total_pages, 'data': serializer.data})
