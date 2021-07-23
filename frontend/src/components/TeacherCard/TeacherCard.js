@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import { create_bookmark, load_bookmarked_teachers } from '../../actions/data';
 
 
-const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages, isBookmarked, view, sortByBookmarks, experience }) => {
-
+const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages, isBookmarked, view, sortByBookmarks, experience, teachingFacilities }) => {
+    console.log("teachingFacilities", teachingFacilities)
     const [bookmarkIsSet, setBookmarkIsSet] = useState();
     const [backgroundImage, setBackgroundImage] = useState()
 
@@ -48,11 +48,11 @@ const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages,
                         <div className="teacher-details">
                             <h4>{user.first_name} {user.last_name}</h4>
                             <h5>Subjects</h5>
-                            {subjects ? subjects.map((subject, index) => <h5 key={index} className="subtext">{subject.name}</h5>) : <h5>No subjects</h5>}
+                            {subjects ? subjects.map((subject, index) => <h5 key={index} className="subtext">{subject.name}</h5>) : <h5 className="subtext">No subjects</h5>}
                             <h5>Languages</h5>
-                            {languages ? languages.map((language, index) => <h5 key={index} className="subtext">{language.language}</h5>) : <h5>No languages</h5>}
+                            {languages ? languages.map((language, index) => <h5 key={index} className="subtext">{language.language}</h5>) : <h5 className="subtext">No languages</h5>}
                             <h5>Teaching Location</h5>
-                            <h5 className="subtext">Dug SA facility</h5>
+                            {teachingFacilities ? teachingFacilities.map((facility, index) => <h5 key={index} className="subtext">{facility.name}</h5>) : <h5 className="subtext">No facilities</h5>}
                             <h5>Teaching Experience</h5>
                             <h5 className="subtext">{experience} years</h5>
                             <button className="availibility-button">Check availibility</button>
@@ -75,7 +75,8 @@ const mapStateToProps = (state, props) => ({
     view: props.view,
     user: props.user,
     sortByBookmarks: props.sortByBookmarks,
-    experience: props.experience
+    experience: props.experience,
+    teachingFacilities: props.teachingFacilities
 });
 
 export default connect(mapStateToProps, { create_bookmark, load_bookmarked_teachers })(TeacherCard);

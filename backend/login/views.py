@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer, FindTeacherSerializer, BookmarkedTeachersSerializer, LanguageSerializer
-from .models import Teacher, CustomUser, Subject, Teacher_Subject, Teacher_Language, Language, Bookmarked_Teacher
+from .models import Teacher, CustomUser, Subject, Teacher_Subject, Teacher_Language, Language, BookmarkedTeacher,TeachingFacility, Teacher_TeachingFacility
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -58,21 +58,26 @@ class FindTeachersView(viewsets.ViewSet):
         for teacher in teachers:
             teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
             teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
+            teachers_facilities = Teacher_TeachingFacility.objects.filter(teacher=teacher)
             subjects = []
             languages = []
-            for subject in teachers_subjects:
-                subjectData = Subject.objects.get(pk=subject.subject.pk)
+            teaching_facilities = []
+            for elem in teachers_subjects:
+                subjectData = Subject.objects.get(pk=elem.subject.pk)
                 subjects.append(subjectData)
-            for language in teachers_languages:
-                languageData = Language.objects.get(pk=language.language.pk)
+            for elem in teachers_languages:
+                languageData = Language.objects.get(pk=elem.language.pk)
                 languages.append(languageData)
+            for elem in teachers_facilities:
+                facilityData = TeachingFacility.objects.get(pk=elem.teaching_facility.pk)
+                teaching_facilities.append(facilityData)
             
-            bookmark = Bookmarked_Teacher.objects.filter(user=self.request.user).filter(teacher=teacher)
+            bookmark = BookmarkedTeacher.objects.filter(user=self.request.user).filter(teacher=teacher)
             isBookmarked = False
             if(bookmark):
                 isBookmarked = True
 
-            data = {'user': teacher.user, 'city': teacher.city, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
+            data = {'user': teacher.user, 'facilities': teaching_facilities, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
             all_teachers.append(data)
 
         paginator = Paginator(all_teachers, 2) 
@@ -90,24 +95,29 @@ class BookmarkedTeachersView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]
     def list(self, request):
         all_teachers = []
-        bookmarked_teachers = Bookmarked_Teacher.objects.filter(user=request.user)
-        if bookmarked_teachers:
-            for elem in bookmarked_teachers:
+        BookmarkedTeachers = BookmarkedTeacher.objects.filter(user=request.user)
+        if BookmarkedTeachers:
+            for elem in BookmarkedTeachers:
                 teacher = Teacher.objects.get(pk = elem.teacher.pk)
                 if teacher.is_approved: 
                     teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
                     teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
+                    teachers_facilities = Teacher_TeachingFacility.objects.filter(teacher=teacher)
                     subjects = []
                     languages = []
-                    for subject in teachers_subjects:
-                        subjectData = Subject.objects.get(pk=subject.subject.pk)
+                    teaching_facilities = []
+                    for elem in teachers_subjects:
+                        subjectData = Subject.objects.get(pk=elem.subject.pk)
                         subjects.append(subjectData)
-                    for language in teachers_languages:
-                        languageData = Language.objects.get(pk=language.language.pk)
+                    for elem in teachers_languages:
+                        languageData = Language.objects.get(pk=elem.language.pk)
                         languages.append(languageData)
+                    for elem in teachers_facilities:
+                        facilityData = TeachingFacility.objects.get(pk=elem.teaching_facility.pk)
+                        teaching_facilities.append(facilityData)
 
                     isBookmarked = True
-                    data = {'user': teacher.user, 'city': teacher.city, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
+                    data = {'user': teacher.user, 'facilities': teaching_facilities, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
                     all_teachers.append(data)
         if all_teachers:
             serializer = FindTeacherSerializer(all_teachers, many=True)
@@ -119,10 +129,10 @@ class BookmarkedTeachersView(viewsets.ViewSet):
             json_data = json.loads(request.body)
             teacherId = json_data["teacherId"]
             teacher = Teacher.objects.get(pk=teacherId)
-            if Bookmarked_Teacher.objects.filter(teacher=teacher).filter(user=request.user).exists():
-                Bookmarked_Teacher.objects.get(teacher=teacher, user=request.user).delete()
+            if BookmarkedTeacher.objects.filter(teacher=teacher).filter(user=request.user).exists():
+                BookmarkedTeacher.objects.get(teacher=teacher, user=request.user).delete()
             else: 
-                new_bookmark = Bookmarked_Teacher(user = request.user, teacher = teacher)
+                new_bookmark = BookmarkedTeacher(user = request.user, teacher = teacher)
                 new_bookmark.save()
             response_data = {"status": "ok"}
         except Exception as e:
@@ -184,21 +194,26 @@ class FilterTeachersView(viewsets.ViewSet):
             if teacher.is_approved: 
                 teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
                 teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
+                teachers_facilities = Teacher_TeachingFacility.objects.filter(teacher=teacher)
                 subjects = []
                 languages = []
-                for subject in teachers_subjects:
-                    subjectData = Subject.objects.get(pk=subject.subject.pk)
+                teaching_facilities = []
+                for elem in teachers_subjects:
+                    subjectData = Subject.objects.get(pk=elem.subject.pk)
                     subjects.append(subjectData)
-                for language in teachers_languages:
-                    languageData = Language.objects.get(pk=language.language.pk)
+                for elem in teachers_languages:
+                    languageData = Language.objects.get(pk=elem.language.pk)
                     languages.append(languageData)
+                for elem in teachers_facilities:
+                    facilityData = TeachingFacility.objects.get(pk=elem.teaching_facility.pk)
+                    teaching_facilities.append(facilityData)
 
-                bookmark = Bookmarked_Teacher.objects.filter(user=self.request.user).filter(teacher=teacher)
+                bookmark = BookmarkedTeacher.objects.filter(user=self.request.user).filter(teacher=teacher)
                 isBookmarked = False
                 if(bookmark):
                     isBookmarked = True
 
-                data = {'user': teacher.user, 'city': teacher.city, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
+                data = {'user': teacher.user, 'facilities': teaching_facilities, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
                 all_teachers.append(data)
 
         if(all_teachers): 

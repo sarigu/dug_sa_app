@@ -167,6 +167,7 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
                                         subjects={teacher.subjects}
                                         languages={teacher.languages}
                                         isBookmarked={teacher.isBookmarked}
+                                        teachingFacilities={teacher.facilities}
                                     />
                                 )
                                 :
@@ -182,12 +183,12 @@ const FindTeachers = ({ load_teachers, teachers, bookmarksUpdated, teachers_are_
                                             key={index}
                                             user={teacher.user}
                                             profileImage={teacher.profile_image}
-                                            city={teacher.city}
                                             subjects={teacher.subjects}
                                             languages={teacher.languages}
                                             isBookmarked={teacher.isBookmarked}
                                             sortByBookmarks={sortByBookmarks}
                                             experience={teacher.experience}
+                                            teachingFacilities={teacher.facilities}
                                         />
                                     )
                                     :
