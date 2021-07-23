@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ArrowDown from '../../icons/ArrowDown'
 import './FilterComponent.css';
 
-const Checkbox = ({ optionValue, onSelected, optionId }) => {
+const Checkbox = ({ optionValue, onSelected, optionId, setButtonText }) => {
     const [checked, setChecked] = useState(false);
     return (
         <div className="checkbox-container">
@@ -11,7 +11,7 @@ const Checkbox = ({ optionValue, onSelected, optionId }) => {
                 name={optionValue}
                 value={optionValue}
                 checked={checked}
-                onChange={() => { onSelected(optionId); setChecked(!checked) }}
+                onChange={() => { onSelected(optionId); setChecked(!checked); setButtonText("Apply") }}
             />
             <label >{optionValue}</label>
         </div>
@@ -44,10 +44,10 @@ const FilterComponent = (props) => {
             </div>
             <div className="dropdown-content">
                 {props.options && props.filterBy === "subjects" ? props.options.map((option, index) =>
-                    <Checkbox key={index} optionId={option.id} optionValue={option.name} onSelected={(optionId) => { addOrRemove(optionId) }} />
+                    <Checkbox key={index} optionId={option.id} optionValue={option.name} setButtonText={setButtonText} onSelected={(optionId) => { addOrRemove(optionId) }} />
                 ) : props.options && props.filterBy === "languages" ?
                         props.options.map((option, index) =>
-                            <Checkbox key={index} optionId={option.id} optionValue={option.language} onSelected={(optionId) => { addOrRemove(optionId) }} />
+                            <Checkbox key={index} optionId={option.id} optionValue={option.language} setButtonText={setButtonText} onSelected={(optionId) => { addOrRemove(optionId) }} />
                         ) : null}
                 <button onClick={() => { props.onApplyFilter(); setButtonText("Applied") }} style={{ margin: "10px 0", height: "30px" }}>{buttonText}</button>
             </div>

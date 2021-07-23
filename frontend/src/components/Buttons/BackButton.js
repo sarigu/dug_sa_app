@@ -4,7 +4,7 @@ import './Buttons.css'
 
 const BackButton = (props) => {
     return (
-        <div className="inline-button" style={{ width: props.buttonWidth }}>
+        <div className="inline-button" style={{ width: props.buttonWidth }} onClick={() => props.selectedCallback()}>
             <ArrowLeft />
             <p>Back</p>
         </div>
