@@ -23,7 +23,7 @@ function Event({ event }) {
 
 
 
-const MyCalendar = props => (
+const StudySessionCalendar = props => (
     <div>
         <Calendar
             localizer={localizer}
@@ -46,37 +46,40 @@ const MyCalendar = props => (
         />
     </div>
 )
-const Schedule = ({ props, load_study_sessions, studySessions }) => {
+const Schedule = ({ props, studySessions, bookedStudySessions }) => {
     const [list, setList] = useState([]);
 
     useEffect(() => {
-        load_study_sessions()
-    }, []);
-
-    useEffect(() => {
-        console.log("FINALLY", studySessions)
-        if (studySessions) {
-            const holidays = []
-            studySessions.forEach((holiday) => {
-                let start = (moment(holiday.date + " " + holiday.start_time).toDate())
-                let end = (moment(holiday.date + " " + holiday.end_time).toDate())
-                //let start_at = (new Date(date + " " + holiday));
+        console.log("FINALLY", studySessions, bookedStudySessions)
+        if (studySessions && bookedStudySessions) {
+            const allStudySessionSlots = []
+            studySessions.forEach((studySession) => {
+                let start = (moment(studySession.date + " " + studySession.start_time).toDate())
+                let end = (moment(studySession.date + " " + studySession.end_time).toDate())
+                //let start_at = (new Date(date + " " + studySession));
                 //let end_at
                 console.log("DATE", start)
-                holidays.push({ id: holiday.id, title: holiday.subject.name + " with " + holiday.teacher.first_name, start: start, end: end, type: "study-session", desc: "at " + holiday.location.name, available_spots: holiday.available_spots, taken_spots: holiday.taken_spots })
+                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: "study-session", desc: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
             })
-            console.log("HOLIDAY", holidays)
-            setList(holidays)
+
+            bookedStudySessions.forEach((studySession) => {
+                let start = (moment(studySession.date + " " + studySession.start_time).toDate())
+                let end = (moment(studySession.date + " " + studySession.end_time).toDate())
+                //let start_at = (new Date(date + " " + studySession));
+                //let end_at
+                console.log("DATE", start)
+                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: "booked-study-session", desc: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
+            })
+            console.log("studySession", allStudySessionSlots)
+            setList(allStudySessionSlots, bookedStudySessions)
         }
 
-
-
-    }, [studySessions]);
+    }, [studySessions, bookedStudySessions]);
 
     return (
         <div >
             Schedule
-            <MyCalendar list={list} />
+            <StudySessionCalendar list={list} />
         </div>
     );
 };
@@ -85,7 +88,8 @@ const Schedule = ({ props, load_study_sessions, studySessions }) => {
 const mapStateToProps = (state, props) => ({
     props: props,
     studySessions: state.data.studySessions,
+    bookedStudySessions: state.data.bookedStudySessions,
 });
 
-export default connect(mapStateToProps, { load_study_sessions })(Schedule);
+export default connect(mapStateToProps, null)(Schedule);
 

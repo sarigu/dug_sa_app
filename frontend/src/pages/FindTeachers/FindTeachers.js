@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import TeacherCard from '../../components/TeacherCard/TeacherCard';
 import BackButton from '../../components/Buttons/BackButton';
-import { load_teachers, load_bookmarked_teachers, filter_teachers } from '../../actions/data';
+import { load_teachers, load_bookmarked_teachers, filter_teachers, load_study_sessions } from '../../actions/data';
 import { load_languages, load_subjects } from '../../actions/auth';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import NextButton from '../../components/Buttons/NextButton';
@@ -12,7 +12,7 @@ import PopUp from '../../components/PopUp/PopUp';
 import { useHistory } from "react-router-dom";
 import './FindTeachers.css';
 
-const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers, totalFilterPages }) => {
+const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers, totalFilterPages, load_study_sessions }) => {
     const [sortByAll, setSortByAll] = useState(true);
     const [sortByBookmarks, setSortByBookmarks] = useState(false);
     const [activeFilter, setActiveFilter] = useState(false);
@@ -134,6 +134,7 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
 
     const handleSelectedTeacher = (teacherId) => {
         console.log("hello", teacherId)
+        load_study_sessions(teacherId)
         setShowSchedule(true);
     }
 
@@ -240,4 +241,4 @@ const mapStateToProps = state => ({
     totalFilterPages: state.data.totalFilterPages
 });
 
-export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, load_languages, load_subjects, filter_teachers })(FindTeachers);
+export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, load_languages, load_subjects, filter_teachers, load_study_sessions })(FindTeachers);

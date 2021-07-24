@@ -22,7 +22,8 @@ const initialState = {
     totalTeacherPages: null,
     filteredTeachers: [],
     totalFilterPages: null,
-    studySessions: []
+    studySessions: [],
+    bookedStudySessions: []
 };
 
 export default function (state = initialState, action) {
@@ -84,7 +85,8 @@ export default function (state = initialState, action) {
         case STUDY_SESSIONS_LOADED_SUCCESS:
             return {
                 ...state,
-                studySessions: payload
+                studySessions: payload.teachersSessions,
+                bookedStudySessions: payload.bookedSessions
             }
         case STUDY_SESSIONS_LOADED_FAIL:
             return {
