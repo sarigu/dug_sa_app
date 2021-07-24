@@ -12,37 +12,51 @@ const localizer = momentLocalizer(moment)
 
 function Event({ event }) {
     return (
-        <span  >
-            <strong>{event.title}</strong> <br></br>
-            {event.desc} <br></br>
-            {event.taken_spots + " from "} {event.available_spots}
-            <button>Book</button>
+        <span className="event-card" >
+            <div style={{ width: "70%" }} className="event-card-content">
+                <div style={{ fontWeight: 600 }}>{event.title}</div>
+                {event.type == "booked-study-session" ? <div>{event.description}</div> : null}
+                <div>{event.location}</div>
+                {event.type == "study-session" ? <div>{event.taken_spots + " from "} {event.available_spots}</div> : null}
+            </div>
+            <div style={{ width: "30%", alignSelf: "center" }}> {event.type == "study-session" ? <button>Book</button> : <span style={{ fontSize: "30px" }}>&#128161;</span>}</div>
         </span>
     )
 }
 
-
+function EventAgenda({ event }) {
+    console.log("AGENDA", event)
+    return (
+        <span>
+            <strong>{event.title}</strong>
+        </span>
+    )
+}
 
 const StudySessionCalendar = props => (
-    <div>
+    <div style={{ width: "90%", margin: "100px auto 50px auto" }}>
         <Calendar
             localizer={localizer}
             events={props.list}
             startAccessor="start"
             endAccessor="end"
-            style={{ height: 500 }}
+            style={{ height: 800, marginBottom: "50px" }}
             defaultView={Views.DAY}
             defaultDate={moment().toDate()}
+            views={{ month: true, day: true }}
             eventPropGetter={event => {
+                console.log(event, "event");
                 const eventData = props.list.find(ot => ot.id === event.id);
                 console.log(eventData.type);
                 const type = eventData.type;
                 return { className: type };
             }}
             components={{
-                event: Event,
-
+                event: EventAgenda,
+                day: { event: Event },
             }}
+
+        //onView={event => { console.log("VIEW", event, event === "day") }}
         />
     </div>
 )
@@ -59,7 +73,7 @@ const Schedule = ({ props, studySessions, bookedStudySessions }) => {
                 //let start_at = (new Date(date + " " + studySession));
                 //let end_at
                 console.log("DATE", start)
-                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: "study-session", desc: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
+                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: "study-session", location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
             })
 
             bookedStudySessions.forEach((studySession) => {
@@ -68,7 +82,7 @@ const Schedule = ({ props, studySessions, bookedStudySessions }) => {
                 //let start_at = (new Date(date + " " + studySession));
                 //let end_at
                 console.log("DATE", start)
-                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: "booked-study-session", desc: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
+                allStudySessionSlots.push({ id: studySession.id, title: "You have a class here", start: start, end: end, type: "booked-study-session", description: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
             })
             console.log("studySession", allStudySessionSlots)
             setList(allStudySessionSlots, bookedStudySessions)
@@ -78,7 +92,6 @@ const Schedule = ({ props, studySessions, bookedStudySessions }) => {
 
     return (
         <div >
-            Schedule
             <StudySessionCalendar list={list} />
         </div>
     );

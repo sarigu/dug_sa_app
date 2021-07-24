@@ -8,7 +8,7 @@
     background-color: rgba(0, 0, 0, 0.562);
 }
 .pop-up-container{
-    height:90vh;
+    height:95vh;
     width:100vw;
     background-color: white;
     border-radius: 15px 15px 0 0 ;
@@ -18,9 +18,11 @@
     z-index: 99;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 }
 
 .pop-up-container .closeButton{
     align-self: flex-end;
     padding: 20px;
+    position:fixed;
 }
