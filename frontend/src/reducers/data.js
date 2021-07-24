@@ -10,6 +10,8 @@ import {
     UPDATED_TEACHERS,
     FILTER_TEACHERS_SUCCESS,
     FILTER_TEACHERS_FAIL,
+    STUDY_SESSIONS_LOADED_SUCCESS,
+    STUDY_SESSIONS_LOADED_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -20,6 +22,7 @@ const initialState = {
     totalTeacherPages: null,
     filteredTeachers: [],
     totalFilterPages: null,
+    studySessions: []
 };
 
 export default function (state = initialState, action) {
@@ -75,6 +78,15 @@ export default function (state = initialState, action) {
                 totalFilterPages: payload.total_pages
             }
         case FILTER_TEACHERS_FAIL:
+            return {
+                ...state,
+            }
+        case STUDY_SESSIONS_LOADED_SUCCESS:
+            return {
+                ...state,
+                studySessions: payload
+            }
+        case STUDY_SESSIONS_LOADED_FAIL:
             return {
                 ...state,
             }

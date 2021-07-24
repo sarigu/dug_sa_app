@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.dispatch import receiver
 from djoser.signals import user_registered
 from phonenumber_field.modelfields import PhoneNumberField
+from django.shortcuts import get_object_or_404
 
 class CustomAccountManager(BaseUserManager):
     def create_superuser(self, email, user_name, first_name, password, **other_fields):
@@ -86,7 +87,8 @@ def create_teacher(user, sender, request, **kwargs):
         teacher.user = user
         teacher.id = user.id
         teacher.save()
-
+        new_teacher = teacher
+    
 
 class Subject(models.Model):
     name = models.CharField(max_length=255)
@@ -110,7 +112,6 @@ class AccessCode(models.Model):
     def __str__(self):
         return f"{self.code}"
 
-
 class Language(models.Model):
     language = models.CharField(max_length=255)
     def __str__(self):
@@ -127,6 +128,26 @@ class Teacher_Language(models.Model):
         return f"{self.teacher} - {self.language}"
 
 
+class TeachingFacility(models.Model):
+    name = models.CharField(max_length=255)
+    street = models.CharField(max_length=255, blank=True, null=True)
+    postal_code = models.CharField(max_length=50, blank=True, null=True)
+    city = models.CharField(max_length=255, blank=True, null=True)
+    def __str__(self):
+        return f"{self.name} - {self.pk}"
+
+
+class Teacher_TeachingFacility(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teaching_facility = models.ForeignKey(TeachingFacility, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('teacher', 'teaching_facility',)
+    
+    def __str__(self):
+        return f"{self.teacher} - {self.teaching_facility}"
+
+
 class BookmarkedTeacher(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
@@ -137,20 +158,3 @@ class BookmarkedTeacher(models.Model):
     def __str__(self):
         return f"{self.user} - {self.teacher}"
 
-class TeachingFacility(models.Model):
-    name = models.CharField(max_length=255)
-    street = models.CharField(max_length=255, blank=True, null=True)
-    postal_code = models.CharField(max_length=50, blank=True, null=True)
-    city = models.CharField(max_length=255, blank=True, null=True)
-    def __str__(self):
-        return f"{self.name}"
-
-class Teacher_TeachingFacility(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    teaching_facility = models.ForeignKey(TeachingFacility, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('teacher', 'teaching_facility',)
-
-    def __str__(self):
-        return f"{self.teacher} - {self.teaching_facility}"

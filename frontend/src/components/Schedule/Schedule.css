@@ -1,0 +1,19 @@
+.study-session{
+    background-color: rgb(192, 220, 238) !important;
+    border:none !important;
+}
+
+.rbc-timeslot-group {
+    min-height: 120px !important;
+}
+
+.rbc-today{
+    background-color: white !important;
+}
+
+.circle{
+    width:20px;
+    height:20px;
+    border-radius: 50%;
+    background-color: grey;
+}

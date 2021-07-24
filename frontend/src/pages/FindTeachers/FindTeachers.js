@@ -8,6 +8,7 @@ import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import NextButton from '../../components/Buttons/NextButton';
 import PrevButton from '../../components/Buttons/PrevButton';
 import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
+import PopUp from '../../components/PopUp/PopUp';
 import { useHistory } from "react-router-dom";
 import './FindTeachers.css';
 
@@ -22,6 +23,7 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
     const [subjectsFilter, setSubjectsFilter] = useState([]);
     const [languageFilter, setLanguageFilter] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [showSchedule, setShowSchedule] = useState(false);
 
     const history = useHistory();
 
@@ -130,6 +132,11 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
         }
     }
 
+    const handleSelectedTeacher = (teacherId) => {
+        console.log("hello", teacherId)
+        setShowSchedule(true);
+    }
+
 
     return (
         <div className="find-teacher-wrapper">
@@ -162,6 +169,7 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
                                         isBookmarked={teacher.isBookmarked}
                                         teachingFacilities={teacher.facilities}
                                         sortByBookmarks={sortByBookmarks}
+                                        selectedCallback={(teacherId) => handleSelectedTeacher(teacherId)}
                                     />
                                 )
                                 :
@@ -183,6 +191,7 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
                                             experience={teacher.experience}
                                             teachingFacilities={teacher.facilities}
                                             sortByBookmarks={sortByBookmarks}
+                                            selectedCallback={(teacherId) => handleSelectedTeacher(teacherId)}
                                         />
                                     )
                                     :
@@ -214,6 +223,7 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
                     </div>
                 }
             </section>
+            {showSchedule ? <PopUp selectedCallback={() => setShowSchedule(false)} /> : null}
         </div>
     );
 };

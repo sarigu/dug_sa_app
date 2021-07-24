@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { create_bookmark, load_bookmarked_teachers } from '../../actions/data';
 
 
-const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages, isBookmarked, view, experience, teachingFacilities, sortByBookmarks }) => {
+const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages, isBookmarked, view, experience, teachingFacilities, sortByBookmarks, selectedCallback }) => {
     const [bookmarkIsSet, setBookmarkIsSet] = useState();
     const [backgroundImage, setBackgroundImage] = useState()
 
@@ -20,12 +20,10 @@ const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages,
     }, [profileImage]);
 
     useEffect(() => {
-        console.log("USE EFFECT teacher card bookmark", isBookmarked)
         setBookmarkIsSet(isBookmarked);
     }, [isBookmarked]);
 
     const handleBookmark = () => {
-        console.log("handle", user.first_name)
         create_bookmark(user.id);
         setBookmarkIsSet(!bookmarkIsSet);
     }
@@ -43,7 +41,6 @@ const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages,
 
                 :
                 <>
-
                     {sortByBookmarks ?
                         <>
                             {bookmarkIsSet ? <div className="teacher-card big" >
@@ -59,20 +56,15 @@ const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages,
                                         {teachingFacilities ? teachingFacilities.map((facility, index) => <h5 key={index} className="subtext">{facility.name}</h5>) : <h5 className="subtext">No facilities</h5>}
                                         <h5>Teaching Experience</h5>
                                         <h5 className="subtext">{experience} years</h5>
-                                        <button className="availibility-button">Check availibility</button>
+                                        <button className="availibility-button" onClick={selectedCallback}>Check availibility</button>
                                     </div>
-                                    {console.log("in render", bookmarkIsSet)}
                                     <div onClick={handleBookmark} style={{ alignSelf: "flex-start", marginRight: "10px" }}> <FilledHeart /></div>
                                 </div>
                             </div> :
                                 null
 
                             }
-
-
-
                         </>
-
                         :
                         <div className="teacher-card big" >
                             <div className="teacher-information-container big-container">
@@ -87,9 +79,8 @@ const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages,
                                     {teachingFacilities ? teachingFacilities.map((facility, index) => <h5 key={index} className="subtext">{facility.name}</h5>) : <h5 className="subtext">No facilities</h5>}
                                     <h5>Teaching Experience</h5>
                                     <h5 className="subtext">{experience} years</h5>
-                                    <button className="availibility-button">Check availibility</button>
+                                    <button className="availibility-button" onClick={() => selectedCallback(user.id)}>Check availibility</button>
                                 </div>
-                                {console.log("in render", bookmarkIsSet)}
                                 <div onClick={handleBookmark} style={{ alignSelf: "flex-start", marginRight: "10px" }}>{bookmarkIsSet ? <FilledHeart /> : <Heart />}</div>
                             </div>
                         </div>
@@ -115,7 +106,8 @@ const mapStateToProps = (state, props) => ({
     user: props.user,
     experience: props.experience,
     teachingFacilities: props.teachingFacilities,
-    sortByBookmarks: props.sortByBookmarks
+    sortByBookmarks: props.sortByBookmarks,
+    selectedCallback: props.selectedCallback
 });
 
 export default connect(mapStateToProps, { create_bookmark, load_bookmarked_teachers })(TeacherCard);

@@ -11,6 +11,8 @@ import {
     UPDATED_TEACHERS,
     FILTER_TEACHERS_SUCCESS,
     FILTER_TEACHERS_FAIL,
+    STUDY_SESSIONS_LOADED_SUCCESS,
+    STUDY_SESSIONS_LOADED_FAIL,
 } from './types';
 
 
@@ -145,6 +147,35 @@ export const filter_teachers = (subjectsFilter, languageFilter, index) => async 
         } catch (err) {
             dispatch({
                 type: FILTER_TEACHERS_FAIL
+            });
+        }
+    }
+};
+
+
+export const load_study_sessions = () => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            let res = await axios.get('http://localhost:8000/api/studysessions/', config);
+            console.log(res, "RESPOSNSE")
+
+            dispatch({
+                type: STUDY_SESSIONS_LOADED_SUCCESS,
+                payload: res.data
+            });
+
+            return res.data;
+        } catch (err) {
+            dispatch({
+                type: STUDY_SESSIONS_LOADED_FAIL
             });
         }
     }
