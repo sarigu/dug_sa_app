@@ -11,6 +11,12 @@ from django.core.paginator import Paginator
 from login.models import Teacher
 
 # Create your views here.
+
+class StudySessionView(viewsets.ModelViewSet):
+    permissions_classes=[IsAuthenticated]
+    serializer_class = StudySessionSerializer
+    queryset = StudySession.objects.all()
+    
 class StudySessionsView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]
     def list(self, request):

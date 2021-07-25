@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import TeacherCard from '../../components/TeacherCard/TeacherCard';
 import BackButton from '../../components/Buttons/BackButton';
-import { load_teachers, load_bookmarked_teachers, filter_teachers, load_study_sessions } from '../../actions/data';
+import { load_teachers, load_bookmarked_teachers, filter_teachers, load_study_sessions, load_study_session } from '../../actions/data';
 import { load_languages, load_subjects } from '../../actions/auth';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import NextButton from '../../components/Buttons/NextButton';
@@ -10,9 +10,11 @@ import PrevButton from '../../components/Buttons/PrevButton';
 import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 import PopUp from '../../components/PopUp/PopUp';
 import { useHistory } from "react-router-dom";
+import Schedule from '../../components/Schedule/Schedule';
+import StudySessionDetail from '../../components/StudySessionDetail/StudySessionDetail';
 import './FindTeachers.css';
 
-const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers, totalFilterPages, load_study_sessions }) => {
+const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers, totalFilterPages, load_study_sessions, load_study_session }) => {
     const [sortByAll, setSortByAll] = useState(true);
     const [sortByBookmarks, setSortByBookmarks] = useState(false);
     const [activeFilter, setActiveFilter] = useState(false);
@@ -24,6 +26,8 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
     const [languageFilter, setLanguageFilter] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [showSchedule, setShowSchedule] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
 
     const history = useHistory();
 
@@ -136,6 +140,14 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
         console.log("hello", teacherId)
         load_study_sessions(teacherId)
         setShowSchedule(true);
+        setShowPopup(true);
+    }
+
+    const handleSelectedStudySession = (studySessionId) => {
+        console.log("I HANDLE", studySessionId);
+        load_study_session(studySessionId);
+        setShowSchedule(false);
+        setShowStudySessionDetails(true);
     }
 
 
@@ -224,7 +236,11 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
                     </div>
                 }
             </section>
-            {showSchedule ? <PopUp selectedCallback={() => setShowSchedule(false)} /> : null}
+            {showPopup ?
+                <PopUp selectedCallback={() => setShowPopup(false)} >
+                    {showSchedule ? <Schedule selectedCallback={(studySessionId) => handleSelectedStudySession(studySessionId)} />
+                        : showStudySessionDetails ? <StudySessionDetail /> : null}
+                </PopUp> : null}
         </div>
     );
 };
@@ -241,4 +257,4 @@ const mapStateToProps = state => ({
     totalFilterPages: state.data.totalFilterPages
 });
 
-export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, load_languages, load_subjects, filter_teachers, load_study_sessions })(FindTeachers);
+export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, load_languages, load_subjects, filter_teachers, load_study_sessions, load_study_session })(FindTeachers);

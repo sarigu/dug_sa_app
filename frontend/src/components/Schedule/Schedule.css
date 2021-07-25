@@ -1,11 +1,4 @@
 
-.circle{
-    width:20px;
-    height:20px;
-    border-radius: 50%;
-    background-color: grey;
-}
-
 /* TOOLBAR */
 
 .rbc-toolbar{
@@ -62,7 +55,6 @@
 
 
 .rbc-event{
- 
     padding:10px !important;
     width:100% !important;
     overflow-y:scroll;
@@ -103,7 +95,5 @@
     
     .rbc-toolbar * {
         margin-bottom: 0px !important;
-    }
-
-    
+    }   
 }

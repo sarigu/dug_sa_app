@@ -13,6 +13,8 @@ import {
     FILTER_TEACHERS_FAIL,
     STUDY_SESSIONS_LOADED_SUCCESS,
     STUDY_SESSIONS_LOADED_FAIL,
+    STUDY_SESSION_DETAILS_LOADED_SUCCESS,
+    STUDY_SESSION_DETAILS_LOADED_FAIL,
 } from './types';
 
 
@@ -164,9 +166,7 @@ export const load_study_sessions = (teacherId) => async dispatch => {
         };
 
         try {
-
             const body = JSON.stringify({ teacherId });
-
             let res = await axios.post('http://localhost:8000/api/studysessions/', body, config);
 
             dispatch({
@@ -178,6 +178,33 @@ export const load_study_sessions = (teacherId) => async dispatch => {
         } catch (err) {
             dispatch({
                 type: STUDY_SESSIONS_LOADED_FAIL
+            });
+        }
+    }
+};
+
+
+export const load_study_session = (studySessionId) => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.get(`http://localhost:8000/api/studysession/${studySessionId}`, config);
+            console.log("GET STUDY SESSIOn RESULT", res)
+            dispatch({
+                type: STUDY_SESSION_DETAILS_LOADED_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: STUDY_SESSION_DETAILS_LOADED_FAIL
             });
         }
     }

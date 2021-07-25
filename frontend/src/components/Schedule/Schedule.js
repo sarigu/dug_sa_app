@@ -9,15 +9,15 @@ import { load_study_sessions } from '../../actions/data';
 
 const localizer = momentLocalizer(moment)
 
-
 function Event({ event }) {
+
     return (
         <span className="event-card" >
             <div style={{ width: "70%" }} className="event-card-content">
                 <div style={{ fontWeight: 600 }}>{event.title}</div>
                 {event.type == "booked-study-session" ? <div>{event.description}</div> : null}
                 <div>{event.location}</div>
-                {event.type == "study-session" ? <div>{event.taken_spots + " from "} {event.available_spots}</div> : null}
+                {event.type == "study-session" ? <div>{event.taken_spots + " taken from "} {event.available_spots + " spots"} </div> : null}
             </div>
             <div style={{ width: "30%", alignSelf: "center" }}> {event.type == "study-session" ? <button>Book</button> : <span style={{ fontSize: "30px" }}>&#128161;</span>}</div>
         </span>
@@ -25,7 +25,6 @@ function Event({ event }) {
 }
 
 function EventAgenda({ event }) {
-    console.log("AGENDA", event)
     return (
         <span>
             <strong>{event.title}</strong>
@@ -34,23 +33,22 @@ function EventAgenda({ event }) {
 }
 
 const StudySessionCalendar = props => (
-    <div style={{ width: "90%", margin: "100px auto 50px auto" }}>
+    <div style={{ width: "100%", margin: "50px auto 50px auto" }}>
         <Calendar
             localizer={localizer}
             events={props.list}
             startAccessor="start"
             endAccessor="end"
-            style={{ height: 800, marginBottom: "50px" }}
+            style={{ height: 800 }}
             defaultView={Views.DAY}
             defaultDate={moment().toDate()}
             views={{ month: true, day: true }}
             eventPropGetter={event => {
-                console.log(event, "event");
                 const eventData = props.list.find(ot => ot.id === event.id);
-                console.log(eventData.type);
                 const type = eventData.type;
                 return { className: type };
             }}
+            onSelectEvent={event => props.selectedCallback(event.id)}
             components={{
                 event: EventAgenda,
                 day: { event: Event },
@@ -60,6 +58,7 @@ const StudySessionCalendar = props => (
         />
     </div>
 )
+
 const Schedule = ({ props, studySessions, bookedStudySessions }) => {
     const [list, setList] = useState([]);
 
@@ -92,7 +91,7 @@ const Schedule = ({ props, studySessions, bookedStudySessions }) => {
 
     return (
         <div >
-            <StudySessionCalendar list={list} />
+            <StudySessionCalendar list={list} selectedCallback={(studySessionId) => { props.selectedCallback(studySessionId) }} />
         </div>
     );
 };

@@ -1,0 +1,9 @@
+.study-session-container{
+    margin: 0 20px;
+}
+.study-session-details{
+    margin: 50px 0;
+}
+.study-session-details p{
+    margin-top: -.5rem !important;
+}

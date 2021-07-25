@@ -26,3 +26,8 @@
     padding: 20px;
     position:fixed;
 }
+
+.pop-up-content{
+    width:90%;
+    margin: 50px auto;
+}
