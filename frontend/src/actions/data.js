@@ -16,7 +16,9 @@ import {
     STUDY_SESSION_DETAILS_LOADED_SUCCESS,
     STUDY_SESSION_DETAILS_LOADED_FAIL,
     PARTICIPATE_IN_STUDY_SESSION_SUCCESS,
-    PARTICIPATE_IN_STUDY_SESSION_LOADED_FAIL
+    PARTICIPATE_IN_STUDY_SESSION_LOADED_FAIL,
+    CANCEL_STUDY_SESSION_PARTICIPATION_SUCCESS,
+    CANCEL_STUDY_SESSION_PARTICIPATION_FAIL
 } from './types';
 
 
@@ -224,7 +226,7 @@ export const participate_in_study_session = (studySessionId) => async dispatch =
 
         try {
             const body = JSON.stringify({ studySessionId });
-            const res = await axios.post('http://localhost:8000/api/studysession/participate', body, config);
+            const res = await axios.post('http://localhost:8000/api/studysession/participation/', body, config);
             console.log("in data.js --> ", res)
             dispatch({
                 type: PARTICIPATE_IN_STUDY_SESSION_SUCCESS,
@@ -234,6 +236,32 @@ export const participate_in_study_session = (studySessionId) => async dispatch =
         } catch (err) {
             dispatch({
                 type: PARTICIPATE_IN_STUDY_SESSION_LOADED_FAIL
+            });
+        }
+    }
+};
+
+export const cancle_participation_in_study_session = (studySessionId) => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.delete(`http://localhost:8000/api/studysession/participation/?session=${studySessionId}`, config);
+            console.log("in data.js --> ", res)
+            dispatch({
+                type: CANCEL_STUDY_SESSION_PARTICIPATION_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: CANCEL_STUDY_SESSION_PARTICIPATION_FAIL
             });
         }
     }

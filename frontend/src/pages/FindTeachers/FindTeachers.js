@@ -12,7 +12,7 @@ import PopUp from '../../components/PopUp/PopUp';
 import { useHistory } from "react-router-dom";
 import Schedule from '../../components/Schedule/Schedule';
 import StudySessionDetail from '../../components/StudySessionDetail/StudySessionDetail';
-import StudySessionBookingFeedback from '../../components/StudySessionBookingFeedback/StudySessionBookingFeedback';
+import StudySessionFeedback from '../../components/StudySessionFeedback/StudySessionFeedback';
 import './FindTeachers.css';
 
 const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers, totalFilterPages, load_study_sessions, load_study_session }) => {
@@ -244,7 +244,7 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
                 <PopUp selectedCallback={() => setShowPopup(false)} >
                     {showSchedule ? <Schedule selectedCallback={(studySessionId, sessionType) => handleSelectedStudySession(studySessionId, sessionType)} />
                         : showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
-                            : showFeedback ? <StudySessionBookingFeedback />
+                            : showFeedback ? <StudySessionFeedback sessionType={sessionType} />
                                 : null}
                 </PopUp> : null}
 

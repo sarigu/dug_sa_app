@@ -67,7 +67,7 @@ class ParticipantView(viewsets.ViewSet):
         study_session = StudySession.objects.get(pk=study_session_id)
         current_date = datetime.datetime.now()
         print("study_session.date >= current_date.date()", study_session.date >= current_date.date())
-        already_participant = Participant.objects.filter(user=user).exists()
+        already_participant = Participant.objects.filter(user=user).filter(study_session=study_session).exists()
         print(already_participant, "already_participant")
         
         try:
@@ -87,4 +87,16 @@ class ParticipantView(viewsets.ViewSet):
         except Exception as e:
             response_data = {"status": "error"}
 
+        return Response(response_data)
+
+    def destroy(self, request, pk=None):
+        try:
+            study_session = request.GET.get('session')
+            user = CustomUser.objects.get(email=request.user)
+            study_session_participation = Participant.objects.filter(study_session=study_session).filter(user=user)
+            print(study_session_participation, "study_session_participation")
+            study_session_participation.delete()
+            response_data = {"status": "ok"}
+        except Exception as e:
+            response_data = {"status": "error"}
         return Response(response_data)
