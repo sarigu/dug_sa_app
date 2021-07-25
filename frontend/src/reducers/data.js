@@ -14,6 +14,8 @@ import {
     STUDY_SESSIONS_LOADED_FAIL,
     STUDY_SESSION_DETAILS_LOADED_SUCCESS,
     STUDY_SESSION_DETAILS_LOADED_FAIL,
+    PARTICIPATE_IN_STUDY_SESSION_SUCCESS,
+    PARTICIPATE_IN_STUDY_SESSION_LOADED_FAIL
 } from '../actions/types';
 
 const initialState = {
@@ -27,6 +29,7 @@ const initialState = {
     studySessions: [],
     bookedStudySessions: [],
     studySession: {},
+    isBooked: false,
 };
 
 export default function (state = initialState, action) {
@@ -96,12 +99,21 @@ export default function (state = initialState, action) {
                 ...state,
             }
         case STUDY_SESSION_DETAILS_LOADED_SUCCESS:
-            console.log("PAYLOAD", payload)
             return {
                 ...state,
                 studySession: payload,
             }
         case STUDY_SESSION_DETAILS_LOADED_FAIL:
+            return {
+                ...state,
+            }
+        case PARTICIPATE_IN_STUDY_SESSION_SUCCESS:
+            console.log("PAYLOAD PARTICIPATE_IN_STUDY_SESSION_SUCCESS", payload, payload.status)
+            return {
+                ...state,
+                isBooked: payload.status == "ok" ? true : false,
+            }
+        case PARTICIPATE_IN_STUDY_SESSION_LOADED_FAIL:
             return {
                 ...state,
             }

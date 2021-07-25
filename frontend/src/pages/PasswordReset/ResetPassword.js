@@ -29,7 +29,6 @@ const ResetPassword = ({ reset_password }) => {
 
     return (
         <div className="password-reset-page">
-
             <div className="request-password-reset-wrapper">
                 <h1>Get a password reset link</h1>
                 <form onSubmit={e => handleSubmit(e)}>

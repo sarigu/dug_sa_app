@@ -15,6 +15,8 @@ import {
     STUDY_SESSIONS_LOADED_FAIL,
     STUDY_SESSION_DETAILS_LOADED_SUCCESS,
     STUDY_SESSION_DETAILS_LOADED_FAIL,
+    PARTICIPATE_IN_STUDY_SESSION_SUCCESS,
+    PARTICIPATE_IN_STUDY_SESSION_LOADED_FAIL
 } from './types';
 
 
@@ -196,7 +198,6 @@ export const load_study_session = (studySessionId) => async dispatch => {
 
         try {
             const res = await axios.get(`http://localhost:8000/api/studysession/${studySessionId}`, config);
-            console.log("GET STUDY SESSIOn RESULT", res)
             dispatch({
                 type: STUDY_SESSION_DETAILS_LOADED_SUCCESS,
                 payload: res.data
@@ -205,6 +206,34 @@ export const load_study_session = (studySessionId) => async dispatch => {
         } catch (err) {
             dispatch({
                 type: STUDY_SESSION_DETAILS_LOADED_FAIL
+            });
+        }
+    }
+};
+
+
+export const participate_in_study_session = (studySessionId) => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const body = JSON.stringify({ studySessionId });
+            const res = await axios.post('http://localhost:8000/api/studysession/participate', body, config);
+            console.log("in data.js --> ", res)
+            dispatch({
+                type: PARTICIPATE_IN_STUDY_SESSION_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: PARTICIPATE_IN_STUDY_SESSION_LOADED_FAIL
             });
         }
     }

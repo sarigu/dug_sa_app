@@ -12,6 +12,7 @@ import PopUp from '../../components/PopUp/PopUp';
 import { useHistory } from "react-router-dom";
 import Schedule from '../../components/Schedule/Schedule';
 import StudySessionDetail from '../../components/StudySessionDetail/StudySessionDetail';
+import StudySessionBookingFeedback from '../../components/StudySessionBookingFeedback/StudySessionBookingFeedback';
 import './FindTeachers.css';
 
 const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers, totalFilterPages, load_study_sessions, load_study_session }) => {
@@ -28,6 +29,8 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
     const [showSchedule, setShowSchedule] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
+    const [showFeedback, setShowFeedback] = useState(false);
+    const [sessionType, setSessionType] = useState();
 
     const history = useHistory();
 
@@ -143,9 +146,10 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
         setShowPopup(true);
     }
 
-    const handleSelectedStudySession = (studySessionId) => {
-        console.log("I HANDLE", studySessionId);
+    const handleSelectedStudySession = (studySessionId, sessionType) => {
+        console.log("I HANDLE", studySessionId, sessionType);
         load_study_session(studySessionId);
+        setSessionType(sessionType);
         setShowSchedule(false);
         setShowStudySessionDetails(true);
     }
@@ -238,9 +242,12 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
             </section>
             {showPopup ?
                 <PopUp selectedCallback={() => setShowPopup(false)} >
-                    {showSchedule ? <Schedule selectedCallback={(studySessionId) => handleSelectedStudySession(studySessionId)} />
-                        : showStudySessionDetails ? <StudySessionDetail /> : null}
+                    {showSchedule ? <Schedule selectedCallback={(studySessionId, sessionType) => handleSelectedStudySession(studySessionId, sessionType)} />
+                        : showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
+                            : showFeedback ? <StudySessionBookingFeedback />
+                                : null}
                 </PopUp> : null}
+
         </div>
     );
 };

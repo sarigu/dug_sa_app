@@ -6,7 +6,6 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { connect } from 'react-redux';
 import { load_study_sessions } from '../../actions/data';
 
-
 const localizer = momentLocalizer(moment)
 
 function Event({ event }) {
@@ -48,7 +47,7 @@ const StudySessionCalendar = props => (
                 const type = eventData.type;
                 return { className: type };
             }}
-            onSelectEvent={event => props.selectedCallback(event.id)}
+            onSelectEvent={event => props.selectedCallback(event.id, event.type)}
             components={{
                 event: EventAgenda,
                 day: { event: Event },
@@ -91,7 +90,7 @@ const Schedule = ({ props, studySessions, bookedStudySessions }) => {
 
     return (
         <div >
-            <StudySessionCalendar list={list} selectedCallback={(studySessionId) => { props.selectedCallback(studySessionId) }} />
+            <StudySessionCalendar list={list} selectedCallback={(studySessionId, sessionType) => { props.selectedCallback(studySessionId, sessionType) }} />
         </div>
     );
 };
