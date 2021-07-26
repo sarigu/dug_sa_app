@@ -7,5 +7,5 @@ router.register(r'studysession', views.StudySessionView, 'studysession')
 
 urlpatterns = [
     path("studysessions/", views.StudySessionsView.as_view({ 'post': 'list'})),
-    path("studysession/participation/", views.ParticipantView.as_view({ 'post': 'create', 'delete': 'destroy'})),
+    path("studysession/participation/", views.ParticipantView.as_view({ 'post': 'create', 'delete': 'destroy', 'get' : 'list'})),
 ] + router.urls 

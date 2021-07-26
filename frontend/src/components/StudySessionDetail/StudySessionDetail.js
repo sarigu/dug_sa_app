@@ -18,7 +18,6 @@ const StudySessionDetail = ({ studySession, participate_in_study_session, select
                 setFormattedDate(date);
             }
         }
-
     }, [studySession]);
 
     const handleStudySessionParticipation = () => {

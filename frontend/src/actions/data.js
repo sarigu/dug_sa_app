@@ -18,7 +18,9 @@ import {
     PARTICIPATE_IN_STUDY_SESSION_SUCCESS,
     PARTICIPATE_IN_STUDY_SESSION_LOADED_FAIL,
     CANCEL_STUDY_SESSION_PARTICIPATION_SUCCESS,
-    CANCEL_STUDY_SESSION_PARTICIPATION_FAIL
+    CANCEL_STUDY_SESSION_PARTICIPATION_FAIL,
+    UPCOMING_STUDY_SESSIONS_LOADED_SUCCESS,
+    UPCOMING_STUDY_SESSIONS_LOADED_FAIL,
 } from './types';
 
 
@@ -262,6 +264,33 @@ export const cancle_participation_in_study_session = (studySessionId) => async d
         } catch (err) {
             dispatch({
                 type: CANCEL_STUDY_SESSION_PARTICIPATION_FAIL
+            });
+        }
+    }
+};
+
+
+export const load_upcoming_booked_study_sessions = () => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.get('http://localhost:8000/api/studysession/participation/', config);
+            console.log("LOAD 5 --> ", res.data)
+            dispatch({
+                type: UPCOMING_STUDY_SESSIONS_LOADED_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: UPCOMING_STUDY_SESSIONS_LOADED_FAIL
             });
         }
     }

@@ -14,6 +14,7 @@ class StudySessionSerializer(serializers.ModelSerializer):
       
 class ParticipantSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    study_session = StudySessionSerializer()
     class Meta:
         model = Participant
         fields = '__all__'

@@ -88,6 +88,7 @@ class ParticipantView(viewsets.ViewSet):
             response_data = {"status": "error"}
 
         return Response(response_data)
+    
 
     def destroy(self, request, pk=None):
         try:
@@ -97,6 +98,20 @@ class ParticipantView(viewsets.ViewSet):
             print(study_session_participation, "study_session_participation")
             study_session_participation.delete()
             response_data = {"status": "ok"}
+        except Exception as e:
+            response_data = {"status": "error"}
+        return Response(response_data)
+
+    def list(self, request):
+        try:
+            user = CustomUser.objects.get(email=request.user)
+            current_date = datetime.datetime.now()
+            current_date = current_date.date()
+            print(user, current_date)
+            study_session_participations = Participant.objects.filter(user=user).filter(study_session__date__gte = current_date).order_by('-study_session__date').reverse()[:5]
+            print("1", study_session_participations)
+            serializer = ParticipantSerializer(study_session_participations, many=True)
+            response_data = {"status": "ok", "upcomingStudySessions": serializer.data}
         except Exception as e:
             response_data = {"status": "error"}
         return Response(response_data)
