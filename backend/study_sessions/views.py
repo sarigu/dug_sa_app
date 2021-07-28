@@ -136,6 +136,7 @@ class ParticipantView(viewsets.ViewSet):
                             page_obj = paginator.get_page(page_number)     
                             print(page_obj, "page-obj")      
                             serializer = ParticipantSerializer(page_obj, many=True)
+                            print(serializer.data, "serializer")
                             return Response({"status": "ok", 'total_pages': total_pages, 'allStudySessions': serializer.data})
                 else: 
                     print("no type")
@@ -146,6 +147,7 @@ class ParticipantView(viewsets.ViewSet):
             else:
                 response_data = {"status": "error"}
         except Exception as e:
+            print(e)
             response_data = {"status": "error"}
         return Response(response_data)
 

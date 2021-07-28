@@ -300,7 +300,7 @@ export const load_upcoming_booked_study_sessions = () => async dispatch => {
     }
 };
 
-export const load_upcoming_booked_study_sessions_list = () => async dispatch => {
+export const load_upcoming_booked_study_sessions_list = (index) => async dispatch => {
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -311,7 +311,7 @@ export const load_upcoming_booked_study_sessions_list = () => async dispatch => 
         };
 
         try {
-            const res = await axios.get('http://localhost:8000/api/studysession/participation/?type=upcoming&page=0', config);
+            const res = await axios.get(`http://localhost:8000/api/studysession/participation/?type=upcoming&page=${index}`, config);
             console.log("LOAD ALL --> ", res.data)
             dispatch({
                 type: UPCOMING_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
@@ -327,7 +327,8 @@ export const load_upcoming_booked_study_sessions_list = () => async dispatch => 
 };
 
 
-export const load_previous_booked_study_sessions_list = () => async dispatch => {
+export const load_previous_booked_study_sessions_list = (index) => async dispatch => {
+    console.log(index, "in load_previous_booked_study_sessions_list");
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -338,7 +339,7 @@ export const load_previous_booked_study_sessions_list = () => async dispatch => 
         };
 
         try {
-            const res = await axios.get('http://localhost:8000/api/studysession/participation/?type=previous&page=0', config);
+            const res = await axios.get(`http://localhost:8000/api/studysession/participation/?type=previous&page=${index}`, config);
             console.log("LOAD ALL PREV --> ", res.data)
             dispatch({
                 type: PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
