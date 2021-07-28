@@ -117,9 +117,11 @@ class ParticipantView(viewsets.ViewSet):
         print("study_session.date >= current_date.date()", study_session.date >= current_date.date())
         already_participant = Participant.objects.filter(user=user).filter(study_session=study_session).exists()
         print(already_participant, "already_participant")
-        
+        already_class = Participant.objects.filter(user=user).filter(study_session__date=study_session.date).filter(study_session__start_time=study_session.start_time).exists()
+        print("------------------")
+        print(already_class, "OTHER CLASS ALREADY ")
         try:
-            if study_session.taken_spots < study_session.available_spots and user.role == "student" and study_session.date >= current_date.date() and already_participant == False and study_session.is_active == True:
+            if study_session.taken_spots < study_session.available_spots and user.role == "student" and study_session.date >= current_date.date() and already_participant == False and study_session.is_active == True and already_class == False:
                 study_session.taken_spots += 1
                 study_session.save()
                 print(user, study_session)
