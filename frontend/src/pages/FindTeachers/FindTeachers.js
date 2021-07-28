@@ -244,9 +244,11 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
                 <PopUp selectedCallback={() => setShowPopup(false)} >
                     {showSchedule ? <Schedule selectedCallback={(studySessionId, sessionType) => handleSelectedStudySession(studySessionId, sessionType)} />
                         : showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
-                            : showFeedback ? <StudySessionFeedback sessionType={sessionType} />
+                            : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
                                 : null}
-                </PopUp> : null}
+                </PopUp>
+                : null
+            }
 
         </div>
     );

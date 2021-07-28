@@ -31,6 +31,8 @@ import {
     TEACHERS_UPCOMING_STUDY_SESSIONS_LIST_LOADED_FAIL,
     TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
     TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL,
+    CANCEL_STUDY_SESSION_SUCCESS,
+    CANCEL_STUDY_SESSION_FAIL,
 } from './types';
 
 
@@ -441,3 +443,31 @@ export const load_teachers_previous_study_sessions_list = (index) => async dispa
         }
     }
 };
+
+
+export const cancel_study_session = (studySessionId) => async dispatch => {
+
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.delete(`http://localhost:8000/api/studysession/${studySessionId}`, config);
+            console.log("DELETE SESS ", res)
+            dispatch({
+                type: CANCEL_STUDY_SESSION_SUCCESS,
+            });
+
+        } catch (err) {
+            dispatch({
+                type: CANCEL_STUDY_SESSION_FAIL
+            });
+        }
+    }
+};
+

@@ -41,6 +41,7 @@ const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingS
                         upcomingStudySessions.map((studySession, index) =>
                             <StudySessionCard
                                 key={index}
+                                sessionId={studySession.id}
                                 isActive={studySession.is_active}
                                 subject={studySession.subject.name}
                                 location={studySession.location.name}

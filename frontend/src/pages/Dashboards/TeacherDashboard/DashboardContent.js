@@ -5,15 +5,36 @@ import Card from '../../../components/Cards/Cards'
 import AllClassesButton from '../../../components/Buttons/AllClassesButton'
 import StudySessionCard from '../../../components/StudySessionCard/StudySessionCard';
 import { useHistory } from "react-router-dom";
-import { load_upcoming_teachers_study_session } from '../../../actions/data';
+import { load_upcoming_teachers_study_session, load_study_session } from '../../../actions/data';
+import PopUp from '../../../components/PopUp/PopUp';
+import StudySessionDetail from '../../../components/StudySessionDetail/StudySessionDetail';
+import StudySessionFeedback from '../../../components/StudySessionFeedback/StudySessionFeedback';
 
-const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_session }) => {
+const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_session, load_study_session }) => {
+
+    const [showPopup, setShowPopup] = useState(false);
+    const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
+    const [showFeedback, setShowFeedback] = useState(false);
+    const [sessionType, setSessionType] = useState("study-session");
 
     const history = useHistory();
 
     useEffect(() => {
         load_upcoming_teachers_study_session();
     }, []);
+
+    const handleSelectedStudySession = (studySessionId, isActive) => {
+        load_study_session(studySessionId);
+        setShowPopup(true);
+        if (isActive) {
+            setSessionType("study-session");
+        } else {
+            setSessionType("cancelled-session");
+        }
+
+        setShowStudySessionDetails(true);
+
+    }
 
     return (
         <div>
@@ -26,7 +47,9 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
                     {upcomingStudySessions ?
                         upcomingStudySessions.map((studySession, index) =>
                             <StudySessionCard
+                                selectedCallback={(sessionId, isActive) => { handleSelectedStudySession(sessionId, isActive) }}
                                 key={index}
+                                sessionId={studySession.id}
                                 isActive={studySession.is_active}
                                 subject={studySession.subject.name}
                                 location={studySession.location.name}
@@ -44,6 +67,15 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
                 <Card emoji={<span>&#128198;</span>} title={"Schedule"} />
                 <Card emoji={<span>&#128218;</span>} title={"Study material"} />
             </section>
+
+            {showPopup ?
+                <PopUp selectedCallback={() => setShowPopup(false)} >
+                    {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
+                        : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                            : null}
+                </PopUp>
+                : null
+            }
         </div>
     );
 };
@@ -53,4 +85,4 @@ const mapStateToProps = state => (console.log(state.data), {
     upcomingStudySessions: state.data.upcomingStudySessions
 });
 
-export default connect(mapStateToProps, { load_upcoming_teachers_study_session })(DashboardContent);
+export default connect(mapStateToProps, { load_upcoming_teachers_study_session, load_study_session })(DashboardContent);

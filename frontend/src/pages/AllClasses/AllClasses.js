@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import BackButton from '../../components/Buttons/BackButton';
 import { useHistory } from "react-router-dom";
-import { load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list } from '../../actions/data';
+import { load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list, load_study_session } from '../../actions/data';
 import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 import StudySessionCard from '../../components/StudySessionCard/StudySessionCard';
 import NextButton from '../../components/Buttons/NextButton';
 import PrevButton from '../../components/Buttons/PrevButton';
+import PopUp from '../../components/PopUp/PopUp';
+import StudySessionDetail from '../../components/StudySessionDetail/StudySessionDetail';
+import StudySessionFeedback from '../../components/StudySessionFeedback/StudySessionFeedback';
 import './AllClasses.css';
 
-const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, totalPreviousStudySessionPages, totalUpcomingStudySessionPages, load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list }) => {
+const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, totalPreviousStudySessionPages, totalUpcomingStudySessionPages, load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list, load_study_session }) => {
     const [sortByUpcoming, setSortByUpcoming] = useState(true);
     const [sortByPrevious, setSortByPrevious] = useState(false);
     const [upcomingIsLoaded, setUpcomingIsLoaded] = useState(false);
@@ -17,6 +20,10 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
     const [allUpcomingStudySessions, setAllUpcomingStudySessions] = useState([])
     const [allPreviousStudySessions, setAllPreviousStudySessions] = useState([])
     const [index, setIndex] = useState(1);
+    const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
+    const [showFeedback, setShowFeedback] = useState(false);
+    const [sessionType, setSessionType] = useState("study-session");
+    const [showPopup, setShowPopup] = useState(false);
 
     const history = useHistory();
 
@@ -120,6 +127,19 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
         }
     }
 
+    const handleSelectedStudySession = (studySessionId, isActive) => {
+        load_study_session(studySessionId);
+        setShowPopup(true);
+        if (isActive) {
+            setSessionType("study-session");
+        } else {
+            setSessionType("cancelled-session");
+        }
+
+        setShowStudySessionDetails(true);
+
+    }
+
     return (
         <div className="all-classes-wrapper">
             <BackButton buttonWidth={"70px"} selectedCallback={() => history.push("/dashboard")} />
@@ -135,6 +155,8 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
                             allUpcomingStudySessions.map((studySession, index) =>
                                 <StudySessionCard
                                     key={index}
+                                    selectedCallback={(sessionId, isActive) => { handleSelectedStudySession(sessionId, isActive) }}
+                                    sessionId={studySession.id}
                                     isActive={studySession.is_active}
                                     subject={studySession.subject.name}
                                     location={studySession.location.name}
@@ -154,6 +176,8 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
                                     allPreviousStudySessions.map((studySession, index) =>
                                         <StudySessionCard
                                             key={index}
+                                            selectedCallback={(sessionId, isActive) => { handleSelectedStudySession(sessionId, isActive) }}
+                                            sessionId={studySession.id}
                                             isActive={studySession.is_active}
                                             subject={studySession.subject.name}
                                             location={studySession.location.name}
@@ -188,6 +212,14 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
                         }
                     </> : null}
             </div>
+            {showPopup ?
+                <PopUp selectedCallback={() => setShowPopup(false)} >
+                    {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
+                        : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                            : null}
+                </PopUp>
+                : null
+            }
         </div>
     );
 };
@@ -201,4 +233,4 @@ const mapStateToProps = (state, props) => ({
     userType: state.auth.userType,
 });
 
-export default connect(mapStateToProps, { load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list })(AllClasses);
+export default connect(mapStateToProps, { load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list, load_study_session })(AllClasses);

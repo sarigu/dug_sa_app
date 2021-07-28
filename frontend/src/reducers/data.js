@@ -30,6 +30,8 @@ import {
     TEACHERS_UPCOMING_STUDY_SESSIONS_LIST_LOADED_FAIL,
     TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
     TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL,
+    CANCEL_STUDY_SESSION_SUCCESS,
+    CANCEL_STUDY_SESSION_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -44,6 +46,7 @@ const initialState = {
     bookedStudySessions: [],
     studySession: {},
     isBooked: false,
+    isCancelled: false,
     participationIsDeleted: false,
     upcomingStudySessions: [],
     allUpcomingStudySessions: [],
@@ -203,7 +206,17 @@ export default function (state = initialState, action) {
             return {
                 ...state,
             }
+        case CANCEL_STUDY_SESSION_SUCCESS:
+            return {
+                ...state,
+                isCancelled: true,
+            }
+        case CANCEL_STUDY_SESSION_FAIL:
+            return {
+                ...state,
+            }
         default:
             return state
     }
 };
+
