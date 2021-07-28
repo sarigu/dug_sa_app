@@ -86,6 +86,16 @@
     border:none !important;
 }
 
+.cancelled-session{
+    background-color: rgba(255, 0, 0, 0.438)  !important;
+    color:#363636 !important;
+    border:none !important;
+}
+
+.rbc-show-more{
+    color: black !important;
+}
+
 
 @media only screen and (min-width: 600px) {
     .rbc-toolbar{

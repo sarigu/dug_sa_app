@@ -119,7 +119,7 @@ class ParticipantView(viewsets.ViewSet):
         print(already_participant, "already_participant")
         
         try:
-            if study_session.taken_spots < study_session.available_spots and user.role == "student" and study_session.date >= current_date.date() and already_participant == False:
+            if study_session.taken_spots < study_session.available_spots and user.role == "student" and study_session.date >= current_date.date() and already_participant == False and study_session.is_active == True:
                 study_session.taken_spots += 1
                 study_session.save()
                 print(user, study_session)

@@ -14,11 +14,11 @@ function Event({ event }) {
         <span className="event-card" >
             <div style={{ width: "70%" }} className="event-card-content">
                 <div style={{ fontWeight: 600 }}>{event.title}</div>
-                {event.type == "booked-study-session" ? <div>{event.description}</div> : null}
+                {event.type == "booked-study-session" ? <div>{event.description}</div> : event.type == "cancelled-session" ? <div>Cancelled</div> : null}
                 <div>{event.location}</div>
                 {event.type == "study-session" ? <div>{event.taken_spots + " taken from "} {event.available_spots + " spots"} </div> : null}
             </div>
-            <div style={{ width: "30%", alignSelf: "center" }}> {event.type == "study-session" ? <button>Book</button> : <span style={{ fontSize: "30px" }}>&#128161;</span>}</div>
+            <div style={{ width: "30%", alignSelf: "center" }}> {event.type == "study-session" ? <button>Book</button> : event.type == "booked-study-session" ? <span style={{ fontSize: "30px" }}>&#128161;</span> : event.type == "cancelled-session" ? <span>&#128680;</span> : null}</div>
         </span>
     )
 }
@@ -70,8 +70,9 @@ const Schedule = ({ props, studySessions, bookedStudySessions }) => {
                 let end = (moment(studySession.date + " " + studySession.end_time).toDate())
                 //let start_at = (new Date(date + " " + studySession));
                 //let end_at
-                console.log("DATE", start)
-                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: "study-session", location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
+                console.log("NORMAL", studySession)
+                let sessionType = studySession.is_active ? "study-session" : "cancelled-session"
+                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: sessionType, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
             })
 
             bookedStudySessions.forEach((studySession) => {
@@ -79,8 +80,9 @@ const Schedule = ({ props, studySessions, bookedStudySessions }) => {
                 let end = (moment(studySession.date + " " + studySession.end_time).toDate())
                 //let start_at = (new Date(date + " " + studySession));
                 //let end_at
-                console.log("DATE", start)
-                allStudySessionSlots.push({ id: studySession.id, title: "You have a class here", start: start, end: end, type: "booked-study-session", description: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
+                console.log("BOOKED", studySession)
+                let sessionType = studySession.is_active ? "booked-study-session" : "cancelled-session"
+                allStudySessionSlots.push({ id: studySession.id, title: "You have a class here", start: start, end: end, type: sessionType, description: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
             })
             console.log("studySession", allStudySessionSlots)
             setList(allStudySessionSlots, bookedStudySessions)
