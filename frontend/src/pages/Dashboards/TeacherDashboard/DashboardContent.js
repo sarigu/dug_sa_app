@@ -64,7 +64,7 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
                 </div>
             </section>
             <section className="cards-container">
-                <Card emoji={<span>&#128198;</span>} title={"Schedule"} />
+                <Card emoji={<span>&#128198;</span>} title={"Schedule"} link="/schedule" />
                 <Card emoji={<span>&#128218;</span>} title={"Study material"} />
             </section>
 

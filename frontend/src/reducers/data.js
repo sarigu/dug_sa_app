@@ -115,7 +115,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 studySessions: payload.teachersSessions,
-                bookedStudySessions: payload.bookedSessions
+                bookedStudySessions: payload.bookedSessions ? payload.bookedSessions : state.bookedStudySessions
             }
         case STUDY_SESSIONS_LOADED_FAIL:
             return {

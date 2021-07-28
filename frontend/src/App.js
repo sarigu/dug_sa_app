@@ -6,6 +6,7 @@ import SignUp from './pages/SignUp/SignUp';
 import ResetPassword from './pages/PasswordReset/ResetPassword';
 import ResetPasswordConfirm from './pages/PasswordReset/ResetPasswordConfirm';
 import FindTeachers from './pages/FindTeachers/FindTeachers';
+import SchedulePage from './pages/SchedulePage/SchedulePage';
 import AllClasses from './pages/AllClasses/AllClasses';
 import { Provider } from 'react-redux';
 import store from './store';
@@ -24,6 +25,7 @@ const App = () => (
           <Route exact path='/password/reset/confirm/:uid/:token' component={ResetPasswordConfirm} />
           <PrivateRoute exact path='/find-teachers' component={FindTeachers} />
           <PrivateRoute exact path='/all-classes' component={AllClasses} />
+          <PrivateRoute exact path='/schedule' component={SchedulePage} />
         </Switch>
       </AuthWrapper>
     </Router>

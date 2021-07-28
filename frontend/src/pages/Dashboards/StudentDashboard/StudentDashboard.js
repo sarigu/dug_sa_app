@@ -27,7 +27,7 @@ const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingS
                 </div>
             </section>
             <section className="cards-container">
-                <Card emoji={<span>&#128587;&#127998;</span>} title={"Find a teacher"} link={"/find-teachers"} />
+                <Card emoji={<span>&#128587;&#127998;</span>} title={"Find a teacher"} link="/find-teachers" />
                 <Card emoji={<span>&#128218;</span>} title={"Self Study"} />
                 <Card emoji={<span>&#127793;</span>} title={"Health & Mental Health"} />
             </section>

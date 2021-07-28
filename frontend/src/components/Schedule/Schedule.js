@@ -9,17 +9,19 @@ import { load_study_sessions } from '../../actions/data';
 const localizer = momentLocalizer(moment)
 
 function Event({ event }) {
-
     return (
         <span className="event-card" >
             <div style={{ width: "70%" }} className="event-card-content">
+                {event.type == "cancelled-session" ? <div>Cancelled</div> : null}
                 <div style={{ fontWeight: 600 }}>{event.title}</div>
-                {event.type == "booked-study-session" ? <div>{event.description}</div> : event.type == "cancelled-session" ? <div>Cancelled</div> : null}
+                {event.type == "booked-study-session" ? <div>{event.description}</div> : null}
                 <div>{event.location}</div>
-                {event.type == "study-session" ? <div>{event.taken_spots + " taken from "} {event.available_spots + " spots"} </div> : null}
+                {event.type == "study-session" || event.type == "booked-study-session" || event.type == "teacher-study-session" ? <div>{event.taken_spots + " taken from "} {event.available_spots + " spots"} </div> : null}
             </div>
             <div style={{ width: "30%", alignSelf: "center" }}> {event.type == "study-session" ? <button>Book</button> : event.type == "booked-study-session" ? <span style={{ fontSize: "30px" }}>&#128161;</span> : event.type == "cancelled-session" ? <span>&#128680;</span> : null}</div>
         </span>
+
+
     )
 }
 
@@ -45,7 +47,12 @@ const StudySessionCalendar = props => (
             eventPropGetter={event => {
                 const eventData = props.list.find(ot => ot.id === event.id);
                 const type = eventData.type;
-                return { className: type };
+                if (type === "study-session" || event.type == "teacher-study-session") {
+                    return { className: "study-session", style: { backgroundColor: `${event.color}` } };
+                } else {
+                    return { className: type };
+                }
+
             }}
             onSelectEvent={event => props.selectedCallback(event.id, event.type)}
             components={{
@@ -58,12 +65,12 @@ const StudySessionCalendar = props => (
     </div>
 )
 
-const Schedule = ({ props, studySessions, bookedStudySessions }) => {
+const Schedule = ({ props, studySessions, bookedStudySessions, userType }) => {
     const [list, setList] = useState([]);
 
     useEffect(() => {
         console.log("FINALLY", studySessions, bookedStudySessions)
-        if (studySessions && bookedStudySessions) {
+        if (userType === "student" && studySessions && bookedStudySessions) {
             const allStudySessionSlots = []
             studySessions.forEach((studySession) => {
                 let start = (moment(studySession.date + " " + studySession.start_time).toDate())
@@ -72,7 +79,7 @@ const Schedule = ({ props, studySessions, bookedStudySessions }) => {
                 //let end_at
                 console.log("NORMAL", studySession)
                 let sessionType = studySession.is_active ? "study-session" : "cancelled-session"
-                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: sessionType, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
+                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: sessionType, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: studySession.subject.color })
             })
 
             bookedStudySessions.forEach((studySession) => {
@@ -82,10 +89,22 @@ const Schedule = ({ props, studySessions, bookedStudySessions }) => {
                 //let end_at
                 console.log("BOOKED", studySession)
                 let sessionType = studySession.is_active ? "booked-study-session" : "cancelled-session"
-                allStudySessionSlots.push({ id: studySession.id, title: "You have a class here", start: start, end: end, type: sessionType, description: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots })
+                allStudySessionSlots.push({ id: studySession.id, title: "You have a class here", start: start, end: end, type: sessionType, description: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: "lightgrey" })
             })
             console.log("studySession", allStudySessionSlots)
             setList(allStudySessionSlots, bookedStudySessions)
+        } else if (userType === "teacher" && studySessions) {
+            const allStudySessionSlots = []
+            studySessions.forEach((studySession) => {
+                let start = (moment(studySession.date + " " + studySession.start_time).toDate())
+                let end = (moment(studySession.date + " " + studySession.end_time).toDate())
+                console.log("NORMAL", studySession)
+                let sessionType = studySession.is_active ? "teacher-study-session" : "cancelled-session"
+                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: sessionType, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: studySession.subject.color })
+            })
+
+
+            setList(allStudySessionSlots)
         }
 
     }, [studySessions, bookedStudySessions]);
@@ -99,6 +118,7 @@ const Schedule = ({ props, studySessions, bookedStudySessions }) => {
 
 
 const mapStateToProps = (state, props) => ({
+    userType: state.auth.userType,
     props: props,
     studySessions: state.data.studySessions,
     bookedStudySessions: state.data.bookedStudySessions,
