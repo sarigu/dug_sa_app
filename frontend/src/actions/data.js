@@ -21,6 +21,10 @@ import {
     CANCEL_STUDY_SESSION_PARTICIPATION_FAIL,
     UPCOMING_STUDY_SESSIONS_LOADED_SUCCESS,
     UPCOMING_STUDY_SESSIONS_LOADED_FAIL,
+    UPCOMING_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
+    UPCOMING_STUDY_SESSIONS_LIST_LOADED_FAIL,
+    PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
+    PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL,
 } from './types';
 
 
@@ -291,6 +295,59 @@ export const load_upcoming_booked_study_sessions = () => async dispatch => {
         } catch (err) {
             dispatch({
                 type: UPCOMING_STUDY_SESSIONS_LOADED_FAIL
+            });
+        }
+    }
+};
+
+export const load_upcoming_booked_study_sessions_list = () => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.get('http://localhost:8000/api/studysession/participation/?type=upcoming&page=0', config);
+            console.log("LOAD ALL --> ", res.data)
+            dispatch({
+                type: UPCOMING_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: UPCOMING_STUDY_SESSIONS_LIST_LOADED_FAIL
+            });
+        }
+    }
+};
+
+
+export const load_previous_booked_study_sessions_list = () => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.get('http://localhost:8000/api/studysession/participation/?type=previous&page=0', config);
+            console.log("LOAD ALL PREV --> ", res.data)
+            dispatch({
+                type: PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL
             });
         }
     }

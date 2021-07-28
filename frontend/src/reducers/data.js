@@ -20,6 +20,10 @@ import {
     CANCEL_STUDY_SESSION_PARTICIPATION_FAIL,
     UPCOMING_STUDY_SESSIONS_LOADED_SUCCESS,
     UPCOMING_STUDY_SESSIONS_LOADED_FAIL,
+    UPCOMING_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
+    UPCOMING_STUDY_SESSIONS_LIST_LOADED_FAIL,
+    PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
+    PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -35,7 +39,11 @@ const initialState = {
     studySession: {},
     isBooked: false,
     participationIsDeleted: false,
-    upcomingStudySessions: []
+    upcomingStudySessions: [],
+    allUpcomingStudySessions: [],
+    allPreviousStudySessions: [],
+    totalUpcomingStudySessionPages: null,
+    totalPreviousStudySessionPages: null,
 };
 
 export default function (state = initialState, action) {
@@ -137,6 +145,26 @@ export default function (state = initialState, action) {
                 upcomingStudySessions: payload.upcomingStudySessions,
             }
         case UPCOMING_STUDY_SESSIONS_LOADED_FAIL:
+            return {
+                ...state,
+            }
+        case UPCOMING_STUDY_SESSIONS_LIST_LOADED_SUCCESS:
+            return {
+                ...state,
+                allUpcomingStudySessions: payload.allStudySessions,
+                totalUpcomingStudySessionPages: payload.total_pages
+            }
+        case UPCOMING_STUDY_SESSIONS_LIST_LOADED_FAIL:
+            return {
+                ...state,
+            }
+        case PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS:
+            return {
+                ...state,
+                allPreviousStudySessions: payload.allStudySessions,
+                totalPreviousStudySessionPages: payload.total_pages
+            }
+        case PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL:
             return {
                 ...state,
             }

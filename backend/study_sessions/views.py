@@ -11,6 +11,8 @@ from django.core.paginator import Paginator
 from login.models import Teacher, CustomUser
 import datetime
 
+PAGINATION_LIMIT = 15; 
+
 # Create your views here.
 
 class StudySessionView(viewsets.ModelViewSet):
@@ -20,7 +22,7 @@ class StudySessionView(viewsets.ModelViewSet):
     
 class StudySessionsView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]
-    def list(self, request):
+    def retrieve(self, request):
         if request.user.role == "student":
             #get all study sessions for that teacher
             all_booked_study_sessions = []
@@ -105,13 +107,48 @@ class ParticipantView(viewsets.ViewSet):
     def list(self, request):
         try:
             user = CustomUser.objects.get(email=request.user)
-            current_date = datetime.datetime.now()
-            current_date = current_date.date()
-            print(user, current_date)
-            study_session_participations = Participant.objects.filter(user=user).filter(study_session__date__gte = current_date).order_by('-study_session__date').reverse()[:5]
-            print("1", study_session_participations)
-            serializer = ParticipantSerializer(study_session_participations, many=True)
-            response_data = {"status": "ok", "upcomingStudySessions": serializer.data}
+            if user.role == "student":
+                current_date = datetime.datetime.now()
+                current_date = current_date.date()
+                print(user, current_date)
+                type = request.GET.get('type')
+                if type:
+                    if type == "upcoming":
+                        print("upcoming")
+                        upcoming_study_sessions = Participant.objects.filter(user=user).filter(study_session__date__gte = current_date).order_by('-study_session__date').reverse()
+                        print("up---------", upcoming_study_sessions)
+                      
+                    elif type == "previous":
+                        print("prev")
+                        upcoming_study_sessions = Participant.objects.filter(user=user).filter(study_session__date__lt = current_date).order_by('-study_session__date').reverse()
+                        print("prev-------", upcoming_study_sessions)
+                    
+                    if(upcoming_study_sessions): 
+                        print("yes", request.GET.get('page'))
+                        paginator = Paginator(upcoming_study_sessions, PAGINATION_LIMIT) 
+                        print(paginator, "paginator")
+                        page_number = self.request.GET.get('page')
+                        print(page_number, "page_number")
+                        total_pages = paginator.num_pages
+
+                        if int(page_number) <= total_pages:
+                            print(page_number, total_pages, "page_number, total_pages")
+                            page_obj = paginator.get_page(page_number)     
+                            print(page_obj, "page-obj")      
+                            serializer = ParticipantSerializer(page_obj, many=True)
+                            return Response({"status": "ok", 'total_pages': total_pages, 'allStudySessions': serializer.data})
+                else: 
+                    print("no type")
+                    study_session_participations = Participant.objects.filter(user=user).filter(study_session__date__gte = current_date).order_by('-study_session__date').reverse()[:5]
+                    print("1", study_session_participations)
+                    serializer = ParticipantSerializer(study_session_participations, many=True)
+                    response_data = {"status": "ok", "upcomingStudySessions": serializer.data}
+            else:
+                response_data = {"status": "error"}
         except Exception as e:
             response_data = {"status": "error"}
         return Response(response_data)
+
+
+
+      

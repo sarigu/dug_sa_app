@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Card from '../../../components/Cards/Cards'
 import '../Dashboard.css';
-import AllClassesButton from '../../../components/Buttons/AllClassesButton'
+import AllClassesButton from '../../../components/Buttons/AllClassesButton';
+import StudySessionCard from '../../../components/StudySessionCard/StudySessionCard';
+import { useHistory } from "react-router-dom";
 import { load_upcoming_booked_study_sessions } from '../../../actions/data';
 
 const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingStudySessions }) => {
 
+    const history = useHistory();
+
     useEffect(() => {
         load_upcoming_booked_study_sessions();
-        console.log("upcomingStudySessions", upcomingStudySessions)
     }, []);
 
     return (
@@ -30,17 +33,23 @@ const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingS
             <section className="reminder-container">
                 <div className="heading-wrapper">
                     <h2>Reminder</h2>
-                    <AllClassesButton buttonWidth={"120px"} />
+                    <AllClassesButton buttonWidth={"120px"} selectedCallback={() => history.push("/all-classes")} />
                 </div>
                 <div>
                     {upcomingStudySessions ?
                         upcomingStudySessions.map((studySession, index) =>
-                            <div key={index} className={studySession.study_session.is_active ? "reminder-card" : "reminder-card cancelled-card"}>
-                                {!studySession.study_session.is_active ? <div className="cancelled-heading-wrapper"><strong>Cancelled</strong><span>&#128680;</span></div> : null}
-                                <strong>{studySession.study_session.subject.name + " with " + studySession.study_session.teacher.first_name + " " + studySession.study_session.teacher.last_name}</strong>
-                                <p>{studySession.study_session.start_time + " - " + studySession.study_session.end_time + " on " + studySession.study_session.date}</p>
-                                <p>{"at " + studySession.study_session.location.name}</p>
-                            </div>)
+                            <StudySessionCard
+                                key={index}
+                                isActive={studySession.study_session.is_active}
+                                subject={studySession.study_session.subject.name}
+                                location={studySession.study_session.location.name}
+                                teacher={studySession.study_session.teacher}
+                                startTime={studySession.study_session.start_time}
+                                endTime={studySession.study_session.end_time}
+                                date={studySession.study_session.date}
+                                subjectColor={studySession.study_session.subject.color}
+                            />
+                        )
                         : <p>No reminders at the moment</p>}
                 </div>
 
