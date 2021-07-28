@@ -44,9 +44,9 @@ const StudySessionDetail = ({ userType, studySession, participate_in_study_sessi
                 <div className="study-session-container">
                     {userType === "student" && sessionType && sessionType === "study-session" ?
                         <h2>Do you want to book a slot for this study session?</h2>
-                        : userType === "student" && sessionType && sessionType !== "study-session" ?
+                        : userType === "student" && sessionType && sessionType === "booked-study-session" ?
                             <h2>Do you want to cancel your slot in this study session?</h2>
-                            : userType === "teacher" && sessionType && sessionType !== "study-session" ?
+                            : sessionType && sessionType === "cancelled-session" ?
                                 <h2>This class was cancelled</h2> :
                                 <h2>Study session details</h2>
                     }
@@ -67,9 +67,9 @@ const StudySessionDetail = ({ userType, studySession, participate_in_study_sessi
                     </div>
                     {userType === "student" && sessionType && sessionType === "study-session" ?
                         <button onClick={handleStudySessionParticipation}>Yes, book a slot!</button>
-                        : userType === "student" && sessionType && sessionType !== "study-session" ?
+                        : userType === "student" && sessionType && sessionType === "booked-study-session" ?
                             <button onClick={handleCancelStudySessionParticipation} style={{ backgroundColor: "red" }}>Drop out</button>
-                            : userType === "teacher" && sessionType && sessionType !== "study-session" ?
+                            : sessionType && sessionType === "cancelled-session" ?
                                 null
                                 : <button onClick={handleCancelStudySession} style={{ backgroundColor: "red" }}>Cancel the class</button>}
                 </div>

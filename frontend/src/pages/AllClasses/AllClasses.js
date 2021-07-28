@@ -22,7 +22,7 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
     const [index, setIndex] = useState(1);
     const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
     const [showFeedback, setShowFeedback] = useState(false);
-    const [sessionType, setSessionType] = useState("study-session");
+    const [sessionType, setSessionType] = useState();
     const [showPopup, setShowPopup] = useState(false);
 
     const history = useHistory();
@@ -32,9 +32,11 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
         if (userType === "student") {
             load_upcoming_booked_study_sessions_list(index);
             load_previous_booked_study_sessions_list(index);
+
         } else if (userType === "teacher") {
             load_teachers_upcoming_study_sessions_list(index);
             load_teachers_previous_study_sessions_list(index);
+
         }
     }, []);
 
@@ -130,7 +132,9 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
     const handleSelectedStudySession = (studySessionId, isActive) => {
         load_study_session(studySessionId);
         setShowPopup(true);
-        if (isActive) {
+        if (isActive && userType === "student") {
+            setSessionType("booked-study-session");
+        } else if (isActive && userType === "teacher") {
             setSessionType("study-session");
         } else {
             setSessionType("cancelled-session");
