@@ -25,6 +25,8 @@ import {
     UPCOMING_STUDY_SESSIONS_LIST_LOADED_FAIL,
     PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
     PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL,
+    TEACHERS_STUDY_SESSIONS_LOADED_SUCCESS,
+    TEACHERS_STUDY_SESSIONS_LOADED_FAIL,
 } from './types';
 
 
@@ -349,6 +351,34 @@ export const load_previous_booked_study_sessions_list = (index) => async dispatc
         } catch (err) {
             dispatch({
                 type: PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL
+            });
+        }
+    }
+};
+
+
+export const load_teachers_study_session = (index) => async dispatch => {
+
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.get('http://localhost:8000/api/studysessions', config);
+            console.log("LOAD TEAHCRTS 5 --> ", res.data)
+            dispatch({
+                type: TEACHERS_STUDY_SESSIONS_LOADED_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: TEACHERS_STUDY_SESSIONS_LOADED_FAIL
             });
         }
     }

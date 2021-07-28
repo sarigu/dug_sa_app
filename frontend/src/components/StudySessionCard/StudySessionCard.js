@@ -7,11 +7,11 @@ const StudySessionCard = (props) => {
     const [formattedDate, setFormattedDate] = useState();
 
     useEffect(() => {
-            if (props.date) {
-                let [year, month, day] = props.date.split('-');
-                let date = day + "." + month + "." + year;
-                setFormattedDate(date);
-            }
+        if (props.date) {
+            let [year, month, day] = props.date.split('-');
+            let date = day + "." + month + "." + year;
+            setFormattedDate(date);
+        }
     }, [props]);
 
     return (
@@ -23,7 +23,6 @@ const StudySessionCard = (props) => {
         </div>
     );
 };
-
 
 
 export default StudySessionCard;

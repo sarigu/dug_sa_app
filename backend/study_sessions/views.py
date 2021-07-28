@@ -58,6 +58,23 @@ class StudySessionsView(viewsets.ViewSet):
 
             return Response({'bookedSessions': serializer_booked_study_sessions.data, 'teachersSessions':serializer_all_study_sessions.data  })
         return Response()
+
+    def list(self, request):
+        user = CustomUser.objects.get(email=request.user)
+        try:
+            if user.role == "teacher":
+                teacher = Teacher.objects.get(pk=user.id)
+                print("its a teacher")
+                current_date = datetime.datetime.now()
+                current_date = current_date.date()
+                study_sessions = StudySession.objects.filter(teacher=teacher).filter(date__gte = current_date).order_by('-date').reverse()[:5]
+                print("teacher 5 sessions", study_sessions)
+                serializer = StudySessionSerializer(study_sessions, many=True)
+                response_data = {"status": "ok", "upcomingStudySessions": serializer.data}
+        except Exception as e:
+            print(e)
+            response_data = {"status": "error"}
+        return Response(response_data)
  
 class ParticipantView(viewsets.ViewSet):    
     permissions_classes=[IsAuthenticated]

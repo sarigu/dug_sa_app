@@ -24,6 +24,8 @@ import {
     UPCOMING_STUDY_SESSIONS_LIST_LOADED_FAIL,
     PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
     PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL,
+    TEACHERS_STUDY_SESSIONS_LOADED_SUCCESS,
+    TEACHERS_STUDY_SESSIONS_LOADED_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -165,6 +167,15 @@ export default function (state = initialState, action) {
                 totalPreviousStudySessionPages: payload.total_pages
             }
         case PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL:
+            return {
+                ...state,
+            }
+        case TEACHERS_STUDY_SESSIONS_LOADED_SUCCESS:
+            return {
+                ...state,
+                upcomingStudySessions: payload.upcomingStudySessions,
+            }
+        case TEACHERS_STUDY_SESSIONS_LOADED_FAIL:
             return {
                 ...state,
             }
