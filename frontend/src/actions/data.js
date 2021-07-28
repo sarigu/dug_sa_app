@@ -25,8 +25,12 @@ import {
     UPCOMING_STUDY_SESSIONS_LIST_LOADED_FAIL,
     PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
     PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL,
-    TEACHERS_STUDY_SESSIONS_LOADED_SUCCESS,
-    TEACHERS_STUDY_SESSIONS_LOADED_FAIL,
+    TEACHERS_UPCOMING_STUDY_SESSIONS_LOADED_SUCCESS,
+    TEACHERS_UPCOMING_STUDY_SESSIONS_LOADED_FAIL,
+    TEACHERS_UPCOMING_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
+    TEACHERS_UPCOMING_STUDY_SESSIONS_LIST_LOADED_FAIL,
+    TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
+    TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL,
 } from './types';
 
 
@@ -357,7 +361,7 @@ export const load_previous_booked_study_sessions_list = (index) => async dispatc
 };
 
 
-export const load_teachers_study_session = (index) => async dispatch => {
+export const load_upcoming_teachers_study_session = (index) => async dispatch => {
 
     if (localStorage.getItem('access')) {
         const config = {
@@ -372,13 +376,67 @@ export const load_teachers_study_session = (index) => async dispatch => {
             const res = await axios.get('http://localhost:8000/api/studysessions', config);
             console.log("LOAD TEAHCRTS 5 --> ", res.data)
             dispatch({
-                type: TEACHERS_STUDY_SESSIONS_LOADED_SUCCESS,
+                type: TEACHERS_UPCOMING_STUDY_SESSIONS_LOADED_SUCCESS,
                 payload: res.data
             });
 
         } catch (err) {
             dispatch({
-                type: TEACHERS_STUDY_SESSIONS_LOADED_FAIL
+                type: TEACHERS_UPCOMING_STUDY_SESSIONS_LOADED_FAIL
+            });
+        }
+    }
+};
+
+export const load_teachers_upcoming_study_sessions_list = (index) => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.get(`http://localhost:8000/api/studysessions/?type=upcoming&page=${index}`, config);
+            console.log("LOAD ALL TEAHCRS --> ", res.data)
+            dispatch({
+                type: TEACHERS_UPCOMING_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: TEACHERS_UPCOMING_STUDY_SESSIONS_LIST_LOADED_FAIL
+            });
+        }
+    }
+};
+
+
+export const load_teachers_previous_study_sessions_list = (index) => async dispatch => {
+
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.get(`http://localhost:8000/api/studysessions/?type=previous&page=${index}`, config);
+            console.log("LOAD ALL TEAHCRS PREV --> ", res.data)
+            dispatch({
+                type: TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL
             });
         }
     }

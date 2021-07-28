@@ -18,4 +18,19 @@ class ParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participant
         fields = '__all__'
+
+class ParticipantStudySessionSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    study_session = StudySessionSerializer()
+    class Meta:
+        model = Participant
+        fields = '__all__'
+    
+    def to_representation(self, instance):
+        data = super(ParticipantStudySessionSerializer, self).to_representation(instance)
+        study_session = data.pop('study_session')
+        for key, val in study_session.items():
+            data.update({key: val})
+        return data
+      
       

@@ -5,14 +5,14 @@ import Card from '../../../components/Cards/Cards'
 import AllClassesButton from '../../../components/Buttons/AllClassesButton'
 import StudySessionCard from '../../../components/StudySessionCard/StudySessionCard';
 import { useHistory } from "react-router-dom";
-import { load_teachers_study_session } from '../../../actions/data';
+import { load_upcoming_teachers_study_session } from '../../../actions/data';
 
-const DashboardContent = ({ upcomingStudySessions, load_teachers_study_session }) => {
+const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_session }) => {
 
     const history = useHistory();
 
     useEffect(() => {
-        load_teachers_study_session();
+        load_upcoming_teachers_study_session();
     }, []);
 
     return (
@@ -53,4 +53,4 @@ const mapStateToProps = state => (console.log(state.data), {
     upcomingStudySessions: state.data.upcomingStudySessions
 });
 
-export default connect(mapStateToProps, { load_teachers_study_session })(DashboardContent);
+export default connect(mapStateToProps, { load_upcoming_teachers_study_session })(DashboardContent);

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import BackButton from '../../components/Buttons/BackButton';
 import { useHistory } from "react-router-dom";
-import { load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list } from '../../actions/data';
+import { load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list } from '../../actions/data';
 import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 import StudySessionCard from '../../components/StudySessionCard/StudySessionCard';
 import NextButton from '../../components/Buttons/NextButton';
 import PrevButton from '../../components/Buttons/PrevButton';
 import './AllClasses.css';
 
-const AllClasses = ({ upcomingStudySessions, previousStudySessions, totalPreviousStudySessionPages, totalUpcomingStudySessionPages, load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list }) => {
+const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, totalPreviousStudySessionPages, totalUpcomingStudySessionPages, load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list }) => {
     const [sortByUpcoming, setSortByUpcoming] = useState(true);
     const [sortByPrevious, setSortByPrevious] = useState(false);
     const [upcomingIsLoaded, setUpcomingIsLoaded] = useState(false);
@@ -21,8 +21,14 @@ const AllClasses = ({ upcomingStudySessions, previousStudySessions, totalPreviou
     const history = useHistory();
 
     useEffect(() => {
-        load_upcoming_booked_study_sessions_list(index);
-        load_previous_booked_study_sessions_list(index);
+        console.log(userType, "------USER TYPE EFFECT ALL CLASSeS")
+        if (userType === "student") {
+            load_upcoming_booked_study_sessions_list(index);
+            load_previous_booked_study_sessions_list(index);
+        } else if (userType === "teacher") {
+            load_teachers_upcoming_study_sessions_list(index);
+            load_teachers_previous_study_sessions_list(index);
+        }
     }, []);
 
 
@@ -41,13 +47,21 @@ const AllClasses = ({ upcomingStudySessions, previousStudySessions, totalPreviou
     const handleNextPage = () => {
         if (sortByUpcoming) {
             if (index + 1 <= totalUpcomingStudySessionPages) {
-                load_upcoming_booked_study_sessions_list(index + 1);
+                if (userType === "student") {
+                    load_upcoming_booked_study_sessions_list(index + 1);
+                } else if (userType === "teacher") {
+                    load_teachers_upcoming_study_sessions_list(index + 1);
+                }
                 setUpcomingIsLoaded(false);
                 setIndex(index + 1);
             }
         } else {
             if (index + 1 <= totalPreviousStudySessionPages) {
-                load_previous_booked_study_sessions_list(index + 1);
+                if (userType === "student") {
+                    load_previous_booked_study_sessions_list(index + 1);
+                } else if (userType === "teacher") {
+                    load_teachers_previous_study_sessions_list(index + 1);
+                }
                 setPreviousIsLoaded(false);
                 setIndex(index + 1);
             }
@@ -57,22 +71,49 @@ const AllClasses = ({ upcomingStudySessions, previousStudySessions, totalPreviou
     const handlePrevPage = () => {
         if (sortByUpcoming) {
             if (index - 1 > 0) {
-                load_upcoming_booked_study_sessions_list(index - 1);
+
+                if (userType === "student") {
+                    load_upcoming_booked_study_sessions_list(index - 1);
+                } else if (userType === "teacher") {
+                    load_teachers_upcoming_study_sessions_list(index - 1);
+                }
+
                 setUpcomingIsLoaded(false);
                 setIndex(index - 1);
             } else {
-                load_upcoming_booked_study_sessions_list(1);
+
+                if (userType === "student") {
+                    load_upcoming_booked_study_sessions_list(1);
+                } else if (userType === "teacher") {
+                    load_teachers_upcoming_study_sessions_list(1);
+                }
+
+
                 setUpcomingIsLoaded(false);
                 setIndex(1);
             }
 
         } else {
             if (index - 1 > 0) {
-                load_previous_booked_study_sessions_list(index - 1);
+
+                if (userType === "student") {
+                    load_previous_booked_study_sessions_list(index - 1);
+                } else if (userType === "teacher") {
+                    load_teachers_previous_study_sessions_list(index - 1);
+                }
+
                 setPreviousIsLoaded(false);
                 setIndex(index - 1);
             } else {
-                load_previous_booked_study_sessions_list(1);
+
+
+                if (userType === "student") {
+                    load_previous_booked_study_sessions_list(1);
+                } else if (userType === "teacher") {
+                    load_teachers_previous_study_sessions_list(1);
+                }
+
+
                 setPreviousIsLoaded(false);
                 setIndex(1);
             }
@@ -94,14 +135,14 @@ const AllClasses = ({ upcomingStudySessions, previousStudySessions, totalPreviou
                             allUpcomingStudySessions.map((studySession, index) =>
                                 <StudySessionCard
                                     key={index}
-                                    isActive={studySession.study_session.is_active}
-                                    subject={studySession.study_session.subject.name}
-                                    location={studySession.study_session.location.name}
-                                    teacher={studySession.study_session.teacher}
-                                    startTime={studySession.study_session.start_time}
-                                    endTime={studySession.study_session.end_time}
-                                    date={studySession.study_session.date}
-                                    subjectColor={studySession.study_session.subject.color}
+                                    isActive={studySession.is_active}
+                                    subject={studySession.subject.name}
+                                    location={studySession.location.name}
+                                    teacher={studySession.teacher}
+                                    startTime={studySession.start_time}
+                                    endTime={studySession.end_time}
+                                    date={studySession.date}
+                                    subjectColor={studySession.subject.color}
                                 />
                             ) : <p>No classes</p>
                         }
@@ -113,14 +154,14 @@ const AllClasses = ({ upcomingStudySessions, previousStudySessions, totalPreviou
                                     allPreviousStudySessions.map((studySession, index) =>
                                         <StudySessionCard
                                             key={index}
-                                            isActive={studySession.study_session.is_active}
-                                            subject={studySession.study_session.subject.name}
-                                            location={studySession.study_session.location.name}
-                                            teacher={studySession.study_session.teacher}
-                                            startTime={studySession.study_session.start_time}
-                                            endTime={studySession.study_session.end_time}
-                                            date={studySession.study_session.date}
-                                            subjectColor={studySession.study_session.subject.color}
+                                            isActive={studySession.is_active}
+                                            subject={studySession.subject.name}
+                                            location={studySession.location.name}
+                                            teacher={studySession.teacher}
+                                            startTime={studySession.start_time}
+                                            endTime={studySession.end_time}
+                                            date={studySession.date}
+                                            subjectColor={studySession.subject.color}
                                         />)
                                     : <p>No classes</p>
                             }
@@ -157,6 +198,7 @@ const mapStateToProps = (state, props) => ({
     previousStudySessions: state.data.allPreviousStudySessions,
     totalPreviousStudySessionPages: state.data.totalPreviousStudySessionPages,
     totalUpcomingStudySessionPages: state.data.totalUpcomingStudySessionPages,
+    userType: state.auth.userType,
 });
 
-export default connect(mapStateToProps, { load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list })(AllClasses);
+export default connect(mapStateToProps, { load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list })(AllClasses);

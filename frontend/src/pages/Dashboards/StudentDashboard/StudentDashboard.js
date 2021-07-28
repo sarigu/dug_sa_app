@@ -12,6 +12,7 @@ const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingS
     const history = useHistory();
 
     useEffect(() => {
+        console.log(upcomingStudySessions, "upcomingStudySessions")
         load_upcoming_booked_study_sessions();
     }, []);
 
@@ -40,14 +41,14 @@ const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingS
                         upcomingStudySessions.map((studySession, index) =>
                             <StudySessionCard
                                 key={index}
-                                isActive={studySession.study_session.is_active}
-                                subject={studySession.study_session.subject.name}
-                                location={studySession.study_session.location.name}
-                                teacher={studySession.study_session.teacher}
-                                startTime={studySession.study_session.start_time}
-                                endTime={studySession.study_session.end_time}
-                                date={studySession.study_session.date}
-                                subjectColor={studySession.study_session.subject.color}
+                                isActive={studySession.is_active}
+                                subject={studySession.subject.name}
+                                location={studySession.location.name}
+                                teacher={studySession.teacher}
+                                startTime={studySession.start_time}
+                                endTime={studySession.end_time}
+                                date={studySession.date}
+                                subjectColor={studySession.subject.color}
                             />
                         )
                         : <p>No reminders at the moment</p>}
