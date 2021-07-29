@@ -29,39 +29,50 @@ class StudySessionView(viewsets.ModelViewSet):
                 if user.role == "teacher":
                     teacher = Teacher.objects.get(pk=user.id)
 
+                current_date = datetime.datetime.now()
+                current_date = current_date.date()
+
                 already_class = StudySession.objects.filter(teacher=teacher).filter(date=request.data["formattedDate"]).filter(start_time=request.data["startTime"]).exists()
                 print("class?", already_class)
                 if already_class == True: 
                     raise ValueError('Already class')
-                else: 
-                    subject = request.data["subject"]
-                    subject = Subject.objects.get(name=subject)
-                    language = request.data["language"]
-                    language = Language.objects.get(language=language)
-                    print(language, "--language")
+            
+                if current_date > datetime.datetime.strptime(request.data["formattedDate"], "%Y-%m-%d").date():
+                    raise ValueError('Date needs to be in future')
+                subject = request.data["subject"]
+                subject = Subject.objects.get(name=subject)
+                language = request.data["language"]
+                language = Language.objects.get(language=language)
+                print(language, "--language")
         
-                    location = TeachingFacility.objects.get(pk=1)
-                    study_session = StudySession.objects.create(
-                        subject = subject,
-                        language = language,
-                        start_time = request.data["startTime"], 
-                        end_time = request.data["endTime"], 
-                        date = request.data["formattedDate"], 
-                        location=location,
-                        teacher = teacher,
-                        available_spots = request.data["spots"],
-                        description = request.data["description"]
-                    )
+                location = TeachingFacility.objects.get(pk=1)
+                study_session = StudySession.objects.create(
+                    subject = subject,
+                    language = language,
+                    start_time = request.data["startTime"], 
+                    end_time = request.data["endTime"], 
+                    date = request.data["formattedDate"], 
+                    location=location,
+                    teacher = teacher,
+                    available_spots = request.data["spots"],
+                    description = request.data["description"]
+                )
 
-                    if(study_session):
-                        print(study_session, "RES")
-                        response_data = {}
+                if(study_session):
+                    print(study_session, "RES")
+                    response_data = {}
             else:
                 raise ValueError('No access right')
         except Exception as e:
             print(e, "ERR")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
+
+    def patch(self, request):
+        print("HELLOD ELETE", request)
+        if request.user.role == "teacher" or request.user.role == "staff":
+            print("teacher or staff")
+        return Response({})
     
 class StudySessionsView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]

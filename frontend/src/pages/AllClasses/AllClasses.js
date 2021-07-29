@@ -12,7 +12,7 @@ import StudySessionDetail from '../../components/StudySessionDetail/StudySession
 import StudySessionFeedback from '../../components/StudySessionFeedback/StudySessionFeedback';
 import './AllClasses.css';
 
-const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, totalPreviousStudySessionPages, totalUpcomingStudySessionPages, load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list, load_study_session }) => {
+const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, totalPreviousStudySessionPages, totalUpcomingStudySessionPages, load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list, load_study_session, isCancelled, isCreated }) => {
     const [sortByUpcoming, setSortByUpcoming] = useState(true);
     const [sortByPrevious, setSortByPrevious] = useState(false);
     const [upcomingIsLoaded, setUpcomingIsLoaded] = useState(false);
@@ -39,6 +39,19 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
 
         }
     }, []);
+
+
+    useEffect(() => {
+        if (userType === "teacher") {
+            load_teachers_upcoming_study_sessions_list(index);
+            load_teachers_previous_study_sessions_list(index);
+
+        }
+    }, [isCancelled, isCreated]);
+
+    useEffect(() => {
+        console.log("WAS RELAODED", upcomingStudySessions)
+    }, [upcomingStudySessions, previousStudySessions]);
 
 
     useEffect(() => {
@@ -237,6 +250,8 @@ const mapStateToProps = (state, props) => ({
     totalPreviousStudySessionPages: state.data.totalPreviousStudySessionPages,
     totalUpcomingStudySessionPages: state.data.totalUpcomingStudySessionPages,
     userType: state.auth.userType,
+    isCancelled: state.data.isCancelled,
+    isCreated: state.data.isCreated,
 });
 
 export default connect(mapStateToProps, { load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list, load_study_session })(AllClasses);

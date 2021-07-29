@@ -457,9 +457,10 @@ export const cancel_study_session = (studySessionId) => async dispatch => {
                 'Accept': 'application/json'
             }
         };
+        console.log("COnfiF", config)
 
         try {
-            const res = await axios.delete(`http://localhost:8000/api/studysession/${studySessionId}`, config);
+            const res = await axios.patch(`http://localhost:8000/api/studysession/${studySessionId}/`, config);
             console.log("DELETE SESS ", res)
             dispatch({
                 type: CANCEL_STUDY_SESSION_SUCCESS,
@@ -497,15 +498,11 @@ export const create_study_session = (date, language, subject, spots, startTime, 
             const res = await axios.post('http://localhost:8000/api/studysession/', body, config);
             console.log("CREAT RES ", res)
 
-            if (res.data.status === "ok") {
-                dispatch({
-                    type: CREATE_STUDY_SESSION_SUCCESS,
-                });
-            } else {
-                dispatch({
-                    type: CREATE_STUDY_SESSION_FAIL
-                });
-            }
+
+            dispatch({
+                type: CREATE_STUDY_SESSION_SUCCESS,
+            });
+
 
 
         } catch (err) {

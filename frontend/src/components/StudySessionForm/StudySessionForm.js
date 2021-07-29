@@ -15,32 +15,56 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
     const [endTime, setEndTime] = useState();
     const [error, setError] = useState(false);
     const [description, setDescription] = useState("");
+    const [dataIsChecked, setDataIsChecked] = useState(false);
+
 
     useEffect(() => {
         load_subjects();
         load_languages();
     }, []);
 
-    const handleSubmit = () => {
+    useEffect(() => {
+        console.log("EFEFCT", dataIsChecked)
+        if (dataIsChecked) {
 
-        console.log(validateYear(date))
+            console.log("SUBMIT", date, language, subject, spots, startTime, endTime, error)
+            if (!error && date && language && subject && spots && startTime && endTime) {
+                create_study_session(date, language, subject, spots, startTime, endTime, description)
+                props.selectedCallback();
+            } else {
+                setError(true);
+            }
+        }
+    }, [dataIsChecked]);
+
+    const handleSubmit = () => {
+        let dataCheck = checkData();
+        if (dataCheck) {
+            setDataIsChecked(true); console.log("data was checked")
+        }
+    }
+
+    const checkData = () => {
 
         if (!language) {
+            console.log("set lang", languages[0].language)
             setLanguage(languages[0].language)
         }
 
         if (!subject) {
+            console.log("set sub", subjects[0].name)
             setSubject(subjects[0].name)
         }
 
-        if (!validateYear(date)) {
-            console.log("year not validated")
-            setError(true);
+        if (date) {
+            if (!validateYear(date)) {
+                console.log("year not validated")
+                setError(true);
+            }
+
         }
 
-        console.log(startTime, endTime, startTime > endTime)
-
-        if (startTime > endTime) {
+        if (startTime > endTime || startTime == endTime) {
             console.log("start before end")
             setError(true);
         }
@@ -50,15 +74,8 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
             setError(true);
         }
 
-        console.log("SUBMIT", date, language, subject, spots, startTime, endTime, error)
-        if (!error && date && language && subject && spots && startTime && endTime) {
-            create_study_session(date, language, subject, spots, startTime, endTime, description)
-            props.selectedCallback();
-        } else {
-            setError(true);
-        }
+        return true;
     }
-
     return (
         <div>
             <h2>Add a study session</h2>
@@ -102,6 +119,7 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
                 <h3>Available Spots</h3>
                 <input
                     type="number"
+                    min="1"
                     onChange={e => { setError(false); setSpots(e.target.value) }}
                 />
                 <h3>Description</h3>

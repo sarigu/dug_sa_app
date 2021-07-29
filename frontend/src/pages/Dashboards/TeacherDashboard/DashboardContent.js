@@ -10,7 +10,7 @@ import PopUp from '../../../components/PopUp/PopUp';
 import StudySessionDetail from '../../../components/StudySessionDetail/StudySessionDetail';
 import StudySessionFeedback from '../../../components/StudySessionFeedback/StudySessionFeedback';
 
-const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_session, load_study_session }) => {
+const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_session, load_study_session, isCancelled, isCreated }) => {
 
     const [showPopup, setShowPopup] = useState(false);
     const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
@@ -22,6 +22,14 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
     useEffect(() => {
         load_upcoming_teachers_study_session();
     }, []);
+
+    useEffect(() => {
+        load_upcoming_teachers_study_session();
+    }, [isCancelled, isCreated]);
+
+    useEffect(() => {
+        console.log("WAS RELAODED", upcomingStudySessions)
+    }, [upcomingStudySessions]);
 
     const handleSelectedStudySession = (studySessionId, isActive) => {
         load_study_session(studySessionId);
@@ -44,7 +52,7 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
                     <AllClassesButton buttonWidth={"120px"} selectedCallback={() => history.push("/all-classes")} />
                 </div>
                 <div>
-                    {upcomingStudySessions ?
+                    {upcomingStudySessions && upcomingStudySessions.length > 0 ?
                         upcomingStudySessions.map((studySession, index) =>
                             <StudySessionCard
                                 selectedCallback={(sessionId, isActive) => { handleSelectedStudySession(sessionId, isActive) }}
@@ -84,7 +92,9 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
 
 const mapStateToProps = state => (console.log("stw", state.data), {
     user: state.auth.user,
-    upcomingStudySessions: state.data.upcomingStudySessions
+    upcomingStudySessions: state.data.upcomingStudySessions,
+    isCancelled: state.data.isCancelled,
+    isCreated: state.data.isCreated,
 });
 
 export default connect(mapStateToProps, { load_upcoming_teachers_study_session, load_study_session })(DashboardContent);
