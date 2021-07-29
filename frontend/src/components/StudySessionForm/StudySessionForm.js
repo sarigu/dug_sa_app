@@ -108,6 +108,7 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
 
                 <input
                     type="text"
+                    maxlength="500"
                     onChange={e => { setError(false); setDescription(e.target.value) }}
                 />
             </div>

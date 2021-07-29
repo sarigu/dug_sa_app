@@ -66,6 +66,8 @@ const StudySessionDetail = ({ userType, studySession, participate_in_study_sessi
                         <p>{studySession.location ? studySession.location.street + " ," + studySession.location.postal_code + " ," + studySession.location.city : null}</p>
                         <h3>Spots</h3>
                         <p>{studySession.taken_spots + " taken from " + studySession.available_spots}</p>
+                        <h3>Description</h3>
+                        <p>{studySession.description ? studySession.description : "No description"}</p>
                     </div>
                     {userType === "student" && sessionType && sessionType === "study-session" ?
                         <button onClick={handleStudySessionParticipation}>Yes, book a slot!</button>

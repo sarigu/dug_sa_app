@@ -188,8 +188,7 @@ class ParticipantView(viewsets.ViewSet):
                 print("success")
                 response_data = {"status": "ok"}
             else: 
-                print("no more spots or no student", study_session.taken_spots, study_session.available_spots, user)
-                response_data = {"status": "error"}
+                raise ValueError('Already class or no spots or class in past or already participant')
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -249,7 +248,7 @@ class ParticipantView(viewsets.ViewSet):
                     serializer = ParticipantStudySessionSerializer(study_session_participations, many=True)
                     response_data = {"status": "ok", "upcomingStudySessions": serializer.data}
             else:
-                response_data = {"status": "error"}
+                raise ValueError('Only for students')
         except Exception as e:
             print(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
