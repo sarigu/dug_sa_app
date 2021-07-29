@@ -55,6 +55,8 @@ const StudySessionDetail = ({ userType, studySession, participate_in_study_sessi
                         <p>{studySession.teacher ? studySession.teacher.first_name + " " + studySession.teacher.last_name : null}</p>
                         <h3>Subject</h3>
                         <p>{studySession.subject ? studySession.subject.name : null}</p>
+                        <h3>Language</h3>
+                        <p>{studySession.language ? studySession.language.language : null}</p>
                         <h3>Date</h3>
                         <p>{formattedDate ? formattedDate : null}</p>
                         <h3>Time</h3>

@@ -79,7 +79,7 @@ const Schedule = ({ props, studySessions, bookedStudySessions, userType }) => {
                 //let end_at
                 console.log("NORMAL", studySession)
                 let sessionType = studySession.is_active ? "study-session" : "cancelled-session"
-                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: sessionType, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: studySession.subject.color })
+                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name + " in " + studySession.language.language, start: start, end: end, type: sessionType, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: studySession.subject.color })
             })
 
             bookedStudySessions.forEach((studySession) => {
@@ -89,7 +89,7 @@ const Schedule = ({ props, studySessions, bookedStudySessions, userType }) => {
                 //let end_at
                 console.log("BOOKED", studySession)
                 let sessionType = studySession.is_active ? "booked-study-session" : "cancelled-session"
-                allStudySessionSlots.push({ id: studySession.id, title: "You have a class here", start: start, end: end, type: sessionType, description: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: "lightgrey" })
+                allStudySessionSlots.push({ id: studySession.id, title: "You have a class here", start: start, end: end, type: sessionType, description: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name + " in " + studySession.language.language, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: "lightgrey" })
             })
             console.log("studySession", allStudySessionSlots)
             setList(allStudySessionSlots, bookedStudySessions)
@@ -100,7 +100,7 @@ const Schedule = ({ props, studySessions, bookedStudySessions, userType }) => {
                 let end = (moment(studySession.date + " " + studySession.end_time).toDate())
                 console.log("NORMAL", studySession)
                 let sessionType = studySession.is_active ? "teacher-study-session" : "cancelled-session"
-                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name, start: start, end: end, type: sessionType, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: studySession.subject.color })
+                allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name + " in " + studySession.language.language, start: start, end: end, type: sessionType, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: studySession.subject.color })
             })
 
 

@@ -58,9 +58,24 @@ const CancelStudySessionSuccessMessage = (props) => {
     );
 };
 
+const CreatedStudySessionSuccessMessage = (props) => {
+    const history = useHistory();
+    const location = useLocation();
+
+    console.log(location.pathname)
+
+    return (
+        <div className="feedback-content">
+            <span className="feedback-icon" >&#128218;</span>
+            <h3>The new study session was created!</h3>
+            <button onClick={() => { location.pathname = "/dashboard" ? props.selectedCallback() : history.push("/dashboard") }}>Go back</button>
+        </div>
+    );
+};
 
 
-const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, userType, isCancelled, selectedCallback }) => {
+
+const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, userType, isCancelled, selectedCallback, isCreated }) => {
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
@@ -83,11 +98,17 @@ const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, u
                                 <div>
                                     {isCancelled ? <CancelStudySessionSuccessMessage selectedCallback={selectedCallback} /> : <FailMessage selectedCallback={selectedCallback} />}
                                 </div>
-                                : <FailMessage selectedCallback={selectedCallback} />}
+                                : userType === "teacher" && sessionType && sessionType === "added-class" ?
+                                    <div>
+                                        {isCreated ? <CreatedStudySessionSuccessMessage selectedCallback={selectedCallback} /> : <FailMessage selectedCallback={selectedCallback} />}
+                                    </div>
+                                    : <FailMessage selectedCallback={selectedCallback} />}
                 </div>
                 : <div className="feedback-loading-icon"><LoadingIcon /></div>}
         </div>
     );
+
+
 };
 
 
@@ -97,7 +118,8 @@ const mapStateToProps = (state, props) => ({
     isCancelled: state.data.isCancelled,
     participationIsDeleted: state.data.participationIsDeleted,
     sessionType: props.sessionType,
-    selectedCallback: props.selectedCallback
+    selectedCallback: props.selectedCallback,
+    isCreated: state.data.isCreated,
 });
 
 export default connect(mapStateToProps, {})(StudySessionFeedback);

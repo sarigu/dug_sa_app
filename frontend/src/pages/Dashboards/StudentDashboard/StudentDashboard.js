@@ -5,16 +5,37 @@ import '../Dashboard.css';
 import AllClassesButton from '../../../components/Buttons/AllClassesButton';
 import StudySessionCard from '../../../components/StudySessionCard/StudySessionCard';
 import { useHistory } from "react-router-dom";
-import { load_upcoming_booked_study_sessions } from '../../../actions/data';
+import { load_upcoming_booked_study_sessions, load_study_session } from '../../../actions/data';
+import PopUp from '../../../components/PopUp/PopUp';
+import StudySessionDetail from '../../../components/StudySessionDetail/StudySessionDetail';
+import StudySessionFeedback from '../../../components/StudySessionFeedback/StudySessionFeedback';
 
-const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingStudySessions }) => {
+const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingStudySessions, load_study_session }) => {
 
     const history = useHistory();
+
+    const [showPopup, setShowPopup] = useState(false);
+    const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
+    const [showFeedback, setShowFeedback] = useState(false);
+    const [sessionType, setSessionType] = useState("booked-study-session");
 
     useEffect(() => {
         console.log(upcomingStudySessions, "upcomingStudySessions")
         load_upcoming_booked_study_sessions();
     }, []);
+
+    const handleSelectedStudySession = (studySessionId, isActive) => {
+        load_study_session(studySessionId);
+        setShowPopup(true);
+        if (isActive) {
+            setSessionType("booked-study-session");
+        } else {
+            setSessionType("cancelled-session");
+        }
+
+        setShowStudySessionDetails(true);
+
+    }
 
     return (
         <div>
@@ -41,9 +62,11 @@ const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingS
                         upcomingStudySessions.map((studySession, index) =>
                             <StudySessionCard
                                 key={index}
+                                selectedCallback={(sessionId, isActive) => { handleSelectedStudySession(sessionId, isActive) }}
                                 sessionId={studySession.id}
                                 isActive={studySession.is_active}
                                 subject={studySession.subject.name}
+                                language={studySession.language.language}
                                 location={studySession.location.name}
                                 teacher={studySession.teacher}
                                 startTime={studySession.start_time}
@@ -56,6 +79,15 @@ const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingS
                 </div>
 
             </section>
+            {
+                showPopup ?
+                    <PopUp selectedCallback={() => setShowPopup(false)} >
+                        {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
+                            : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                                : null}
+                    </PopUp>
+                    : null
+            }
         </div>
     );
 
@@ -66,4 +98,4 @@ const mapStateToProps = state => (console.log(state.data), {
     upcomingStudySessions: state.data.upcomingStudySessions
 });
 
-export default connect(mapStateToProps, { load_upcoming_booked_study_sessions })(StudentDashboard);
+export default connect(mapStateToProps, { load_upcoming_booked_study_sessions, load_study_session })(StudentDashboard);

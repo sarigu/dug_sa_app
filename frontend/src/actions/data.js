@@ -33,6 +33,8 @@ import {
     TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL,
     CANCEL_STUDY_SESSION_SUCCESS,
     CANCEL_STUDY_SESSION_FAIL,
+    CREATE_STUDY_SESSION_SUCCESS,
+    CREATE_STUDY_SESSION_FAIL,
 } from './types';
 
 
@@ -471,3 +473,37 @@ export const cancel_study_session = (studySessionId) => async dispatch => {
     }
 };
 
+
+export const create_study_session = (date, language, subject, spots, startTime, endTime, description) => async dispatch => {
+
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+
+        //format date because Django expects YYYY-MM-DD
+        let [day, month, year] = date.split('/');
+        const formattedDate = year + "-" + month + "-" + day;
+
+        const body = JSON.stringify({ formattedDate, language, subject, spots, startTime, endTime, description });
+        console.log("BODY", body);
+
+        try {
+            const res = await axios.post('http://localhost:8000/api/studysession/', body, config);
+            console.log("CREAT RES ", res)
+            dispatch({
+                type: CREATE_STUDY_SESSION_SUCCESS,
+            });
+
+        } catch (err) {
+            dispatch({
+                type: CREATE_STUDY_SESSION_FAIL
+            });
+        }
+    }
+};

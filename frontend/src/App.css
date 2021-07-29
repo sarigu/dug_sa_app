@@ -13,12 +13,12 @@ main{
     height:100%;
 }
 
-input, button, .shadow{
+input, button, .shadow, select{
     filter:drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.199) );
     cursor: pointer;
 }
 
-input{
+input, select{
     background-color: white;
     border-radius: 15px;
     border:none;

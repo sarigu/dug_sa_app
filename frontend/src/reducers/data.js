@@ -32,6 +32,8 @@ import {
     TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_FAIL,
     CANCEL_STUDY_SESSION_SUCCESS,
     CANCEL_STUDY_SESSION_FAIL,
+    CREATE_STUDY_SESSION_SUCCESS,
+    CREATE_STUDY_SESSION_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -53,6 +55,7 @@ const initialState = {
     allPreviousStudySessions: [],
     totalUpcomingStudySessionPages: null,
     totalPreviousStudySessionPages: null,
+    isCreated: false,
 };
 
 export default function (state = initialState, action) {
@@ -215,8 +218,18 @@ export default function (state = initialState, action) {
             return {
                 ...state,
             }
+        case CREATE_STUDY_SESSION_SUCCESS:
+            return {
+                ...state,
+                isCreated: true,
+            }
+        case CREATE_STUDY_SESSION_FAIL:
+            return {
+                ...state,
+            }
         default:
             return state
     }
 };
+
 

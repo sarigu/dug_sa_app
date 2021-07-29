@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .serializers import StudySessionSerializer, ParticipantSerializer, ParticipantStudySessionSerializer
 from .models import Participant, StudySession
+from login.models import Subject, Language, CustomUser, TeachingFacility, Teacher
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -19,6 +20,43 @@ class StudySessionView(viewsets.ModelViewSet):
     permissions_classes=[IsAuthenticated]
     serializer_class = StudySessionSerializer
     queryset = StudySession.objects.all()
+
+    def create(self, request): 
+        print("hello")
+        try:
+            user = CustomUser.objects.get(email=request.user)
+            if user.role == "teacher" or user.role == "staff":
+                if user.role == "teacher":
+                    teacher = Teacher.objects.get(pk=user.id)
+       
+                subject = request.data["subject"]
+                subject = Subject.objects.get(name=subject)
+                language = request.data["language"]
+                language = Language.objects.get(language=language)
+                print(language, "--language")
+      
+                location = TeachingFacility.objects.get(pk=1)
+                study_session = StudySession.objects.create(
+                    subject = subject,
+                    language = language,
+                    start_time = request.data["startTime"], 
+                    end_time = request.data["endTime"], 
+                    date = request.data["formattedDate"], 
+                    location=location,
+                    teacher = teacher,
+                    available_spots = request.data["spots"],
+                    description = request.data["description"]
+                )
+
+                if(study_session):
+                    print(study_session, "RES")
+                    response_data = {}
+            else:
+                raise ValueError('No access right')
+        except Exception as e:
+            print(e, "ERR")
+            response_data = {}
+        return Response(response_data)
     
 class StudySessionsView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]

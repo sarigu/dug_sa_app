@@ -1,11 +1,12 @@
 from django.db import models
-from login.models import Subject, Teacher, CustomUser, TeachingFacility
+from login.models import Subject, Teacher, CustomUser, TeachingFacility, Language
 
 # Create your models here.
 
 class StudySession(models.Model):
     is_active = models.BooleanField(default=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, on_delete=models.PROTECT)
     start_time = models.TimeField(auto_now=False)
     end_time = models.TimeField(auto_now=False)
     date = models.DateField()

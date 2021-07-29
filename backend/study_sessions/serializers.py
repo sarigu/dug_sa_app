@@ -2,12 +2,13 @@ from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import StudySession, Participant
-from login.serializers import TeacherSerializer, SubjectSerializer, UserSerializer, TeachingFacilitySerializer
+from login.serializers import TeacherSerializer, SubjectSerializer, UserSerializer, TeachingFacilitySerializer, LanguageSerializer
 
 class StudySessionSerializer(serializers.ModelSerializer):
     teacher = TeacherSerializer()
     subject = SubjectSerializer()
     location = TeachingFacilitySerializer()
+    language = LanguageSerializer()
     class Meta:
         model = StudySession
         fields = '__all__'

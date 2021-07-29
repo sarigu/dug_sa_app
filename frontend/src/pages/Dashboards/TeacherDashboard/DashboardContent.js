@@ -37,7 +37,7 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
     }
 
     return (
-        <div>
+        < div >
             <section className="reminder-container" >
                 <div className="heading-wrapper">
                     <h2>Reminder</h2>
@@ -52,6 +52,7 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
                                 sessionId={studySession.id}
                                 isActive={studySession.is_active}
                                 subject={studySession.subject.name}
+                                language={studySession.language.language}
                                 location={studySession.location.name}
                                 teacher={studySession.teacher}
                                 startTime={studySession.start_time}
@@ -68,19 +69,20 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
                 <Card emoji={<span>&#128218;</span>} title={"Study material"} />
             </section>
 
-            {showPopup ?
-                <PopUp selectedCallback={() => setShowPopup(false)} >
-                    {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
-                        : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
-                            : null}
-                </PopUp>
-                : null
+            {
+                showPopup ?
+                    <PopUp selectedCallback={() => setShowPopup(false)} >
+                        {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
+                            : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                                : null}
+                    </PopUp>
+                    : null
             }
-        </div>
+        </div >
     );
 };
 
-const mapStateToProps = state => (console.log(state.data), {
+const mapStateToProps = state => (console.log("stw", state.data), {
     user: state.auth.user,
     upcomingStudySessions: state.data.upcomingStudySessions
 });
