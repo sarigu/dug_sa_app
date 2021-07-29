@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets,status
 from .serializers import StudySessionSerializer, ParticipantSerializer, ParticipantStudySessionSerializer
 from .models import Participant, StudySession
 from login.models import Subject, Language, CustomUser, TeachingFacility, Teacher
@@ -28,34 +28,39 @@ class StudySessionView(viewsets.ModelViewSet):
             if user.role == "teacher" or user.role == "staff":
                 if user.role == "teacher":
                     teacher = Teacher.objects.get(pk=user.id)
-       
-                subject = request.data["subject"]
-                subject = Subject.objects.get(name=subject)
-                language = request.data["language"]
-                language = Language.objects.get(language=language)
-                print(language, "--language")
-      
-                location = TeachingFacility.objects.get(pk=1)
-                study_session = StudySession.objects.create(
-                    subject = subject,
-                    language = language,
-                    start_time = request.data["startTime"], 
-                    end_time = request.data["endTime"], 
-                    date = request.data["formattedDate"], 
-                    location=location,
-                    teacher = teacher,
-                    available_spots = request.data["spots"],
-                    description = request.data["description"]
-                )
 
-                if(study_session):
-                    print(study_session, "RES")
-                    response_data = {}
+                already_class = StudySession.objects.filter(teacher=teacher).filter(date=request.data["formattedDate"]).filter(start_time=request.data["startTime"]).exists()
+                print("class?", already_class)
+                if already_class == True: 
+                    raise ValueError('Already class')
+                else: 
+                    subject = request.data["subject"]
+                    subject = Subject.objects.get(name=subject)
+                    language = request.data["language"]
+                    language = Language.objects.get(language=language)
+                    print(language, "--language")
+        
+                    location = TeachingFacility.objects.get(pk=1)
+                    study_session = StudySession.objects.create(
+                        subject = subject,
+                        language = language,
+                        start_time = request.data["startTime"], 
+                        end_time = request.data["endTime"], 
+                        date = request.data["formattedDate"], 
+                        location=location,
+                        teacher = teacher,
+                        available_spots = request.data["spots"],
+                        description = request.data["description"]
+                    )
+
+                    if(study_session):
+                        print(study_session, "RES")
+                        response_data = {}
             else:
                 raise ValueError('No access right')
         except Exception as e:
             print(e, "ERR")
-            response_data = {}
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
     
 class StudySessionsView(viewsets.ViewSet):
@@ -106,8 +111,8 @@ class StudySessionsView(viewsets.ViewSet):
                 serializer = StudySessionSerializer(study_sessions, many=True)
                 return Response({ 'teachersSessions':serializer.data  })
         except Exception as e:
-            print(e)
-            return Response()
+      
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response()
 
     def list(self, request):
@@ -153,7 +158,7 @@ class StudySessionsView(viewsets.ViewSet):
                     response_data = {"status": "ok", "upcomingStudySessions": serializer.data}
         except Exception as e:
             print(e)
-            response_data = {"status": "error"}
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
  
 class ParticipantView(viewsets.ViewSet):    
@@ -186,7 +191,7 @@ class ParticipantView(viewsets.ViewSet):
                 print("no more spots or no student", study_session.taken_spots, study_session.available_spots, user)
                 response_data = {"status": "error"}
         except Exception as e:
-            response_data = {"status": "error"}
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         return Response(response_data)
     
@@ -200,7 +205,7 @@ class ParticipantView(viewsets.ViewSet):
             study_session_participation.delete()
             response_data = {"status": "ok"}
         except Exception as e:
-            response_data = {"status": "error"}
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
 
     def list(self, request):
@@ -247,7 +252,7 @@ class ParticipantView(viewsets.ViewSet):
                 response_data = {"status": "error"}
         except Exception as e:
             print(e)
-            response_data = {"status": "error"}
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
 
 

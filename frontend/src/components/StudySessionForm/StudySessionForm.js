@@ -45,7 +45,12 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
             setError(true);
         }
 
-        console.log("SUBMIT", date, language, subject, spots, startTime, endTime)
+        if (spots <= 0) {
+            console.log("too little spots")
+            setError(true);
+        }
+
+        console.log("SUBMIT", date, language, subject, spots, startTime, endTime, error)
         if (!error && date && language && subject && spots && startTime && endTime) {
             create_study_session(date, language, subject, spots, startTime, endTime, description)
             props.selectedCallback();

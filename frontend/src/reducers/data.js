@@ -224,6 +224,7 @@ export default function (state = initialState, action) {
                 isCreated: true,
             }
         case CREATE_STUDY_SESSION_FAIL:
+            console.log("fail");
             return {
                 ...state,
             }

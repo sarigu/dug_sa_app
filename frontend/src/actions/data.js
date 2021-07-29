@@ -496,11 +496,20 @@ export const create_study_session = (date, language, subject, spots, startTime, 
         try {
             const res = await axios.post('http://localhost:8000/api/studysession/', body, config);
             console.log("CREAT RES ", res)
-            dispatch({
-                type: CREATE_STUDY_SESSION_SUCCESS,
-            });
+
+            if (res.data.status === "ok") {
+                dispatch({
+                    type: CREATE_STUDY_SESSION_SUCCESS,
+                });
+            } else {
+                dispatch({
+                    type: CREATE_STUDY_SESSION_FAIL
+                });
+            }
+
 
         } catch (err) {
+            console.log(err, "err?")
             dispatch({
                 type: CREATE_STUDY_SESSION_FAIL
             });
