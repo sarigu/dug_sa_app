@@ -68,11 +68,29 @@ class StudySessionView(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
 
-    def patch(self, request):
-        print("HELLOD ELETE", request)
-        if request.user.role == "teacher" or request.user.role == "staff":
-            print("teacher or staff")
-        return Response({})
+    def partial_update(self, request, *args, **kwargs):
+        study_session_id =  self.kwargs['pk'] 
+        try:
+            if request.user.role == "teacher" or request.user.role == "staff":
+                study_session = StudySession.objects.get(pk = study_session_id)
+                if request.user.role == "teacher":
+                    teacher = Teacher.objects.get(pk=request.user.id)
+                    if not study_session.teacher == teacher:
+                        raise ValueError('No access right')
+                
+                study_session.is_active = False
+                study_session.save()
+
+            else:
+                raise ValueError('No access right')
+        except Exception as e:
+            print(e, "ERR")
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response({"status": "ok"})
+
+ 
+     
+ 
     
 class StudySessionsView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]

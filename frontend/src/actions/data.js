@@ -452,15 +452,14 @@ export const cancel_study_session = (studySessionId) => async dispatch => {
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `JWT ${localStorage.getItem('access')}`,
-                'Accept': 'application/json'
             }
         };
-        console.log("COnfiF", config)
+        //console.log("COnfiF", config, localStorage.getItem('access'))
+        const body = JSON.stringify({ is_active: false });
 
         try {
-            const res = await axios.patch(`http://localhost:8000/api/studysession/${studySessionId}/`, config);
+            const res = await axios.patch(`http://localhost:8000/api/studysession/${studySessionId}/`, body, config);
             console.log("DELETE SESS ", res)
             dispatch({
                 type: CANCEL_STUDY_SESSION_SUCCESS,
