@@ -219,9 +219,9 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
                                 handleChange(e);
                                 let changedGraduationDate = e.target.value;
                                 changedGraduationDate = changedGraduationDate
-                                    .replace(/^(\d\d)(\d)$/g, "$1/$2")
-                                    .replace(/^(\d\d\/\d\d)(\d+)$/g, "$1/$2")
-                                    .replace(/[^\d\/]/g, "");
+                                    .replace(/^(\d\d)(\d)$/g, "$1.$2")
+                                    .replace(/^(\d\d\.\d\d)(\d+)$/g, "$1.$2")
+                                    .replace(/[^\d\.]/g, "");
                                 setGraduationDate(changedGraduationDate);
                             }}
                         />

@@ -12,7 +12,8 @@ export const validatePassword = (password) => {
 }
 
 export const validateYear = (date) => {
-    let [day, month, year] = date.split('/');
+    let [day, month, year] = date.split('.');
+    console.log("val", day, month, year)
     if (day && month && year) {
         if (day.length !== 2 || month.length !== 2 || year.length !== 4) {
             return false;
@@ -23,8 +24,19 @@ export const validateYear = (date) => {
     } else {
         return false;
     }
+}
 
-
+export const validateTime = (time) => {
+    let [hour, minute, seconds] = time.split(':');
+    console.log("val", hour, minute, seconds)
+    if (hour && minute && seconds) {
+        if (hour.length !== 2 || minute.length !== 2 || seconds.length !== 2) {
+            return false;
+        }
+        return true;
+    } else {
+        return false;
+    }
 }
 
 export const validateExperince = (year) => {

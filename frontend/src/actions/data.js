@@ -178,6 +178,7 @@ export const filter_teachers = (subjectsFilter, languageFilter, index) => async 
 
 
 export const load_study_sessions = (teacherId) => async dispatch => {
+    console.log("LAOD")
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -187,8 +188,12 @@ export const load_study_sessions = (teacherId) => async dispatch => {
             }
         };
 
+
+        console.log(localStorage.getItem('access'))
+
         try {
             const body = JSON.stringify({ teacherId });
+            console.log(body)
             let res = await axios.post('http://localhost:8000/api/studysessions/', body, config);
 
             dispatch({
@@ -216,8 +221,9 @@ export const load_study_session = (studySessionId) => async dispatch => {
             }
         };
 
+
         try {
-            const res = await axios.get(`http://localhost:8000/api/studysession/${studySessionId}`, config);
+            const res = await axios.get(`http://localhost:8000/api/studysession/${studySessionId}/`, config);
             console.log("RES for study sess", res.data)
             dispatch({
                 type: STUDY_SESSION_DETAILS_LOADED_SUCCESS,
@@ -380,7 +386,7 @@ export const load_upcoming_teachers_study_session = (index) => async dispatch =>
         };
 
         try {
-            const res = await axios.get('http://localhost:8000/api/studysessions', config);
+            const res = await axios.get('http://localhost:8000/api/studysessions/', config);
             console.log("LOAD TEAHCRTS 5 --> ", res.data)
             dispatch({
                 type: TEACHERS_UPCOMING_STUDY_SESSIONS_LOADED_SUCCESS,

@@ -36,8 +36,14 @@ const StudySessionEdit = ({ load_subjects, load_languages, subjects, languages, 
             setDescription(studySession.description);
             setStartTime(studySession.start_time);
             setEndTime(studySession.end_time);
-            setSubject(studySession.subject.name);
-            setLanguage(studySession.language.language);
+
+            if (studySession.subject) {
+                setSubject(studySession.subject.name)
+            }
+            if (studySession.language) {
+                setLanguage(studySession.language.language)
+            }
+
             setError(false);
 
         }
@@ -81,7 +87,16 @@ const StudySessionEdit = ({ load_subjects, load_languages, subjects, languages, 
                             min="08:00"
                             max="23:00"
                             value={startTime}
-                            onChange={e => { setError(false); setStartTime(e.target.value) }}
+                            onChange={e => {
+                                setError(false);
+
+                                let newStartTime = e.target.value;
+                                newStartTime = newStartTime
+                                    .replace(/^(\d\d)(\d)$/g, "$1:$2")
+                                    .replace(/^(\d\d\:\d\d)(\d+)$/g, "$1:$2")
+                                    .replace(/[^\d\:]/g, "");
+                                setStartTime(newStartTime);
+                            }}
                         />
 
                         <h3>End Time</h3>
@@ -90,8 +105,21 @@ const StudySessionEdit = ({ load_subjects, load_languages, subjects, languages, 
                             min="08:00"
                             max="23:00"
                             value={endTime}
-                            onChange={e => { setError(false); setEndTime(e.target.value) }}
+                            //onChange={e => { setError(false); setEndTime(e.target.value) }}
+
+                            onChange={e => {
+                                setError(false);
+                                console.log(e.target.value)
+                                let newEndTime = e.target.value;
+                                newEndTime = newEndTime
+                                    .replace(/^(\d\d)(\d)$/g, "$1:$2")
+                                    .replace(/^(\d\d\:\d\d)(\d+)$/g, "$1:$2")
+                                    .replace(/[^\d\:]/g, "");
+                                setEndTime(newEndTime);
+                            }}
                         />
+
+
                         <h3>Location</h3>
                         <p>{studySession.location ? studySession.location.name : null}</p>
                         <p>{studySession.location ? studySession.location.street + " ," + studySession.location.postal_code + " ," + studySession.location.city : null}</p>

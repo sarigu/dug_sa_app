@@ -3,7 +3,7 @@ import { load_subjects, load_languages } from '../../actions/auth';
 import { create_study_session } from '../../actions/data';
 import { connect } from 'react-redux';
 import './StudySessionForm.css';
-import { validateYear } from '../SignUpForms/utils';
+import { validateYear, validateTime } from '../SignUpForms/utils';
 
 
 const StudySessionForm = ({ props, load_subjects, load_languages, subjects, languages, create_study_session }) => {
@@ -41,7 +41,7 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
     const handleSubmit = () => {
         let dataCheck = checkData();
         if (dataCheck) {
-            setDataIsChecked(true); console.log("data was checked")
+            // setDataIsChecked(true); console.log("data was checked")
         }
     }
 
@@ -62,13 +62,15 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
                 console.log("year not validated")
                 setError(true);
             }
-
         }
 
-        if (startTime > endTime || startTime == endTime) {
-            console.log("start before end")
-            setError(true);
+        if (startTime && endTime) {
+            if (!validateTime(startTime) || !validateTime(endTime)) {
+                console.log("time not validates")
+                setError(true);
+            }
         }
+
 
         if (spots <= 0) {
             console.log("too little spots")
@@ -91,14 +93,36 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
                     type="time"
                     min="08:00"
                     max="23:00"
-                    onChange={e => { setError(false); setStartTime(e.target.value) }}
+                    placeholder="00:00:00"
+                    value={startTime}
+                    onChange={e => {
+                        setError(false);
+
+                        let newStartTime = e.target.value;
+                        newStartTime = newStartTime
+                            .replace(/^(\d\d)(\d)$/g, "$1:$2")
+                            .replace(/^(\d\d\:\d\d)(\d+)$/g, "$1:$2")
+                            .replace(/[^\d\:]/g, "");
+                        setStartTime(newStartTime);
+                    }}
                 />
                 <h3>End Time</h3>
                 <input
                     type="time"
                     min="08:00"
                     max="23:00"
-                    onChange={e => { setError(false); setEndTime(e.target.value) }}
+                    placeholder="00:00:00"
+                    value={endTime}
+                    onChange={e => {
+                        setError(false);
+                        console.log(e.target.value)
+                        let newEndTime = e.target.value;
+                        newEndTime = newEndTime
+                            .replace(/^(\d\d)(\d)$/g, "$1:$2")
+                            .replace(/^(\d\d\:\d\d)(\d+)$/g, "$1:$2")
+                            .replace(/[^\d\:]/g, "");
+                        setEndTime(newEndTime);
+                    }}
                 />
                 <h3>Date</h3>
                 <input
@@ -109,9 +133,9 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
                         setError(false);
                         let changedDate = e.target.value;
                         changedDate = changedDate
-                            .replace(/^(\d\d)(\d)$/g, "$1/$2")
-                            .replace(/^(\d\d\/\d\d)(\d+)$/g, "$1/$2")
-                            .replace(/[^\d\/]/g, "");
+                            .replace(/^(\d\d)(\d)$/g, "$1.$2")
+                            .replace(/^(\d\d\.\d\d)(\d+)$/g, "$1.$2")
+                            .replace(/[^\d\.]/g, "");
                         setDate(changedDate);
                     }}
                 />
