@@ -1,0 +1,38 @@
+.reminder-card{
+    width:80%;
+    height:fit-content;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    filter:drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.199) );    
+    cursor: pointer;
+    padding:20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.reminder-card * {
+    margin: 0 0 .5rem 0;
+}
+
+.cancelled-card{
+    background-color: rgba(243, 155, 155, 0.384) !important;
+}
+
+.cancelled-heading-wrapper{
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0 !important;
+}
+
+.cancelled-heading-wrapper * {
+    margin: 0 !important;
+}
+
+@media only screen and (min-width: 600px) {
+    .reminder-card{
+        width: 550px;
+    }
+}

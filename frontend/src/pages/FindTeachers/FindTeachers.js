@@ -2,16 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import TeacherCard from '../../components/TeacherCard/TeacherCard';
 import BackButton from '../../components/Buttons/BackButton';
-import { load_teachers, load_bookmarked_teachers, filter_teachers } from '../../actions/data';
+import { load_teachers, load_bookmarked_teachers, filter_teachers, load_study_sessions, load_study_session } from '../../actions/data';
 import { load_languages, load_subjects } from '../../actions/auth';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import NextButton from '../../components/Buttons/NextButton';
 import PrevButton from '../../components/Buttons/PrevButton';
 import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
+import PopUp from '../../components/PopUp/PopUp';
 import { useHistory } from "react-router-dom";
+import Schedule from '../../components/Schedule/Schedule';
+import StudySessionDetail from '../../components/StudySessionDetail/StudySessionDetail';
+import StudySessionFeedback from '../../components/StudySessionFeedback/StudySessionFeedback';
 import './FindTeachers.css';
 
-const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers, totalFilterPages }) => {
+const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookmarkedTeachers, totalTeacherPages, load_languages, load_subjects, subjects, languages, filter_teachers, filteredTeachers, totalFilterPages, load_study_sessions, load_study_session }) => {
     const [sortByAll, setSortByAll] = useState(true);
     const [sortByBookmarks, setSortByBookmarks] = useState(false);
     const [activeFilter, setActiveFilter] = useState(false);
@@ -22,6 +26,11 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
     const [subjectsFilter, setSubjectsFilter] = useState([]);
     const [languageFilter, setLanguageFilter] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [showSchedule, setShowSchedule] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
+    const [showFeedback, setShowFeedback] = useState(false);
+    const [sessionType, setSessionType] = useState();
 
     const history = useHistory();
 
@@ -130,6 +139,21 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
         }
     }
 
+    const handleSelectedTeacher = (teacherId) => {
+        console.log("hello", teacherId)
+        load_study_sessions(teacherId)
+        setShowSchedule(true);
+        setShowPopup(true);
+    }
+
+    const handleSelectedStudySession = (studySessionId, sessionType) => {
+        console.log("I HANDLE", studySessionId, sessionType);
+        load_study_session(studySessionId);
+        setSessionType(sessionType);
+        setShowSchedule(false);
+        setShowStudySessionDetails(true);
+    }
+
 
     return (
         <div className="find-teacher-wrapper">
@@ -162,6 +186,7 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
                                         isBookmarked={teacher.isBookmarked}
                                         teachingFacilities={teacher.facilities}
                                         sortByBookmarks={sortByBookmarks}
+                                        selectedCallback={(teacherId) => handleSelectedTeacher(teacherId)}
                                     />
                                 )
                                 :
@@ -183,6 +208,7 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
                                             experience={teacher.experience}
                                             teachingFacilities={teacher.facilities}
                                             sortByBookmarks={sortByBookmarks}
+                                            selectedCallback={(teacherId) => handleSelectedTeacher(teacherId)}
                                         />
                                     )
                                     :
@@ -214,6 +240,16 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
                     </div>
                 }
             </section>
+            {showPopup ?
+                <PopUp selectedCallback={() => setShowPopup(false)} >
+                    {showSchedule ? <Schedule selectedCallback={(studySessionId, sessionType) => handleSelectedStudySession(studySessionId, sessionType)} />
+                        : showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
+                            : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                                : null}
+                </PopUp>
+                : null
+            }
+
         </div>
     );
 };
@@ -230,4 +266,4 @@ const mapStateToProps = state => ({
     totalFilterPages: state.data.totalFilterPages
 });
 
-export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, load_languages, load_subjects, filter_teachers })(FindTeachers);
+export default connect(mapStateToProps, { load_teachers, load_bookmarked_teachers, load_languages, load_subjects, filter_teachers, load_study_sessions, load_study_session })(FindTeachers);

@@ -82,8 +82,6 @@ export const login = (email, password) => async dispatch => {
             payload: res.data
         });
 
-        console.log("after login success dispatch laod user")
-
         dispatch(load_user());
     } catch (err) {
         dispatch({
@@ -107,8 +105,6 @@ export const signup = (first_name, last_name, email, access_code, password, re_p
             type: SIGNUP_SUCCESS,
             payload: res.data,
         });
-
-        console.log("after sign up success dispatch laod user", res.data)
 
         dispatch(login(email, password));
 
@@ -177,7 +173,7 @@ export const update_teacher = (userID, degree, university, year_of_graduation, l
     };
 
     //format date because Django expects YYYY-MM-DD
-    let [day, month, year] = year_of_graduation.split('/');
+    let [day, month, year] = year_of_graduation.split('.');
     const formattedDate = year + "-" + month + "-" + day;
 
     const formData = new FormData();

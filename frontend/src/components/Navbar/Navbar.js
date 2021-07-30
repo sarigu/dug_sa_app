@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/auth';
 import Burgermenu from '../../icons/Burgermenu';
-import CloseButton from '../../icons/CloseButton';
+import CloseIcon from '../../icons/CloseIcon';
 import './Navbar.css';
 
 const Navbar = ({ user, onMenuClick, menuShows }) => {
@@ -11,7 +11,7 @@ const Navbar = ({ user, onMenuClick, menuShows }) => {
         <div className="navbar-wrapper">
             <div className="navbar">
                 <h2>Hi, {user ? user.first_name : null}<span>&#128075;&#127998;</span> </h2>
-                <div onClick={() => { onMenuClick() }}>{menuShows ? <CloseButton /> : <Burgermenu />}</div>
+                <div onClick={() => { onMenuClick() }}>{menuShows ? <CloseIcon /> : <Burgermenu />}</div>
             </div>
         </div >
     );

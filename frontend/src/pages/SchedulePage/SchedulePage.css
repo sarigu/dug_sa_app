@@ -1,0 +1,10 @@
+.schedule-wrapper{
+    padding:30px;
+    overflow-x:hidden;
+}
+  
+.plus-button-container{
+    position: absolute;
+    bottom: 30px;
+    right:30px;
+}

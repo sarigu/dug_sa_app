@@ -4,6 +4,7 @@ import { checkAuthenticated, load_user } from '../actions/auth';
 import '../App.css'
 
 const AuthWrapper = ({ checkAuthenticated, load_user, children }) => {
+
     useEffect(() => {
         checkAuthenticated();
         load_user();
