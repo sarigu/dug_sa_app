@@ -59,7 +59,7 @@ const StaffDashboard = ({ load_new_teachers }) => {
                 {hideShowMore ? null : <p onClick={loadMoreTeacher} style={{ cursor: "pointer" }}>Show more</p>}
             </section>
             <section className="cards-container">
-                <Card emoji={<span>&#128198;</span>} title={"Schedule"} link={"/find-teachers"} />
+                <Card emoji={<span>&#128198;</span>} title={"Schedule"} link={"/schedule"} />
                 <Card emoji={<span>&#128587;&#127998;</span>} title={"Add staff"} />
                 <Card emoji={<span>&#128172;</span>} title={"Add motivational quote"} />
                 <Card emoji={<span>&#128272;</span>} title={"Edit access codes"} />

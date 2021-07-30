@@ -5,6 +5,7 @@ import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { connect } from 'react-redux';
 import { load_study_sessions } from '../../actions/data';
+import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 
 const localizer = momentLocalizer(moment)
 
@@ -67,6 +68,7 @@ const StudySessionCalendar = props => (
 
 const Schedule = ({ props, studySessions, bookedStudySessions, userType }) => {
     const [list, setList] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         console.log("FINALLY", studySessions, bookedStudySessions)
@@ -93,7 +95,7 @@ const Schedule = ({ props, studySessions, bookedStudySessions, userType }) => {
             })
             console.log("studySession", allStudySessionSlots)
             setList(allStudySessionSlots, bookedStudySessions)
-        } else if (userType === "teacher" && studySessions) {
+        } else if ((userType === "teacher" || userType === "staff") && studySessions) {
             const allStudySessionSlots = []
             studySessions.forEach((studySession) => {
                 let start = (moment(studySession.date + " " + studySession.start_time).toDate())
@@ -103,15 +105,19 @@ const Schedule = ({ props, studySessions, bookedStudySessions, userType }) => {
                 allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name + " in " + studySession.language.language, start: start, end: end, type: sessionType, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: studySession.subject.color })
             })
 
-
-            setList(allStudySessionSlots)
+            setList(allStudySessionSlots);
         }
+
+        setIsLoaded(true);
 
     }, [studySessions, bookedStudySessions]);
 
     return (
+        console.log(isLoaded),
         <div >
-            <StudySessionCalendar list={list} selectedCallback={(studySessionId, sessionType) => { props.selectedCallback(studySessionId, sessionType) }} />
+            {isLoaded ?
+                <StudySessionCalendar list={list} selectedCallback={(studySessionId, sessionType) => { props.selectedCallback(studySessionId, sessionType) }} />
+                : <LoadingIcon />}
         </div>
     );
 };

@@ -139,6 +139,10 @@ class StudySessionsView(viewsets.ViewSet):
                 print(study_sessions, "study sessions")
                 serializer = StudySessionSerializer(study_sessions, many=True)
                 return Response({ 'teachersSessions':serializer.data  })
+            elif request.user.role == "staff": 
+                study_sessions = StudySession.objects.all()
+                serializer = StudySessionSerializer(study_sessions, many=True)
+                return Response({ 'teachersSessions':serializer.data  })
         except Exception as e:
       
             return Response(status=status.HTTP_400_BAD_REQUEST)

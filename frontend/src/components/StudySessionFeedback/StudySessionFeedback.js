@@ -83,6 +83,7 @@ const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, u
     }, [isBooked, participationIsDeleted]);
 
     return (
+        console.log(isCancelled, "isCancelled", userType, sessionType),
         <div className="feedback-container" >
             {isLoaded ?
                 <div>
@@ -94,11 +95,11 @@ const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, u
                             <div>
                                 {participationIsDeleted ? <DropOutOfStudySessionSuccessMessage selectedCallback={selectedCallback} /> : <FailMessage selectedCallback={selectedCallback} />}
                             </div>
-                            : userType === "teacher" && sessionType && sessionType === "study-session" ?
+                            : userType === "teacher" || userType === "staff" && sessionType && sessionType === "teacher-study-session" ?
                                 <div>
                                     {isCancelled ? <CancelStudySessionSuccessMessage selectedCallback={selectedCallback} /> : <FailMessage selectedCallback={selectedCallback} />}
                                 </div>
-                                : userType === "teacher" && sessionType && sessionType === "added-class" ?
+                                : userType === "teacher" || userType === "staff" && sessionType && sessionType === "added-class" ?
                                     <div>
                                         {isCreated ? <CreatedStudySessionSuccessMessage selectedCallback={selectedCallback} /> : <FailMessage selectedCallback={selectedCallback} />}
                                     </div>
