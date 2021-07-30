@@ -178,7 +178,6 @@ export const filter_teachers = (subjectsFilter, languageFilter, index) => async 
 
 
 export const load_study_sessions = (teacherId) => async dispatch => {
-    console.log("LAOD")
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -188,12 +187,8 @@ export const load_study_sessions = (teacherId) => async dispatch => {
             }
         };
 
-
-        console.log(localStorage.getItem('access'))
-
         try {
             const body = JSON.stringify({ teacherId });
-            console.log(body)
             let res = await axios.post('http://localhost:8000/api/studysessions/', body, config);
 
             dispatch({
@@ -224,7 +219,6 @@ export const load_study_session = (studySessionId) => async dispatch => {
 
         try {
             const res = await axios.get(`http://localhost:8000/api/studysession/${studySessionId}/`, config);
-            console.log("RES for study sess", res.data)
             dispatch({
                 type: STUDY_SESSION_DETAILS_LOADED_SUCCESS,
                 payload: res.data
@@ -252,7 +246,7 @@ export const participate_in_study_session = (studySessionId) => async dispatch =
         try {
             const body = JSON.stringify({ studySessionId });
             const res = await axios.post('http://localhost:8000/api/studysession/participation/', body, config);
-            console.log("in data.js --> ", res)
+
             dispatch({
                 type: PARTICIPATE_IN_STUDY_SESSION_SUCCESS,
                 payload: res.data
@@ -278,7 +272,6 @@ export const cancle_participation_in_study_session = (studySessionId) => async d
 
         try {
             const res = await axios.delete(`http://localhost:8000/api/studysession/participation/?session=${studySessionId}`, config);
-            console.log("in data.js --> ", res)
             dispatch({
                 type: CANCEL_STUDY_SESSION_PARTICIPATION_SUCCESS,
                 payload: res.data
@@ -305,7 +298,6 @@ export const load_upcoming_booked_study_sessions = () => async dispatch => {
 
         try {
             const res = await axios.get('http://localhost:8000/api/studysession/participation/', config);
-            console.log("LOAD 5 --> ", res.data)
             dispatch({
                 type: UPCOMING_STUDY_SESSIONS_LOADED_SUCCESS,
                 payload: res.data
@@ -331,7 +323,6 @@ export const load_upcoming_booked_study_sessions_list = (index) => async dispatc
 
         try {
             const res = await axios.get(`http://localhost:8000/api/studysession/participation/?type=upcoming&page=${index}`, config);
-            console.log("LOAD ALL --> ", res.data)
             dispatch({
                 type: UPCOMING_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
                 payload: res.data
@@ -347,7 +338,6 @@ export const load_upcoming_booked_study_sessions_list = (index) => async dispatc
 
 
 export const load_previous_booked_study_sessions_list = (index) => async dispatch => {
-    console.log(index, "in load_previous_booked_study_sessions_list");
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -359,7 +349,6 @@ export const load_previous_booked_study_sessions_list = (index) => async dispatc
 
         try {
             const res = await axios.get(`http://localhost:8000/api/studysession/participation/?type=previous&page=${index}`, config);
-            console.log("LOAD ALL PREV --> ", res.data)
             dispatch({
                 type: PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
                 payload: res.data
@@ -387,7 +376,6 @@ export const load_upcoming_teachers_study_session = (index) => async dispatch =>
 
         try {
             const res = await axios.get('http://localhost:8000/api/studysessions/', config);
-            console.log("LOAD TEAHCRTS 5 --> ", res.data)
             dispatch({
                 type: TEACHERS_UPCOMING_STUDY_SESSIONS_LOADED_SUCCESS,
                 payload: res.data
@@ -413,7 +401,6 @@ export const load_teachers_upcoming_study_sessions_list = (index) => async dispa
 
         try {
             const res = await axios.get(`http://localhost:8000/api/studysessions/?type=upcoming&page=${index}`, config);
-            console.log("LOAD ALL TEAHCRS --> ", res.data)
             dispatch({
                 type: TEACHERS_UPCOMING_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
                 payload: res.data
@@ -441,7 +428,6 @@ export const load_teachers_previous_study_sessions_list = (index) => async dispa
 
         try {
             const res = await axios.get(`http://localhost:8000/api/studysessions/?type=previous&page=${index}`, config);
-            console.log("LOAD ALL TEAHCRS PREV --> ", res.data)
             dispatch({
                 type: TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
                 payload: res.data
@@ -464,12 +450,11 @@ export const cancel_study_session = (studySessionId) => async dispatch => {
                 'Authorization': `JWT ${localStorage.getItem('access')}`,
             }
         };
-        //console.log("COnfiF", config, localStorage.getItem('access'))
+
         const body = JSON.stringify({ isActive: false });
 
         try {
             const res = await axios.patch(`http://localhost:8000/api/studysession/${studySessionId}/`, body, config);
-            console.log("DELETE SESS ", res)
             dispatch({
                 type: CANCEL_STUDY_SESSION_SUCCESS,
             });
@@ -494,27 +479,20 @@ export const create_study_session = (date, language, subject, spots, startTime, 
             }
         };
 
-
         //format date because Django expects YYYY-MM-DD
-        let [day, month, year] = date.split('/');
+        let [day, month, year] = date.split('.');
         const formattedDate = year + "-" + month + "-" + day;
 
         const body = JSON.stringify({ formattedDate, language, subject, spots, startTime, endTime, description });
-        console.log("BODY", body);
 
         try {
             const res = await axios.post('http://localhost:8000/api/studysession/', body, config);
-            console.log("CREAT RES ", res)
-
 
             dispatch({
                 type: CREATE_STUDY_SESSION_SUCCESS,
             });
 
-
-
         } catch (err) {
-            console.log(err, "err?")
             dispatch({
                 type: CREATE_STUDY_SESSION_FAIL
             });
@@ -533,11 +511,9 @@ export const edit_study_session = (studySessionId, language, subject, startTime,
         };
 
         const body = JSON.stringify({ language, subject, startTime, endTime, description, isActive });
-        console.log(body)
 
         try {
             const res = await axios.patch(`http://localhost:8000/api/studysession/${studySessionId}/`, body, config);
-            console.log("EDIT SESS ", res)
             dispatch({
                 type: EDIT_STUDY_SESSION_SUCCESS,
             });

@@ -10,17 +10,15 @@ import PopUp from '../../../components/PopUp/PopUp';
 import StudySessionDetail from '../../../components/StudySessionDetail/StudySessionDetail';
 import StudySessionFeedback from '../../../components/StudySessionFeedback/StudySessionFeedback';
 
-const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingStudySessions, load_study_session }) => {
+const StudentDashboard = ({ load_upcoming_booked_study_sessions, upcomingStudySessions, load_study_session }) => {
 
     const history = useHistory();
-
     const [showPopup, setShowPopup] = useState(false);
     const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
     const [showFeedback, setShowFeedback] = useState(false);
     const [sessionType, setSessionType] = useState("booked-study-session");
 
     useEffect(() => {
-        console.log(upcomingStudySessions, "upcomingStudySessions")
         load_upcoming_booked_study_sessions();
     }, []);
 
@@ -32,9 +30,7 @@ const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingS
         } else {
             setSessionType("cancelled-session");
         }
-
         setShowStudySessionDetails(true);
-
     }
 
     return (
@@ -80,14 +76,13 @@ const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingS
                 </div>
 
             </section>
-            {
-                showPopup ?
-                    <PopUp selectedCallback={() => setShowPopup(false)} >
-                        {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
-                            : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
-                                : null}
-                    </PopUp>
-                    : null
+            {showPopup ?
+                <PopUp selectedCallback={() => setShowPopup(false)} >
+                    {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
+                        : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                            : null}
+                </PopUp>
+                : null
             }
         </div>
     );

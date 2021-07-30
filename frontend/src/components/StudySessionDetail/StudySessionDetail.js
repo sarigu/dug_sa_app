@@ -9,7 +9,6 @@ const StudySessionDetail = ({ userType, studySession, participate_in_study_sessi
     const [formattedDate, setFormattedDate] = useState();
 
     useEffect(() => {
-        console.log(sessionType, "SESSION TYPE")
         if (studySession) {
             setIsLoaded(true);
             if (studySession.date) {
@@ -21,19 +20,16 @@ const StudySessionDetail = ({ userType, studySession, participate_in_study_sessi
     }, [studySession]);
 
     const handleStudySessionParticipation = () => {
-        console.log("----participate.-----")
         participate_in_study_session(studySession.id);
         selectedCallback();
     }
 
     const handleCancelStudySessionParticipation = () => {
-        console.log("----delte.-----")
         cancle_participation_in_study_session(studySession.id)
         selectedCallback();
     }
 
     const handleCancelStudySession = () => {
-        console.log("CANCEL SESSIOn", studySession.id)
         cancel_study_session(studySession.id);
         selectedCallback();
     }
@@ -97,7 +93,6 @@ const StudySessionDetail = ({ userType, studySession, participate_in_study_sessi
         </div>
     );
 };
-
 
 const mapStateToProps = (state, props) => ({
     studySession: state.data.studySession,

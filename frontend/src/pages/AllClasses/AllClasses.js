@@ -30,15 +30,12 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
     const history = useHistory();
 
     useEffect(() => {
-        console.log(userType, "------USER TYPE EFFECT ALL CLASSeS")
         if (userType === "student") {
             load_upcoming_booked_study_sessions_list(index);
             load_previous_booked_study_sessions_list(index);
-
         } else if (userType === "teacher") {
             load_teachers_upcoming_study_sessions_list(index);
             load_teachers_previous_study_sessions_list(index);
-
         }
     }, []);
 
@@ -47,24 +44,16 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
         if (userType === "teacher") {
             load_teachers_upcoming_study_sessions_list(index);
             load_teachers_previous_study_sessions_list(index);
-
         }
     }, [isCancelled, isCreated]);
-
-    useEffect(() => {
-        console.log("WAS RELAODED", upcomingStudySessions)
-    }, [upcomingStudySessions, previousStudySessions]);
-
 
     useEffect(() => {
         setUpcomingIsLoaded(true);
         setAllUpcomingStudySessions(upcomingStudySessions)
     }, [upcomingStudySessions]);
 
-
     useEffect(() => {
         setPreviousIsLoaded(true);
-        console.log("previousStudySessions", previousStudySessions)
         setAllPreviousStudySessions(previousStudySessions)
     }, [previousStudySessions]);
 
@@ -95,49 +84,38 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
     const handlePrevPage = () => {
         if (sortByUpcoming) {
             if (index - 1 > 0) {
-
                 if (userType === "student") {
                     load_upcoming_booked_study_sessions_list(index - 1);
                 } else if (userType === "teacher") {
                     load_teachers_upcoming_study_sessions_list(index - 1);
                 }
-
                 setUpcomingIsLoaded(false);
                 setIndex(index - 1);
             } else {
-
                 if (userType === "student") {
                     load_upcoming_booked_study_sessions_list(1);
                 } else if (userType === "teacher") {
                     load_teachers_upcoming_study_sessions_list(1);
                 }
-
-
                 setUpcomingIsLoaded(false);
                 setIndex(1);
             }
 
         } else {
             if (index - 1 > 0) {
-
                 if (userType === "student") {
                     load_previous_booked_study_sessions_list(index - 1);
                 } else if (userType === "teacher") {
                     load_teachers_previous_study_sessions_list(index - 1);
                 }
-
                 setPreviousIsLoaded(false);
                 setIndex(index - 1);
             } else {
-
-
                 if (userType === "student") {
                     load_previous_booked_study_sessions_list(1);
                 } else if (userType === "teacher") {
                     load_teachers_previous_study_sessions_list(1);
                 }
-
-
                 setPreviousIsLoaded(false);
                 setIndex(1);
             }
@@ -154,9 +132,7 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
         } else {
             setSessionType("cancelled-session");
         }
-
         setShowStudySessionDetails(true);
-
     }
 
     return (
@@ -212,7 +188,9 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
                                         />)
                                     : <p>No classes</p>
                             }
-                        </> : <LoadingIcon />}
+                        </> :
+                        <LoadingIcon />
+                }
             </div>
             <div className="bottom-navigation">
                 {sortByUpcoming && allUpcomingStudySessions && allUpcomingStudySessions.length > 0 ?
@@ -248,8 +226,7 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
     );
 };
 
-
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = state => ({
     upcomingStudySessions: state.data.allUpcomingStudySessions,
     previousStudySessions: state.data.allPreviousStudySessions,
     totalPreviousStudySessionPages: state.data.totalPreviousStudySessionPages,

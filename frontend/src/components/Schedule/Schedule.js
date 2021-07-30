@@ -4,7 +4,6 @@ import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { connect } from 'react-redux';
-import { load_study_sessions } from '../../actions/data';
 import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 
 const localizer = momentLocalizer(moment)
@@ -21,8 +20,6 @@ function Event({ event }) {
             </div>
             <div style={{ width: "30%", alignSelf: "center" }}> {event.type == "study-session" ? <button>Book</button> : event.type == "booked-study-session" ? <span style={{ fontSize: "30px" }}>&#128161;</span> : event.type == "updated-study-session" ? <span>&#128227;</span> : event.type == "cancelled-session" ? <span>&#128680;</span> : null}</div>
         </span>
-
-
     )
 }
 
@@ -71,15 +68,11 @@ const Schedule = ({ props, studySessions, bookedStudySessions, userType }) => {
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        console.log("FINALLY", studySessions, bookedStudySessions)
         if (userType === "student" && studySessions && bookedStudySessions) {
             const allStudySessionSlots = []
             studySessions.forEach((studySession) => {
                 let start = (moment(studySession.date + " " + studySession.start_time).toDate())
                 let end = (moment(studySession.date + " " + studySession.end_time).toDate())
-                //let start_at = (new Date(date + " " + studySession));
-                //let end_at
-                console.log("NORMAL", studySession)
                 let sessionType = studySession.is_active ? "study-session" : "cancelled-session"
                 allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name + " in " + studySession.language.language, start: start, end: end, type: sessionType, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: studySession.subject.color })
             })
@@ -87,33 +80,25 @@ const Schedule = ({ props, studySessions, bookedStudySessions, userType }) => {
             bookedStudySessions.forEach((studySession) => {
                 let start = (moment(studySession.date + " " + studySession.start_time).toDate())
                 let end = (moment(studySession.date + " " + studySession.end_time).toDate())
-                //let start_at = (new Date(date + " " + studySession));
-                //let end_at
-                console.log("BOOKED", studySession)
                 let sessionType = studySession.is_active && studySession.was_updated ? "updated-study-session" : studySession.is_active ? "booked-study-session" : "cancelled-session"
                 allStudySessionSlots.push({ id: studySession.id, title: "You have a class here", start: start, end: end, type: sessionType, description: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name + " in " + studySession.language.language, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: "lightgrey" })
             })
-            console.log("studySession", allStudySessionSlots)
-            setList(allStudySessionSlots, bookedStudySessions)
+            setList(allStudySessionSlots, bookedStudySessions);
+
         } else if ((userType === "teacher" || userType === "staff") && studySessions) {
             const allStudySessionSlots = []
             studySessions.forEach((studySession) => {
-                let start = (moment(studySession.date + " " + studySession.start_time).toDate())
-                let end = (moment(studySession.date + " " + studySession.end_time).toDate())
-                console.log("NORMAL", studySession)
+                let start = (moment(studySession.date + " " + studySession.start_time).toDate());
+                let end = (moment(studySession.date + " " + studySession.end_time).toDate());
                 let sessionType = studySession.is_active ? "teacher-study-session" : "cancelled-session"
                 allStudySessionSlots.push({ id: studySession.id, title: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name + " in " + studySession.language.language, start: start, end: end, type: sessionType, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: studySession.subject.color })
             })
-
             setList(allStudySessionSlots);
         }
-
         setIsLoaded(true);
-
     }, [studySessions, bookedStudySessions]);
 
     return (
-        console.log(isLoaded),
         <div >
             {isLoaded ?
                 <StudySessionCalendar list={list} selectedCallback={(studySessionId, sessionType) => { props.selectedCallback(studySessionId, sessionType) }} />
@@ -121,7 +106,6 @@ const Schedule = ({ props, studySessions, bookedStudySessions, userType }) => {
         </div>
     );
 };
-
 
 const mapStateToProps = (state, props) => ({
     userType: state.auth.userType,

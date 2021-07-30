@@ -1,6 +1,5 @@
 
 /* TOOLBAR */
-
 .rbc-toolbar{
     margin-bottom: 30px !important;
     flex-direction: column-reverse;
@@ -42,6 +41,7 @@
 .rbc-today{
     background-color: white !important;
 }
+
 .rbc-time-header{
     display: none !important;
 }
@@ -49,17 +49,16 @@
 .rbc-time-content{
     border-top: none !important;
 }
+
 .rbc-timeslot-group {
     min-height: 120px !important;
 }
-
 
 .rbc-event{
     padding:10px !important;
     width:100% !important;
     overflow-y:scroll;
 }
-
 
 .event-card{
     display:  flex;
@@ -72,7 +71,6 @@
 .event-card-content * {
     margin-top: 5px;
 }
-
 
 .study-session{
     color:#363636 !important;

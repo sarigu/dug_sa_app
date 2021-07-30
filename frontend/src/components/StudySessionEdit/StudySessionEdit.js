@@ -3,10 +3,8 @@ import { connect } from 'react-redux';
 import { load_subjects, load_languages } from '../../actions/auth';
 import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 import { edit_study_session } from '../../actions/data';
-import './StudySessionEdit.css';
 
 const StudySessionEdit = ({ load_subjects, load_languages, subjects, languages, userType, studySession, edit_study_session, selectedCallback, studySessionParticipants }) => {
-
     const [isLoaded, setIsLoaded] = useState(false);
     const [formattedDate, setFormattedDate] = useState();
     const [language, setLanguage] = useState();
@@ -45,25 +43,17 @@ const StudySessionEdit = ({ load_subjects, load_languages, subjects, languages, 
             }
 
             setError(false);
-
         }
     }, [studySession]);
 
 
     const handleUpdate = () => {
-        console.log(language, subject, startTime, endTime, error, description, isActive)
-
-        console.log(error, startTime > endTime, startTime == endTime)
         if (error || startTime > endTime || startTime == endTime) {
-            console.log("ERR")
             setError(true);
         } else {
-            console.log("UPDATE______")
-            //call function
             edit_study_session(studySession.id, language, subject, startTime, endTime, description, isActive);
             selectedCallback();
         }
-
     }
 
     return (
@@ -89,7 +79,6 @@ const StudySessionEdit = ({ load_subjects, load_languages, subjects, languages, 
                             value={startTime}
                             onChange={e => {
                                 setError(false);
-
                                 let newStartTime = e.target.value;
                                 newStartTime = newStartTime
                                     .replace(/^(\d\d)(\d)$/g, "$1:$2")
@@ -98,15 +87,12 @@ const StudySessionEdit = ({ load_subjects, load_languages, subjects, languages, 
                                 setStartTime(newStartTime);
                             }}
                         />
-
                         <h3>End Time</h3>
                         <input
                             type="time"
                             min="08:00"
                             max="23:00"
                             value={endTime}
-                            //onChange={e => { setError(false); setEndTime(e.target.value) }}
-
                             onChange={e => {
                                 setError(false);
                                 console.log(e.target.value)
@@ -118,8 +104,6 @@ const StudySessionEdit = ({ load_subjects, load_languages, subjects, languages, 
                                 setEndTime(newEndTime);
                             }}
                         />
-
-
                         <h3>Location</h3>
                         <p>{studySession.location ? studySession.location.name : null}</p>
                         <p>{studySession.location ? studySession.location.street + " ," + studySession.location.postal_code + " ," + studySession.location.city : null}</p>
@@ -148,7 +132,6 @@ const StudySessionEdit = ({ load_subjects, load_languages, subjects, languages, 
         </div>
     );
 };
-
 
 const mapStateToProps = (state, props) => ({
     studySession: state.data.studySession,

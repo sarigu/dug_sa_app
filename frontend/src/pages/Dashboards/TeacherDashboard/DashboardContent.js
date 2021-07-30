@@ -29,10 +29,6 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
         load_upcoming_teachers_study_session();
     }, [isCancelled, isCreated]);
 
-    useEffect(() => {
-        console.log("WAS RELAODED", upcomingStudySessions)
-    }, [upcomingStudySessions]);
-
     const handleSelectedStudySession = (studySessionId, isActive) => {
         load_study_session(studySessionId);
         setShowPopup(true);
@@ -41,9 +37,7 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
         } else {
             setSessionType("cancelled-session");
         }
-
         setShowStudySessionDetails(true);
-
     }
 
     return (
@@ -79,16 +73,14 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
                 <Card emoji={<span>&#128198;</span>} title={"Schedule"} link="/schedule" />
                 <Card emoji={<span>&#128218;</span>} title={"Study material"} />
             </section>
-
-            {
-                showPopup ?
-                    <PopUp selectedCallback={() => setShowPopup(false)} >
-                        {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} handleEdit={() => { setShowStudySessionEdit(true); setShowStudySessionDetails(false) }} />
-                            : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} /> :
-                                showStudySessionEdit ? <StudySessionEdit selectedCallback={() => { setShowFeedback(true); setShowStudySessionEdit(false); setSessionType("updated-session") }} /> :
-                                    null}
-                    </PopUp>
-                    : null
+            {showPopup ?
+                <PopUp selectedCallback={() => setShowPopup(false)} >
+                    {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} handleEdit={() => { setShowStudySessionEdit(true); setShowStudySessionDetails(false) }} />
+                        : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} /> :
+                            showStudySessionEdit ? <StudySessionEdit selectedCallback={() => { setShowFeedback(true); setShowStudySessionEdit(false); setSessionType("updated-session") }} /> :
+                                null}
+                </PopUp>
+                : null
             }
         </div >
     );

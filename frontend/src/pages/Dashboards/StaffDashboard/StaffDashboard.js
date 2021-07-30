@@ -16,16 +16,13 @@ const StaffDashboard = ({ load_new_teachers }) => {
             if (res && res.length > 0) {
                 setTeachersListShortened(res.slice(0, 5));
                 setTeachersList(res)
-
                 if (res.length <= index) {
                     setHideShowMore(true);
                 }
-
             } else {
                 setHideShowMore(true)
             }
-        }
-        )
+        })
     }, []);
 
     const loadMoreTeacher = () => {
@@ -55,7 +52,10 @@ const StaffDashboard = ({ load_new_teachers }) => {
                         view={"overview"}
                         user={teacher}
                         profileImage={teacher.profile_image}
-                    />) : <p>No new teachers applied</p>}
+                    />
+                ) :
+                    <p>No new teachers applied</p>
+                }
                 {hideShowMore ? null : <p onClick={loadMoreTeacher} style={{ cursor: "pointer" }}>Show more</p>}
             </section>
             <section className="cards-container">

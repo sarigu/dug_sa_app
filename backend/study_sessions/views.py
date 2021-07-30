@@ -22,12 +22,9 @@ class StudySessionView(viewsets.ModelViewSet):
     queryset = StudySession.objects.all()
 
     def retrieve(self, request, *args, **kwargs):
-        print("in get")
         study_session_id =  self.kwargs['pk'] 
-        print(study_session_id)
         try:
             if request.user.role == "staff":
-                print("is staff")
                 study_session = StudySession.objects.get(pk = study_session_id)
                 all_participants = Participant.objects.filter(study_session=study_session)
                 if len(all_participants) > 0:
@@ -42,12 +39,10 @@ class StudySessionView(viewsets.ModelViewSet):
                 serializer = StudySessionSerializer(study_session)
                 response_data = {"studySession": serializer.data}
         except Exception as e:
-            print(e, "ERR")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
 
     def create(self, request): 
-        print("hello")
         try:
             user = CustomUser.objects.get(email=request.user)
             if user.role == "teacher" or user.role == "staff":
@@ -58,7 +53,6 @@ class StudySessionView(viewsets.ModelViewSet):
                 current_date = current_date.date()
 
                 already_class = StudySession.objects.filter(teacher=teacher).filter(date=request.data["formattedDate"]).filter(start_time=request.data["startTime"]).exists()
-                print("class?", already_class)
                 if already_class == True: 
                     raise ValueError('Already class')
             
@@ -67,9 +61,7 @@ class StudySessionView(viewsets.ModelViewSet):
                 subject = request.data["subject"]
                 subject = Subject.objects.get(name=subject)
                 language = request.data["language"]
-                language = Language.objects.get(language=language)
-                print(language, "--language")
-        
+                language = Language.objects.get(language=language)        
                 location = TeachingFacility.objects.get(pk=1)
                 study_session = StudySession.objects.create(
                     subject = subject,
@@ -84,36 +76,28 @@ class StudySessionView(viewsets.ModelViewSet):
                 )
 
                 if(study_session):
-                    print(study_session, "RES")
                     response_data = {}
             else:
                 raise ValueError('No access right')
         except Exception as e:
-            print(e, "ERR")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
 
     def partial_update(self, request, **kwargs):
         study_session_id =  self.kwargs['pk'] 
-        print("data???", request.body)
         try:
             if request.user.role == "teacher" or request.user.role == "staff":
                 study_session = StudySession.objects.get(pk = study_session_id)
-                data = json.loads(request.body)
-                print(data)
-    
+                data = json.loads(request.body)    
                 if data["isActive"] == False:
-                    print("no active anymore")
                     study_session.is_active = False
                     study_session.save()
                 else:
-                    print("in else")
                     if request.user.role == "teacher":
                         teacher = Teacher.objects.get(pk=request.user.id)
                         if not study_session.teacher == teacher:
                             raise ValueError('No access right')
                
-                    print("update the obj", study_session)
                     subject = data["subject"]
                     subject = Subject.objects.get(name=subject)
                     language = data["language"]
@@ -128,16 +112,10 @@ class StudySessionView(viewsets.ModelViewSet):
             else:
                 raise ValueError('No access right')
         except Exception as e:
-            print(e, "ERR")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response({"status": "ok"})
     
- 
 
- 
-     
- 
-    
 class StudySessionsView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]
     def retrieve(self, request):
@@ -148,41 +126,28 @@ class StudySessionsView(viewsets.ViewSet):
                 all_study_sessions = []
                 teacherId = request.data["teacherId"]
                 teacher = Teacher.objects.get(pk=teacherId)
-                print("teacherId--", teacherId, request.user, teacher)
                 study_sessions = StudySession.objects.filter(teacher = teacher)
-                print(study_sessions, "study sessions")
                 #get all study sessions for that student
                 booked_study_sessions = Participant.objects.filter(user = request.user)
-                print(booked_study_sessions, "booked_study_sessions")
-                if booked_study_sessions:
-                    print("in if")
+                if len(booked_study_sessions) > 0:
                     for booked_session in booked_study_sessions:
-                        print(booked_session, "booked_session")
                         session_data = StudySession.objects.get(pk=booked_session.study_session.pk)
-                        print("-------------", session_data)
                         all_booked_study_sessions.append(session_data)
-                if study_sessions: 
+                if len(study_sessions) > 0: 
                     for study_session in study_sessions:
-                        print(">>>>", study_session)
                         if study_session in all_booked_study_sessions:
-                            print("schon drin")
                             continue
                         else:
-                            print("noch nicht")
                             all_study_sessions.append(study_session)
-                
-                print("END", all_study_sessions)
+
                 serializer_all_study_sessions = StudySessionSerializer(all_study_sessions, many=True)
                 serializer_booked_study_sessions = StudySessionSerializer(all_booked_study_sessions, many=True)
-
                 return Response({'bookedSessions': serializer_booked_study_sessions.data, 'teachersSessions':serializer_all_study_sessions.data  })
             
             elif request.user.role == "teacher":
                 teacherId = request.data["teacherId"]
                 teacher = Teacher.objects.get(pk=teacherId)
-                print("teacherId--", teacherId, request.user, teacher)
                 study_sessions = StudySession.objects.filter(teacher = teacher)
-                print(study_sessions, "study sessions")
                 serializer = StudySessionSerializer(study_sessions, many=True)
                 return Response({ 'teachersSessions':serializer.data  })
             elif request.user.role == "staff": 
@@ -190,8 +155,8 @@ class StudySessionsView(viewsets.ViewSet):
                 serializer = StudySessionSerializer(study_sessions, many=True)
                 return Response({ 'teachersSessions':serializer.data  })
         except Exception as e:
-      
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
         return Response()
 
     def list(self, request):
@@ -199,47 +164,36 @@ class StudySessionsView(viewsets.ViewSet):
         try:
             if user.role == "teacher":
                 teacher = Teacher.objects.get(pk=user.id)
-                print("its a teacher")
                 current_date = datetime.datetime.now()
                 current_date = current_date.date()
                 type = request.GET.get('type')
                 if type:
                     if type == "upcoming":
-                        print("all upcoming")
                         upcoming_study_sessions = StudySession.objects.filter(teacher=teacher).filter(date__gte = current_date).order_by('-date').reverse()
-                        print("up---------", upcoming_study_sessions)
                       
                     elif type == "previous":
-                        print("prev")
                         upcoming_study_sessions = StudySession.objects.filter(teacher=teacher).filter(date__lt = current_date).order_by('-date').reverse()
-                        print("prev-------", upcoming_study_sessions)
                     
-                    if(upcoming_study_sessions): 
-                        print("yes", request.GET.get('page'))
+                    if(len(upcoming_study_sessions) > 0): 
                         paginator = Paginator(upcoming_study_sessions, PAGINATION_LIMIT) 
                     
                         page_number = self.request.GET.get('page')
-                        print(page_number, "page_number")
                         total_pages = paginator.num_pages
 
                         if int(page_number) <= total_pages:
-                            print(page_number, total_pages, "page_number, total_pages")
-                            page_obj = paginator.get_page(page_number)     
-                            print(page_obj, "page-obj")      
+                            page_obj = paginator.get_page(page_number)         
                             serializer = StudySessionSerializer(page_obj, many=True)
-                   
                             response_data = {"status": "ok", 'total_pages': total_pages, 'allStudySessions': serializer.data}
                 else: 
-                    print("no type")
                     study_sessions = StudySession.objects.filter(teacher=teacher).filter(date__gte = current_date).order_by('-date').reverse()[:5]
-                    print("teacher 5 sessions", study_sessions)
                     serializer = StudySessionSerializer(study_sessions, many=True)
                     response_data = {"status": "ok", "upcomingStudySessions": serializer.data}
         except Exception as e:
-            print(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
  
+
+
 class ParticipantView(viewsets.ViewSet):    
     permissions_classes=[IsAuthenticated]
     serializer_class = ParticipantSerializer
@@ -249,22 +203,16 @@ class ParticipantView(viewsets.ViewSet):
         user = CustomUser.objects.get(email=request.user)
         study_session = StudySession.objects.get(pk=study_session_id)
         current_date = datetime.datetime.now()
-        print("study_session.date >= current_date.date()", study_session.date >= current_date.date())
         already_participant = Participant.objects.filter(user=user).filter(study_session=study_session).exists()
-        print(already_participant, "already_participant")
         already_class = Participant.objects.filter(user=user).filter(study_session__date=study_session.date).filter(study_session__start_time=study_session.start_time).exists()
-        print("------------------")
-        print(already_class, "OTHER CLASS ALREADY ")
         try:
             if study_session.taken_spots < study_session.available_spots and user.role == "student" and study_session.date >= current_date.date() and already_participant == False and study_session.is_active == True and already_class == False:
                 study_session.taken_spots += 1
                 study_session.save()
-                print(user, study_session)
                 participant = Participant()
                 participant.user = user
                 participant.study_session = study_session
                 participant.save()
-                print("success")
                 response_data = {"status": "ok"}
             else: 
                 raise ValueError('Already class or no spots or class in past or already participant')
@@ -279,7 +227,6 @@ class ParticipantView(viewsets.ViewSet):
             study_session = request.GET.get('session')
             user = CustomUser.objects.get(email=request.user)
             study_session_participation = Participant.objects.filter(study_session=study_session).filter(user=user)
-            print(study_session_participation, "study_session_participation")
             study_session_participation.delete()
             response_data = {"status": "ok"}
         except Exception as e:
@@ -292,44 +239,30 @@ class ParticipantView(viewsets.ViewSet):
             if user.role == "student":
                 current_date = datetime.datetime.now()
                 current_date = current_date.date()
-                print(user, current_date)
                 type = request.GET.get('type')
                 if type:
                     if type == "upcoming":
-                        print("upcoming")
                         upcoming_study_sessions = Participant.objects.filter(user=user).filter(study_session__date__gte = current_date).order_by('-study_session__date').reverse()
-                        print("up---------", upcoming_study_sessions)
                       
                     elif type == "previous":
-                        print("prev")
                         upcoming_study_sessions = Participant.objects.filter(user=user).filter(study_session__date__lt = current_date).order_by('-study_session__date').reverse()
-                        print("prev-------", upcoming_study_sessions)
                     
                     if(upcoming_study_sessions): 
-                        print("yes", request.GET.get('page'))
                         paginator = Paginator(upcoming_study_sessions, PAGINATION_LIMIT) 
-                        print(paginator, "paginator")
                         page_number = self.request.GET.get('page')
-                        print(page_number, "page_number")
                         total_pages = paginator.num_pages
 
                         if int(page_number) <= total_pages:
-                            print(page_number, total_pages, "page_number, total_pages")
-                            page_obj = paginator.get_page(page_number)     
-                            print(page_obj, "page-obj")      
+                            page_obj = paginator.get_page(page_number)          
                             serializer = ParticipantStudySessionSerializer(page_obj, many=True)
-                            print(serializer.data, "serializer")
                             response_data = {"status": "ok", 'total_pages': total_pages, 'allStudySessions': serializer.data}
                 else: 
-                    print("no type")
                     study_session_participations = Participant.objects.filter(user=user).filter(study_session__date__gte = current_date).order_by('-study_session__date').reverse()[:5]
-                    print("1", study_session_participations)
                     serializer = ParticipantStudySessionSerializer(study_session_participations, many=True)
                     response_data = {"status": "ok", "upcomingStudySessions": serializer.data}
             else:
                 raise ValueError('Only for students')
         except Exception as e:
-            print(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
 

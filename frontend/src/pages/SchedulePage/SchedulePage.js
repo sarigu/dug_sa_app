@@ -11,30 +11,23 @@ import { useHistory } from "react-router-dom";
 import { load_study_sessions, load_study_session } from '../../actions/data';
 import './SchedulePage.css';
 import StudySessionEdit from '../../components/StudySessionEdit/StudySessionEdit';
-import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 
-const SchedulePage = ({ user, load_study_sessions, load_study_session, isCreated }) => {
-
+const SchedulePage = ({ user, load_study_sessions, load_study_session }) => {
     const [showPopup, setShowPopup] = useState(false);
     const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
     const [showFeedback, setShowFeedback] = useState(false);
     const [addStudySession, setAddStudySession] = useState(false);
     const [sessionType, setSessionType] = useState();
     const [addStudySessionFeeback, setAddStudySessionFeedback] = useState(false);
-    const [addStudySessionFeebackIsLoaded, setAddStudySessionFeedbackIsLoaded] = useState(false);
     const [showStudySessionEdit, setShowStudySessionEdit] = useState(false);
 
     const history = useHistory();
 
     useEffect(() => {
-        console.log("techer", user.id)
         load_study_sessions(user.id)
     }, []);
 
-
-
     const handleSelectedStudySession = (studySessionId, sessionType) => {
-        console.log("I HANDLE", studySessionId, sessionType);
         load_study_session(studySessionId);
         setSessionType(sessionType);
         setShowStudySessionDetails(true);
@@ -42,11 +35,9 @@ const SchedulePage = ({ user, load_study_sessions, load_study_session, isCreated
     }
 
     const handleAddStudySession = () => {
-        console.log("---add---wuhuu");
         setAddStudySession(true);
         setShowPopup(true);
     }
-
 
     return (
         <div className="schedule-wrapper" >
@@ -69,10 +60,8 @@ const SchedulePage = ({ user, load_study_sessions, load_study_session, isCreated
     );
 };
 
-
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = state => ({
     user: state.auth.user,
-    isCreated: state.data.isCreated,
 });
 
 export default connect(mapStateToProps, { load_study_sessions, load_study_session })(SchedulePage);

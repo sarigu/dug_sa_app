@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { load_subjects, load_languages } from '../../actions/auth';
 import { create_study_session } from '../../actions/data';
 import { connect } from 'react-redux';
-import './StudySessionForm.css';
 import { validateYear, validateTime } from '../SignUpForms/utils';
 
 
@@ -25,10 +24,7 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
     }, []);
 
     useEffect(() => {
-        console.log("EFEFCT", dataIsChecked)
         if (dataIsChecked) {
-
-            console.log("SUBMIT", date, language, subject, spots, startTime, endTime, error)
             if (!error && date && language && subject && spots && startTime && endTime) {
                 create_study_session(date, language, subject, spots, startTime, endTime, description)
                 props.selectedCallback();
@@ -41,44 +37,38 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
     const handleSubmit = () => {
         let dataCheck = checkData();
         if (dataCheck) {
-            // setDataIsChecked(true); console.log("data was checked")
+            setDataIsChecked(true);
         }
     }
 
     const checkData = () => {
-
         if (!language) {
-            console.log("set lang", languages[0].language)
             setLanguage(languages[0].language)
         }
 
         if (!subject) {
-            console.log("set sub", subjects[0].name)
             setSubject(subjects[0].name)
         }
 
         if (date) {
             if (!validateYear(date)) {
-                console.log("year not validated")
                 setError(true);
             }
         }
 
         if (startTime && endTime) {
             if (!validateTime(startTime) || !validateTime(endTime)) {
-                console.log("time not validates")
                 setError(true);
             }
         }
 
-
         if (spots <= 0) {
-            console.log("too little spots")
             setError(true);
         }
 
         return true;
     }
+
     return (
         <div>
             <h2>Add a study session</h2>
@@ -97,7 +87,6 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
                     value={startTime}
                     onChange={e => {
                         setError(false);
-
                         let newStartTime = e.target.value;
                         newStartTime = newStartTime
                             .replace(/^(\d\d)(\d)$/g, "$1:$2")
@@ -115,7 +104,6 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
                     value={endTime}
                     onChange={e => {
                         setError(false);
-                        console.log(e.target.value)
                         let newEndTime = e.target.value;
                         newEndTime = newEndTime
                             .replace(/^(\d\d)(\d)$/g, "$1:$2")
@@ -151,7 +139,6 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
                     <h3 style={{ marginRight: "20px" }}>Description</h3>
                     <span>Words left: {wordCountdown}</span>
                 </div>
-
                 <textarea
                     onKeyUp={(e) => 500 - e.target.value.length > 0 ? setWordCountdown(500 - e.target.value.length) : setWordCountdown(0)}
                     rows="10" cols="30"
@@ -164,8 +151,6 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
         </div>
     );
 };
-
-
 
 const mapStateToProps = (state, props) => ({
     props: props,

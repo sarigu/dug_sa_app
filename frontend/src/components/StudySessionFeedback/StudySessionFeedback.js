@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
-import { useHistory, useLocation } from "react-router-dom";
 import './StudySessionFeedback.css';
 
-const BookingSuccessMessage = (props) => {
-
+const BookingSuccessMessage = () => {
     return (
         <div className="feedback-content">
             <span className="feedback-icon" >&#127881;</span>
@@ -15,8 +13,7 @@ const BookingSuccessMessage = (props) => {
     );
 };
 
-const FailMessage = (props) => {
-
+const FailMessage = () => {
     return (
         <div className="feedback-content">
             <span className="feedback-icon" >&#127871;</span>
@@ -26,9 +23,7 @@ const FailMessage = (props) => {
     );
 };
 
-const DropOutOfStudySessionSuccessMessage = (props) => {
-
-
+const DropOutOfStudySessionSuccessMessage = () => {
     return (
         <div className="feedback-content">
             <span className="feedback-icon" >&#9989;</span>
@@ -39,9 +34,7 @@ const DropOutOfStudySessionSuccessMessage = (props) => {
 };
 
 
-const CancelStudySessionSuccessMessage = (props) => {
-
-
+const CancelStudySessionSuccessMessage = () => {
     return (
         <div className="feedback-content">
             <span className="feedback-icon" >&#9989;</span>
@@ -51,7 +44,7 @@ const CancelStudySessionSuccessMessage = (props) => {
     );
 };
 
-const CreatedStudySessionSuccessMessage = (props) => {
+const CreatedStudySessionSuccessMessage = () => {
     return (
         <div className="feedback-content">
             <span className="feedback-icon" >&#128218;</span>
@@ -61,7 +54,7 @@ const CreatedStudySessionSuccessMessage = (props) => {
     );
 };
 
-const UpdatedStudySessionSuccessMessage = (props) => {
+const UpdatedStudySessionSuccessMessage = () => {
     return (
         <div className="feedback-content">
             <span className="feedback-icon" >&#128221;</span>
@@ -72,7 +65,6 @@ const UpdatedStudySessionSuccessMessage = (props) => {
 };
 
 
-
 const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, userType, isCancelled, selectedCallback, isCreated, isUpdated }) => {
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -81,7 +73,6 @@ const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, u
     }, [isBooked, participationIsDeleted]);
 
     return (
-        console.log(isCancelled, "isCancelled", userType, sessionType),
         <div className="feedback-container" >
             {isLoaded ?
                 <div>
@@ -107,7 +98,9 @@ const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, u
                                         </div>
                                         : <FailMessage selectedCallback={selectedCallback} />}
                 </div>
-                : <div className="feedback-loading-icon"><LoadingIcon /></div>}
+                :
+                <div className="feedback-loading-icon"><LoadingIcon /></div>
+            }
         </div>
     );
 

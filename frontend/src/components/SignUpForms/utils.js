@@ -13,7 +13,6 @@ export const validatePassword = (password) => {
 
 export const validateYear = (date) => {
     let [day, month, year] = date.split('.');
-    console.log("val", day, month, year)
     if (day && month && year) {
         if (day.length !== 2 || month.length !== 2 || year.length !== 4) {
             return false;
@@ -28,9 +27,11 @@ export const validateYear = (date) => {
 
 export const validateTime = (time) => {
     let [hour, minute, seconds] = time.split(':');
-    console.log("val", hour, minute, seconds)
-    if (hour && minute && seconds) {
-        if (hour.length !== 2 || minute.length !== 2 || seconds.length !== 2) {
+    if (hour && minute) {
+        if (hour.length !== 2 || minute.length !== 2) {
+            return false;
+        }
+        if (seconds && seconds.length !== 2) {
             return false;
         }
         return true;
@@ -40,30 +41,24 @@ export const validateTime = (time) => {
 }
 
 export const validateExperince = (year) => {
-    console.log("VALIDAROR experience", year);
     var text = /^[0-9]+$/;
 
     if (!text.test(year)) {
-        console.log("text false", text.test(year))
         return false;
     }
 
     if (year.length > 2) {
-        console.log("longer than 2")
         return false;
     }
 
     if (year < 0) {
-        console.log("minus years")
         return false;
     }
     return true;
-
 }
 
 
 export const validatePhone = (phone) => {
-    console.log("VALIDAROR", phone);
     const re = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
     return re.test(phone);
 }
