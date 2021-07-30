@@ -35,6 +35,8 @@ import {
     CANCEL_STUDY_SESSION_FAIL,
     CREATE_STUDY_SESSION_SUCCESS,
     CREATE_STUDY_SESSION_FAIL,
+    EDIT_STUDY_SESSION_SUCCESS,
+    EDIT_STUDY_SESSION_FAIL,
 } from './types';
 
 
@@ -457,7 +459,7 @@ export const cancel_study_session = (studySessionId) => async dispatch => {
             }
         };
         //console.log("COnfiF", config, localStorage.getItem('access'))
-        const body = JSON.stringify({ is_active: false });
+        const body = JSON.stringify({ isActive: false });
 
         try {
             const res = await axios.patch(`http://localhost:8000/api/studysession/${studySessionId}/`, body, config);
@@ -509,6 +511,34 @@ export const create_study_session = (date, language, subject, spots, startTime, 
             console.log(err, "err?")
             dispatch({
                 type: CREATE_STUDY_SESSION_FAIL
+            });
+        }
+    }
+};
+
+
+export const edit_study_session = (studySessionId, language, subject, startTime, endTime, description, isActive) => async dispatch => {
+
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+            }
+        };
+
+        const body = JSON.stringify({ language, subject, startTime, endTime, description, isActive });
+        console.log(body)
+
+        try {
+            const res = await axios.patch(`http://localhost:8000/api/studysession/${studySessionId}/`, body, config);
+            console.log("EDIT SESS ", res)
+            dispatch({
+                type: EDIT_STUDY_SESSION_SUCCESS,
+            });
+
+        } catch (err) {
+            dispatch({
+                type: EDIT_STUDY_SESSION_FAIL
             });
         }
     }

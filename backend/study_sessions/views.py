@@ -95,17 +95,35 @@ class StudySessionView(viewsets.ModelViewSet):
 
     def partial_update(self, request, **kwargs):
         study_session_id =  self.kwargs['pk'] 
+        print("data???", request.body)
         try:
             if request.user.role == "teacher" or request.user.role == "staff":
                 study_session = StudySession.objects.get(pk = study_session_id)
-                if request.user.role == "teacher":
-                    teacher = Teacher.objects.get(pk=request.user.id)
-                    if not study_session.teacher == teacher:
-                        raise ValueError('No access right')
-                
-                study_session.is_active = False
-                study_session.save()
-
+                data = json.loads(request.body)
+                print(data)
+    
+                if data["isActive"] == False:
+                    print("no active anymore")
+                    study_session.is_active = False
+                    study_session.save()
+                else:
+                    print("in else")
+                    if request.user.role == "teacher":
+                        teacher = Teacher.objects.get(pk=request.user.id)
+                        if not study_session.teacher == teacher:
+                            raise ValueError('No access right')
+               
+                    print("update the obj", study_session)
+                    subject = data["subject"]
+                    subject = Subject.objects.get(name=subject)
+                    language = data["language"]
+                    language = Language.objects.get(language=language)
+                    study_session.language = language
+                    study_session.subject = subject
+                    study_session.start_time = data["startTime"]
+                    study_session.end_time = data["endTime"]
+                    study_session.description = data["description"]
+                    study_session.save()
             else:
                 raise ValueError('No access right')
         except Exception as e:

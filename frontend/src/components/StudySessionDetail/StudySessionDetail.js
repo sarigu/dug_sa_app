@@ -4,7 +4,7 @@ import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 import { participate_in_study_session, cancle_participation_in_study_session, cancel_study_session } from '../../actions/data';
 import './StudySessionDetail.css';
 
-const StudySessionDetail = ({ userType, studySession, participate_in_study_session, selectedCallback, sessionType, cancle_participation_in_study_session, cancel_study_session, studySessionParticipants }) => {
+const StudySessionDetail = ({ userType, studySession, participate_in_study_session, selectedCallback, sessionType, cancle_participation_in_study_session, cancel_study_session, studySessionParticipants, handleEdit }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [formattedDate, setFormattedDate] = useState();
 
@@ -36,6 +36,10 @@ const StudySessionDetail = ({ userType, studySession, participate_in_study_sessi
         console.log("CANCEL SESSIOn", studySession.id)
         cancel_study_session(studySession.id);
         selectedCallback();
+    }
+
+    const handleEditStudySession = () => {
+        handleEdit();
     }
 
     return (
@@ -81,7 +85,11 @@ const StudySessionDetail = ({ userType, studySession, participate_in_study_sessi
                             <button onClick={handleCancelStudySessionParticipation} style={{ backgroundColor: "red" }}>Drop out</button>
                             : sessionType && sessionType === "cancelled-session" ?
                                 null
-                                : <button onClick={handleCancelStudySession} style={{ backgroundColor: "red" }}>Cancel the class</button>}
+                                : <div>
+                                    <button onClick={handleEditStudySession} style={{ backgroundColor: "lightgreen", marginBottom: "20px" }}>Edit the class</button>
+                                    <button onClick={handleCancelStudySession} style={{ backgroundColor: "red" }}>Cancel the class</button>
+                                </div>
+                    }
                 </div>
                 : <LoadingIcon />
             }
@@ -96,6 +104,7 @@ const mapStateToProps = (state, props) => ({
     sessionType: props.sessionType,
     userType: state.auth.userType,
     studySessionParticipants: state.data.studySessionParticipants,
+    handleEdit: props.handleEdit
 });
 
 export default connect(mapStateToProps, { participate_in_study_session, cancle_participation_in_study_session, cancel_study_session })(StudySessionDetail);

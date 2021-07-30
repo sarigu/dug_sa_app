@@ -23,7 +23,7 @@ input, select, textarea{
     border-radius: 15px;
     border:none;
     font-size: 15px;
-    font-weight: 400;
+    font-weight: 500;
     font-family: 'Montserrat', sans-serif;
     height:40px;
     width:calc(100% - 10px);

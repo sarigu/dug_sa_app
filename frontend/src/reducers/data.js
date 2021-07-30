@@ -34,6 +34,8 @@ import {
     CANCEL_STUDY_SESSION_FAIL,
     CREATE_STUDY_SESSION_SUCCESS,
     CREATE_STUDY_SESSION_FAIL,
+    EDIT_STUDY_SESSION_SUCCESS,
+    EDIT_STUDY_SESSION_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -57,6 +59,7 @@ const initialState = {
     totalUpcomingStudySessionPages: null,
     totalPreviousStudySessionPages: null,
     isCreated: false,
+    isUpdated: false,
 };
 
 export default function (state = initialState, action) {
@@ -226,7 +229,15 @@ export default function (state = initialState, action) {
                 isCreated: true,
             }
         case CREATE_STUDY_SESSION_FAIL:
-            console.log("fail");
+            return {
+                ...state,
+            }
+        case EDIT_STUDY_SESSION_SUCCESS:
+            return {
+                ...state,
+                isUpdated: true,
+            }
+        case EDIT_STUDY_SESSION_FAIL:
             return {
                 ...state,
             }
@@ -234,5 +245,3 @@ export default function (state = initialState, action) {
             return state
     }
 };
-
-

@@ -61,9 +61,19 @@ const CreatedStudySessionSuccessMessage = (props) => {
     );
 };
 
+const UpdatedStudySessionSuccessMessage = (props) => {
+    return (
+        <div className="feedback-content">
+            <span className="feedback-icon" >&#128221;</span>
+            <h3>You updated the study session!</h3>
+            <button onClick={() => { window.location.href = "/dashboard" }}>Go back</button>
+        </div>
+    );
+};
 
 
-const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, userType, isCancelled, selectedCallback, isCreated }) => {
+
+const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, userType, isCancelled, selectedCallback, isCreated, isUpdated }) => {
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
@@ -83,15 +93,19 @@ const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, u
                             <div>
                                 {participationIsDeleted ? <DropOutOfStudySessionSuccessMessage selectedCallback={selectedCallback} /> : <FailMessage selectedCallback={selectedCallback} />}
                             </div>
-                            : userType === "teacher" || userType === "staff" && sessionType && sessionType === "teacher-study-session" ?
+                            : (userType === "teacher" || userType === "staff") && sessionType && sessionType === "teacher-study-session" ?
                                 <div>
                                     {isCancelled ? <CancelStudySessionSuccessMessage selectedCallback={selectedCallback} /> : <FailMessage selectedCallback={selectedCallback} />}
                                 </div>
-                                : userType === "teacher" || userType === "staff" && sessionType && sessionType === "added-class" ?
+                                : (userType === "teacher" || userType === "staff") && sessionType && sessionType === "added-class" ?
                                     <div>
                                         {isCreated ? <CreatedStudySessionSuccessMessage selectedCallback={selectedCallback} /> : <FailMessage selectedCallback={selectedCallback} />}
                                     </div>
-                                    : <FailMessage selectedCallback={selectedCallback} />}
+                                    : (userType === "teacher" || userType === "staff") && sessionType && sessionType === "updated-session" ?
+                                        <div>
+                                            {isUpdated ? <UpdatedStudySessionSuccessMessage selectedCallback={selectedCallback} /> : <FailMessage selectedCallback={selectedCallback} />}
+                                        </div>
+                                        : <FailMessage selectedCallback={selectedCallback} />}
                 </div>
                 : <div className="feedback-loading-icon"><LoadingIcon /></div>}
         </div>
@@ -99,6 +113,8 @@ const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, u
 
 
 };
+
+
 
 
 const mapStateToProps = (state, props) => ({
@@ -109,6 +125,7 @@ const mapStateToProps = (state, props) => ({
     sessionType: props.sessionType,
     selectedCallback: props.selectedCallback,
     isCreated: state.data.isCreated,
+    isUpdated: state.data.isUpdated
 });
 
 export default connect(mapStateToProps, {})(StudySessionFeedback);
