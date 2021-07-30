@@ -16,6 +16,20 @@ class TeacherView(viewsets.ModelViewSet):
     serializer_class = TeacherSerializer
     queryset = Teacher.objects.all()
 
+    def retrieve(self, request, *args, **kwargs):
+        teacher_id =  self.kwargs['pk'] 
+        try:
+            if request.user.role == "staff" or request.user.role == "teacher":
+                teacher = Teacher.objects.get(pk = teacher_id)
+                serializer = TeacherSerializer(teacher)
+                response_data = {"teacher": serializer.data}
+            else:
+                raise ValueError('Already class')
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(response_data)
+
+
 class NewTeachersView(ListAPIView):
     permissions_classes=[IsAuthenticated]
     serializer_class = TeacherShortVersionSerializer
@@ -89,8 +103,7 @@ class FindTeachersView(viewsets.ViewSet):
             total_pages = paginator.num_pages
 
             if int(page_number) <= total_pages:
-                page_obj = paginator.get_page(page_number)  
-                print(page_obj)     
+                page_obj = paginator.get_page(page_number)    
                 serializer = FindTeacherSerializer(page_obj, many=True)
                 return Response({'total_pages': total_pages, 'data': serializer.data})
         except Exception as e:
@@ -233,7 +246,6 @@ class FilterTeachersView(viewsets.ViewSet):
 
                 if int(page_number) <= total_pages:
                     page_obj = paginator.get_page(page_number)     
-                    print(page_obj)      
                     serializer = FindTeacherSerializer(page_obj, many=True)
                     return Response({'total_pages': total_pages, 'data': serializer.data})
         except Exception as e:

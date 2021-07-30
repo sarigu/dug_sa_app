@@ -34,7 +34,7 @@ export const load_user = () => async dispatch => {
             let res = await axios.get('http://localhost:8000/auth/users/me/', config);
 
             if (res.data.role === "teacher") {
-                res = await axios.get(`http://localhost:8000/api/teachers/${res.data.id}/`, config);
+                res = await axios.get(`http://localhost:8000/api/teacher/${res.data.id}/`, config);
             }
             dispatch({
                 type: USER_LOADED_SUCCESS,
@@ -193,7 +193,7 @@ export const update_teacher = (userID, degree, university, year_of_graduation, l
     formData.append("provided_information", provided_information);
 
     try {
-        const res = await axios.patch(`http://localhost:8000/api/teachers/${userID}/`, formData, config);
+        const res = await axios.patch(`http://localhost:8000/api/teacher/${userID}/`, formData, config);
         if (res.status === 200) {
             const config = {
                 headers: {

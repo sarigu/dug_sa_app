@@ -36,6 +36,8 @@ import {
     CREATE_STUDY_SESSION_FAIL,
     EDIT_STUDY_SESSION_SUCCESS,
     EDIT_STUDY_SESSION_FAIL,
+    LOAD_TEACHER_DETAILS_SUCCESS,
+    LOAD_TEACHER_DETAILS_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -60,6 +62,7 @@ const initialState = {
     totalPreviousStudySessionPages: null,
     isCreated: false,
     isUpdated: false,
+    teacher: undefined
 };
 
 export default function (state = initialState, action) {
@@ -238,6 +241,15 @@ export default function (state = initialState, action) {
                 isUpdated: true,
             }
         case EDIT_STUDY_SESSION_FAIL:
+            return {
+                ...state,
+            }
+        case LOAD_TEACHER_DETAILS_SUCCESS:
+            return {
+                ...state,
+                teacher: payload.teacher,
+            }
+        case LOAD_TEACHER_DETAILS_FAIL:
             return {
                 ...state,
             }

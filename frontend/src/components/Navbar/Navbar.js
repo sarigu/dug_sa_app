@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { logout } from '../../actions/auth';
 import Burgermenu from '../../icons/Burgermenu';
 import CloseIcon from '../../icons/CloseIcon';
 import './Navbar.css';

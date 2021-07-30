@@ -37,6 +37,8 @@ import {
     CREATE_STUDY_SESSION_FAIL,
     EDIT_STUDY_SESSION_SUCCESS,
     EDIT_STUDY_SESSION_FAIL,
+    LOAD_TEACHER_DETAILS_SUCCESS,
+    LOAD_TEACHER_DETAILS_FAIL,
 } from './types';
 
 
@@ -59,6 +61,30 @@ export const load_teachers = (index) => async dispatch => {
         } catch (err) {
             dispatch({
                 type: TEACHERS_LOADED_FAIL
+            });
+        }
+    }
+};
+
+export const load_teacher_details = (teacherId) => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            let res = await axios.get(`http://localhost:8000/api/teacher/${teacherId}/`, config);
+            dispatch({
+                type: LOAD_TEACHER_DETAILS_SUCCESS,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: LOAD_TEACHER_DETAILS_FAIL
             });
         }
     }
