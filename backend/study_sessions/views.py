@@ -123,6 +123,7 @@ class StudySessionView(viewsets.ModelViewSet):
                     study_session.start_time = data["startTime"]
                     study_session.end_time = data["endTime"]
                     study_session.description = data["description"]
+                    study_session.was_updated = True
                     study_session.save()
             else:
                 raise ValueError('No access right')

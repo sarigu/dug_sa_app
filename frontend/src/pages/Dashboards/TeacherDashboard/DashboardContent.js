@@ -69,6 +69,7 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
                                 endTime={studySession.end_time}
                                 date={studySession.date}
                                 subjectColor={studySession.subject.color}
+                                wasUpdated={studySession.was_updated}
                             />
                         )
                         : <p>No reminders at the moment</p>}

@@ -73,6 +73,7 @@ const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingS
                                 endTime={studySession.end_time}
                                 date={studySession.date}
                                 subjectColor={studySession.subject.color}
+                                wasUpdated={studySession.was_updated}
                             />
                         )
                         : <p>No reminders at the moment</p>}

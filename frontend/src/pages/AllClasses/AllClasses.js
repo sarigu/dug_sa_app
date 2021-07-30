@@ -183,6 +183,7 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
                                     endTime={studySession.end_time}
                                     date={studySession.date}
                                     subjectColor={studySession.subject.color}
+                                    wasUpdated={studySession.was_updated}
                                 />
                             ) : <p>No classes</p>
                         }
@@ -205,6 +206,7 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
                                             endTime={studySession.end_time}
                                             date={studySession.date}
                                             subjectColor={studySession.subject.color}
+                                            wasUpdated={studySession.was_updated}
                                         />)
                                     : <p>No classes</p>
                             }

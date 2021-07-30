@@ -85,6 +85,12 @@
     border:none !important;
 }
 
+.updated-study-session{
+    background-color: #F5F4F4  !important;
+    color:#363636 !important;
+    border:none !important;
+}
+
 .cancelled-session{
     background-color: rgba(255, 0, 0, 0.438)  !important;
     color:#363636 !important;

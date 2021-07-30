@@ -15,6 +15,7 @@ class StudySession(models.Model):
     available_spots = models.IntegerField(default=1)
     taken_spots = models.IntegerField(default=0)
     description = models.CharField(max_length=500, blank=True, null=True)
+    was_updated = models.BooleanField(default=False)
     
     def __str__(self):
         return f"{self.subject} - {self.teacher} - {self.date} - {self.start_time}"

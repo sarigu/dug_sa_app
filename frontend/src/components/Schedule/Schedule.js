@@ -13,13 +13,13 @@ function Event({ event }) {
     return (
         <span className="event-card" >
             <div style={{ width: "70%" }} className="event-card-content">
-                {event.type == "cancelled-session" ? <div>Cancelled</div> : null}
+                {event.type == "cancelled-session" ? <div>Cancelled</div> : event.type == "updated-study-session" ? <div>Updated</div> : null}
                 <div style={{ fontWeight: 600 }}>{event.title}</div>
-                {event.type == "booked-study-session" ? <div>{event.description}</div> : null}
+                {event.type == "booked-study-session" || event.type == "updated-study-session" ? <div>{event.description}</div> : null}
                 <div>{event.location}</div>
-                {event.type == "study-session" || event.type == "booked-study-session" || event.type == "teacher-study-session" ? <div>{event.taken_spots + " taken from "} {event.available_spots + " spots"} </div> : null}
+                {event.type == "study-session" || event.type == "booked-study-session" || event.type == "teacher-study-session" || event.type == "updated-study-session" ? <div>{event.taken_spots + " taken from "} {event.available_spots + " spots"} </div> : null}
             </div>
-            <div style={{ width: "30%", alignSelf: "center" }}> {event.type == "study-session" ? <button>Book</button> : event.type == "booked-study-session" ? <span style={{ fontSize: "30px" }}>&#128161;</span> : event.type == "cancelled-session" ? <span>&#128680;</span> : null}</div>
+            <div style={{ width: "30%", alignSelf: "center" }}> {event.type == "study-session" ? <button>Book</button> : event.type == "booked-study-session" ? <span style={{ fontSize: "30px" }}>&#128161;</span> : event.type == "updated-study-session" ? <span>&#128227;</span> : event.type == "cancelled-session" ? <span>&#128680;</span> : null}</div>
         </span>
 
 
@@ -90,7 +90,7 @@ const Schedule = ({ props, studySessions, bookedStudySessions, userType }) => {
                 //let start_at = (new Date(date + " " + studySession));
                 //let end_at
                 console.log("BOOKED", studySession)
-                let sessionType = studySession.is_active ? "booked-study-session" : "cancelled-session"
+                let sessionType = studySession.is_active && studySession.was_updated ? "updated-study-session" : studySession.is_active ? "booked-study-session" : "cancelled-session"
                 allStudySessionSlots.push({ id: studySession.id, title: "You have a class here", start: start, end: end, type: sessionType, description: studySession.subject.name + " with " + studySession.teacher.first_name + " " + studySession.teacher.last_name + " in " + studySession.language.language, location: "at " + studySession.location.name, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: "lightgrey" })
             })
             console.log("studySession", allStudySessionSlots)
