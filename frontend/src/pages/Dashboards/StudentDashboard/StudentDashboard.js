@@ -58,7 +58,7 @@ const StudentDashboard = ({ user, load_upcoming_booked_study_sessions, upcomingS
                     <AllClassesButton buttonWidth={"120px"} selectedCallback={() => history.push("/all-classes")} />
                 </div>
                 <div>
-                    {upcomingStudySessions ?
+                    {upcomingStudySessions && upcomingStudySessions.length > 0 ?
                         upcomingStudySessions.map((studySession, index) =>
                             <StudySessionCard
                                 key={index}

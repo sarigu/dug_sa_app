@@ -216,6 +216,7 @@ export const load_study_session = (studySessionId) => async dispatch => {
 
         try {
             const res = await axios.get(`http://localhost:8000/api/studysession/${studySessionId}`, config);
+            console.log("RES for study sess", res.data)
             dispatch({
                 type: STUDY_SESSION_DETAILS_LOADED_SUCCESS,
                 payload: res.data

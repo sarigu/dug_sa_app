@@ -4,7 +4,7 @@ import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 import { participate_in_study_session, cancle_participation_in_study_session, cancel_study_session } from '../../actions/data';
 import './StudySessionDetail.css';
 
-const StudySessionDetail = ({ userType, studySession, participate_in_study_session, selectedCallback, sessionType, cancle_participation_in_study_session, cancel_study_session }) => {
+const StudySessionDetail = ({ userType, studySession, participate_in_study_session, selectedCallback, sessionType, cancle_participation_in_study_session, cancel_study_session, studySessionParticipants }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [formattedDate, setFormattedDate] = useState();
 
@@ -68,6 +68,12 @@ const StudySessionDetail = ({ userType, studySession, participate_in_study_sessi
                         <p>{studySession.taken_spots + " taken from " + studySession.available_spots}</p>
                         <h3>Description</h3>
                         <p>{studySession.description ? studySession.description : "No description"}</p>
+                        {userType === "staff" && studySessionParticipants && studySessionParticipants.length > 0 ?
+                            <>
+                                <h3>Participants</h3>
+                                {studySessionParticipants.map(participant => <p>{participant.user.first_name + " " + participant.user.last_name}</p>)}
+                            </>
+                            : null}
                     </div>
                     {userType === "student" && sessionType && sessionType === "study-session" ?
                         <button onClick={handleStudySessionParticipation}>Yes, book a slot!</button>
@@ -88,7 +94,8 @@ const mapStateToProps = (state, props) => ({
     studySession: state.data.studySession,
     selectedCallback: props.selectedCallback,
     sessionType: props.sessionType,
-    userType: state.auth.userType
+    userType: state.auth.userType,
+    studySessionParticipants: state.data.studySessionParticipants,
 });
 
 export default connect(mapStateToProps, { participate_in_study_session, cancle_participation_in_study_session, cancel_study_session })(StudySessionDetail);

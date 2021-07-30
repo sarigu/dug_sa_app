@@ -16,6 +16,7 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
     const [error, setError] = useState(false);
     const [description, setDescription] = useState("");
     const [dataIsChecked, setDataIsChecked] = useState(false);
+    const [wordCountdown, setWordCountdown] = useState(500);
 
 
     useEffect(() => {
@@ -122,10 +123,15 @@ const StudySessionForm = ({ props, load_subjects, load_languages, subjects, lang
                     min="1"
                     onChange={e => { setError(false); setSpots(e.target.value) }}
                 />
-                <h3>Description</h3>
+                <div style={{ display: "inline-flex", alignItems: "center" }}>
+                    <h3 style={{ marginRight: "20px" }}>Description</h3>
+                    <span>Words left: {wordCountdown}</span>
+                </div>
 
-                <input
-                    type="text"
+                <textarea
+                    onKeyUp={(e) => 500 - e.target.value.length > 0 ? setWordCountdown(500 - e.target.value.length) : setWordCountdown(0)}
+                    rows="10" cols="30"
+                    placeholder="Tell the students what the class will be about"
                     maxlength="500"
                     onChange={e => { setError(false); setDescription(e.target.value) }}
                 />

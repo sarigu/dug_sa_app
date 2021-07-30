@@ -13,24 +13,29 @@ main{
     height:100%;
 }
 
-input, button, .shadow, select{
+input, button, .shadow, select, textarea{
     filter:drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.199) );
     cursor: pointer;
 }
 
-input, select{
+input, select, textarea{
     background-color: white;
     border-radius: 15px;
     border:none;
     font-size: 15px;
-    font-weight: 300;
+    font-weight: 400;
+    font-family: 'Montserrat', sans-serif;
     height:40px;
     width:calc(100% - 10px);
     margin:  10px 0;
     padding: 0 0 0 10px; 
 }
 
-input:focus{
+textarea{
+    height:unset !important;
+}
+
+input:focus, textarea:focus{
     outline: none;
 }
 

@@ -2,7 +2,7 @@ from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import StudySession, Participant
-from login.serializers import TeacherSerializer, SubjectSerializer, UserSerializer, TeachingFacilitySerializer, LanguageSerializer
+from login.serializers import TeacherSerializer, SubjectSerializer, UserSerializer, UserShortVersionSerializer, TeachingFacilitySerializer, LanguageSerializer
 
 class StudySessionSerializer(serializers.ModelSerializer):
     teacher = TeacherSerializer()
@@ -33,5 +33,13 @@ class ParticipantStudySessionSerializer(serializers.ModelSerializer):
         for key, val in study_session.items():
             data.update({key: val})
         return data
+
+class ParticipantListSerializer(serializers.ModelSerializer):
+    user = UserShortVersionSerializer()
+    study_session = StudySessionSerializer()
+    class Meta:
+        model = Participant
+        fields = '__all__'
+
       
       

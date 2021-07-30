@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets,status
-from .serializers import StudySessionSerializer, ParticipantSerializer, ParticipantStudySessionSerializer
+from .serializers import StudySessionSerializer, ParticipantSerializer, ParticipantStudySessionSerializer, ParticipantListSerializer
 from .models import Participant, StudySession
 from login.models import Subject, Language, CustomUser, TeachingFacility, Teacher
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
@@ -20,6 +20,31 @@ class StudySessionView(viewsets.ModelViewSet):
     permissions_classes=[IsAuthenticated]
     serializer_class = StudySessionSerializer
     queryset = StudySession.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        print("in get")
+        study_session_id =  self.kwargs['pk'] 
+        print(study_session_id)
+        try:
+            if request.user.role == "staff":
+                print("is staff")
+                study_session = StudySession.objects.get(pk = study_session_id)
+                all_participants = Participant.objects.filter(study_session=study_session)
+                if len(all_participants) > 0:
+                    serializerStudySession = StudySessionSerializer(study_session)
+                    serializerParticipants = ParticipantListSerializer(all_participants, many=True)
+                    response_data = {"studySession": serializerStudySession.data, "studySessionParticipants": serializerParticipants.data}
+                else: 
+                    serializer = StudySessionSerializer(study_session)
+                    response_data = {"studySession": serializer.data}
+            else:
+                study_session = StudySession.objects.get(pk = study_session_id)
+                serializer = StudySessionSerializer(study_session)
+                response_data = {"studySession": serializer.data}
+        except Exception as e:
+            print(e, "ERR")
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(response_data)
 
     def create(self, request): 
         print("hello")
@@ -68,7 +93,7 @@ class StudySessionView(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
 
-    def partial_update(self, request, *args, **kwargs):
+    def partial_update(self, request, **kwargs):
         study_session_id =  self.kwargs['pk'] 
         try:
             if request.user.role == "teacher" or request.user.role == "staff":
@@ -87,6 +112,8 @@ class StudySessionView(viewsets.ModelViewSet):
             print(e, "ERR")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response({"status": "ok"})
+    
+ 
 
  
      

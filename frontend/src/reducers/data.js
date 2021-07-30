@@ -47,6 +47,7 @@ const initialState = {
     studySessions: [],
     bookedStudySessions: [],
     studySession: {},
+    studySessionParticipants: [],
     isBooked: false,
     isCancelled: false,
     participationIsDeleted: false,
@@ -127,7 +128,8 @@ export default function (state = initialState, action) {
         case STUDY_SESSION_DETAILS_LOADED_SUCCESS:
             return {
                 ...state,
-                studySession: payload,
+                studySession: payload.studySession,
+                studySessionParticipants: payload.studySessionParticipants
             }
         case STUDY_SESSION_DETAILS_LOADED_FAIL:
             return {
