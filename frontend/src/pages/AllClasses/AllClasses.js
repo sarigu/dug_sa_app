@@ -10,6 +10,7 @@ import PrevButton from '../../components/Buttons/PrevButton';
 import PopUp from '../../components/PopUp/PopUp';
 import StudySessionDetail from '../../components/StudySessionDetail/StudySessionDetail';
 import StudySessionFeedback from '../../components/StudySessionFeedback/StudySessionFeedback';
+import StudySessionEdit from '../../components/StudySessionEdit/StudySessionEdit';
 import './AllClasses.css';
 
 const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, totalPreviousStudySessionPages, totalUpcomingStudySessionPages, load_upcoming_booked_study_sessions_list, load_previous_booked_study_sessions_list, load_teachers_upcoming_study_sessions_list, load_teachers_previous_study_sessions_list, load_study_session, isCancelled, isCreated }) => {
@@ -24,6 +25,7 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
     const [showFeedback, setShowFeedback] = useState(false);
     const [sessionType, setSessionType] = useState();
     const [showPopup, setShowPopup] = useState(false);
+    const [showStudySessionEdit, setShowStudySessionEdit] = useState(false);
 
     const history = useHistory();
 
@@ -148,7 +150,7 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
         if (isActive && userType === "student") {
             setSessionType("booked-study-session");
         } else if (isActive && userType === "teacher") {
-            setSessionType("study-session");
+            setSessionType("teacher-study-session");
         } else {
             setSessionType("cancelled-session");
         }
@@ -235,9 +237,10 @@ const AllClasses = ({ userType, upcomingStudySessions, previousStudySessions, to
             </div>
             {showPopup ?
                 <PopUp selectedCallback={() => setShowPopup(false)} >
-                    {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
-                        : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
-                            : null}
+                    {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} handleEdit={() => { setShowStudySessionEdit(true); setShowStudySessionDetails(false) }} />
+                        : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} /> :
+                            showStudySessionEdit ? <StudySessionEdit selectedCallback={() => { setShowFeedback(true); setShowStudySessionEdit(false); setSessionType("updated-session") }} />
+                                : null}
                 </PopUp>
                 : null
             }

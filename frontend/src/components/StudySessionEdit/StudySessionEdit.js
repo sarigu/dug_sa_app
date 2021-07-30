@@ -70,9 +70,9 @@ const StudySessionEdit = ({ load_subjects, load_languages, subjects, languages, 
                         <h3>Teacher</h3>
                         <p>{studySession.teacher ? studySession.teacher.first_name + " " + studySession.teacher.last_name : null}</p>
                         <h3>Subject</h3>
-                        <select onChange={e => { setError(false); setSubject(e.target.value) }}>{subjects && subjects.map((subject, index) => <option key={index} value={subject.name}>{subject.name}</option>)}</select>
+                        <select onChange={e => { setError(false); setSubject(e.target.value) }}>{subjects && subjects.map((elem, index) => <option key={index} selected={elem.name == subject} value={elem.name}>{elem.name}</option>)}</select>
                         <h3>Language</h3>
-                        <select onChange={e => { setError(false); setLanguage(e.target.value) }}>{languages && languages.map((languages, index) => <option key={index} value={languages.language}>{languages.language}</option>)}</select>
+                        <select onChange={e => { setError(false); setLanguage(e.target.value) }}>{languages && languages.map((elem, index) => <option key={index} selected={elem.language == language} value={elem.language}>{elem.language}</option>)}</select>
                         <h3>Date</h3>
                         <p>{formattedDate ? formattedDate : null}</p>
                         <h3>Start Time</h3>
