@@ -8,6 +8,7 @@ import ResetPasswordConfirm from './pages/PasswordReset/ResetPasswordConfirm';
 import FindTeachers from './pages/FindTeachers/FindTeachers';
 import SchedulePage from './pages/SchedulePage/SchedulePage';
 import AllClasses from './pages/AllClasses/AllClasses';
+import AllTeachers from './pages/AllTeachers/AllTeachers';
 import { Provider } from 'react-redux';
 import store from './store';
 import AuthWrapper from './AuthWrappers/AuthWrapper';
@@ -26,6 +27,7 @@ const App = () => (
           <PrivateRoute exact path='/find-teachers' component={FindTeachers} />
           <PrivateRoute exact path='/all-classes' component={AllClasses} />
           <PrivateRoute exact path='/schedule' component={SchedulePage} />
+          <PrivateRoute exact path='/teachers' component={AllTeachers} />
         </Switch>
       </AuthWrapper>
     </Router>

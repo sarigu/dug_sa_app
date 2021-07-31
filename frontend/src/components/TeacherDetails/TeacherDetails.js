@@ -6,21 +6,30 @@ import CloseButton from '../../components/Buttons/CloseButton'
 import { add_teacher_review } from '../../actions/data';
 import './TeacherDetails.css';
 
-const TeacherDetails = ({ teacher, add_teacher_review, selectedCallback }) => {
+const TeacherDetails = ({ teacherData, add_teacher_review, selectedCallback }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [formattedDate, setFormattedDate] = useState();
     const [showAdressProofDetails, setShowAdressProofDetails] = useState(false);
+    const [subjects, setSubjects] = useState();
+    const [languages, setLanguages] = useState();
+    const [facilities, setFacilities] = useState();
+    const [teacher, setTeacher] = useState();
 
     useEffect(() => {
-        if (teacher) {
+        if (teacherData) {
+            console.log("teacherData", teacherData.teacher)
             setIsLoaded(true);
-            if (teacher.year_of_graduation) {
+            setSubjects(teacherData.subjects)
+            setLanguages(teacherData.languages)
+            setFacilities(teacherData.facilities)
+            setTeacher(teacherData.teacher)
+            if (teacherData.year_of_graduation) {
                 let [year, month, day] = teacher.year_of_graduation.split('-');
                 let date = day + "." + month + "." + year;
                 setFormattedDate(date);
             }
         }
-    }, [teacher]);
+    }, [teacherData]);
 
     const handleApproveTeacher = () => {
         console.log("APPROVE");
@@ -40,15 +49,29 @@ const TeacherDetails = ({ teacher, add_teacher_review, selectedCallback }) => {
                 <div className="details-wrapper">
                     <div className="image-container">
                         <div>
+                            {teacher.is_reviewed ?
+                                <h2 style={{ margin: " 0 0 30px 0" }}>Teacher Details</h2>
+                                : null
+                            }
                             <div className="profile-image" style={{ backgroundImage: `url(${"http://localhost:8000" + teacher.profile_image})` }}></div>
-                            <h3>Proof of address</h3>
-                            <div onClick={() => { setShowAdressProofDetails(true) }} className="address-proof-image" style={{ backgroundImage: `url( ${"http://localhost:8000" + teacher.proof_of_address})` }}></div>
+                            {!teacher.is_reviewed ?
+                                <div>
+                                    <h3>Proof of address</h3>
+                                    <div onClick={() => { setShowAdressProofDetails(true) }} className="address-proof-image" style={{ backgroundImage: `url( ${"http://localhost:8000" + teacher.proof_of_address})` }}></div>
+                                </div>
+                                :
+                                null}
                         </div>
-                        <button style={{ backgroundColor: "red" }} onClick={handleRejectTeacher}>Reject</button>
+                        {teacher.is_reviewed ? null :
+                            <button style={{ backgroundColor: "red" }} onClick={handleRejectTeacher}>Reject</button>
+                        }
                     </div>
                     <div className="info-container">
                         <div>
-                            <h2 style={{ marginBottom: "30px" }}>New Teacher</h2>
+                            {!teacher.is_reviewed ?
+                                <h2 style={{ marginBottom: "0 0 30px 0 " }}>New Teacher</h2>
+                                : null
+                            }
                             <Accordion title="Contact info">
                                 <div>
                                     <h3>Name</h3>
@@ -82,9 +105,21 @@ const TeacherDetails = ({ teacher, add_teacher_review, selectedCallback }) => {
                                     <p>{teacher.years_of_experience + " years"}</p>
                                 </div>
                             </Accordion>
+                            <Accordion title="Teaching at DUG">
+                                <div>
+                                    <h3>Subject they wish to teach</h3>
+                                    {console.log(subjects, languages, facilities)}
+                                    {subjects && subjects.map((subject, index) => <p key={index}>{subject.name}</p>)}
+                                    <h3>Languages they wish to teach in</h3>
+                                    {languages && languages.map((language, index) => <p key={index}>{language.language}</p>)}
+                                    <h3>Places they wish to teach at</h3>
+                                    {facilities && facilities.map((facility, index) => <p key={index}>{facility.name}</p>)}
+                                </div>
+                            </Accordion>
                         </div>
-
-                        <button onClick={handleApproveTeacher}>Approve</button>
+                        {teacher.is_reviewed ? null :
+                            <button onClick={handleApproveTeacher}>Approve</button>
+                        }
                     </div>
                 </div>
                 : <LoadingIcon />
@@ -104,7 +139,7 @@ const TeacherDetails = ({ teacher, add_teacher_review, selectedCallback }) => {
 };
 
 const mapStateToProps = (state, props) => ({
-    teacher: state.data.teacher,
+    teacherData: state.data.teacher,
     selectedCallback: props.selectedCallback
 });
 

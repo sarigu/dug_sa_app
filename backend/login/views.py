@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status
-from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer, FindTeacherSerializer, BookmarkedTeachersSerializer, LanguageSerializer
+from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer, FindTeacherSerializer, BookmarkedTeachersSerializer, LanguageSerializer, TeachingFacilitySerializer
 from .models import Teacher, CustomUser, Subject, Teacher_Subject, Teacher_Language, Language, BookmarkedTeacher,TeachingFacility, Teacher_TeachingFacility
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
@@ -21,11 +21,33 @@ class TeacherView(viewsets.ModelViewSet):
         try:
             if request.user.role == "staff" or request.user.role == "teacher":
                 teacher = Teacher.objects.get(pk = teacher_id)
-                serializer = TeacherSerializer(teacher)
-                return Response(serializer.data)
+                print("TEAHCER", teacher)
+                teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
+                teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
+                teachers_facilities = Teacher_TeachingFacility.objects.filter(teacher=teacher)
+                subjects = []
+                languages = []
+                teaching_facilities = []
+                for elem in teachers_subjects:
+                    subjectData = Subject.objects.get(pk=elem.subject.pk)
+                    subjects.append(subjectData)
+                for elem in teachers_languages:
+                    languageData = Language.objects.get(pk=elem.language.pk)
+                    languages.append(languageData)
+                for elem in teachers_facilities:
+                    facilityData = TeachingFacility.objects.get(pk=elem.teaching_facility.pk)
+                    teaching_facilities.append(facilityData)
+                teacher_serializer =  TeacherSerializer(teacher)
+                subject_serializer =  SubjectSerializer(subjects, many=True)
+                langauge_serializer =  LanguageSerializer(languages, many=True)
+                facilities_serializer = TeachingFacilitySerializer(teaching_facilities, many=True)
+                data = {'teacher': teacher_serializer.data, 'subjects': subject_serializer.data, 'languages': langauge_serializer.data, 'facilities':facilities_serializer.data }
+     
+                return Response(data)
             else:
-                raise ValueError('Already class')
+                raise ValueError('No access')
         except Exception as e:
+            print("ERR", e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response()
 
@@ -93,9 +115,10 @@ class TeacherSubjectView(viewsets.ViewSet):
 class FindTeachersView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]
     def list(self, request):
+        print("in find", request.user)
         try:
             all_teachers = []
-            teachers = Teacher.objects.filter(is_approved=True)
+            teachers = Teacher.objects.filter(is_approved=True).filter(is_reviewed=True)
             for teacher in teachers:
                 teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
                 teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
@@ -113,14 +136,19 @@ class FindTeachersView(viewsets.ViewSet):
                     facilityData = TeachingFacility.objects.get(pk=elem.teaching_facility.pk)
                     teaching_facilities.append(facilityData)
                 
-                bookmark = BookmarkedTeacher.objects.filter(user=self.request.user).filter(teacher=teacher)
-                isBookmarked = False
-                if(bookmark):
-                    isBookmarked = True
-
-                data = {'user': teacher.user, 'facilities': teaching_facilities, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
-                all_teachers.append(data)
-
+                if request.user.role == "student":
+                    bookmark = BookmarkedTeacher.objects.filter(user=self.request.user).filter(teacher=teacher)
+                    isBookmarked = False
+                    if(bookmark):
+                        isBookmarked = True
+                    data = {'user': teacher.user, 'facilities': teaching_facilities, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
+                    all_teachers.append(data)
+                elif request.user.role == "staff": 
+                    print("is staff")
+                    data = {'user': teacher.user, 'facilities': teaching_facilities, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': False, 'experience': teacher.years_of_experience}
+                    all_teachers.append(data)
+                else: 
+                    raise ValueError('No access')
             paginator = Paginator(all_teachers, PAGINATION_LIMIT) 
             page_number = self.request.GET.get('page')
             total_pages = paginator.num_pages
@@ -275,5 +303,4 @@ class FilterTeachersView(viewsets.ViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         return Response([])
-       
        

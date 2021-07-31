@@ -261,7 +261,6 @@ const mapStateToProps = state => ({
     subjects: state.auth.subjects,
     totalTeacherPages: state.data.totalTeacherPages,
     bookmarkedTeachers: state.data.bookmarkedTeachers,
-    totalTeacherPages: state.data.totalTeacherPages,
     filteredTeachers: state.data.filteredTeachers,
     totalFilterPages: state.data.totalFilterPages
 });

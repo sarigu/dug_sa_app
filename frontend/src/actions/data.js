@@ -56,6 +56,7 @@ export const load_teachers = (index) => async dispatch => {
 
         try {
             let res = await axios.get(`http://localhost:8000/api/find/teachers/?page=${index}`, config);
+            console.log("laoded teacehrs", res)
             dispatch({
                 type: TEACHERS_LOADED_SUCCESS,
                 payload: res.data
@@ -80,6 +81,7 @@ export const load_teacher_details = (teacherId) => async dispatch => {
 
         try {
             let res = await axios.get(`http://localhost:8000/api/teacher/${teacherId}/`, config);
+            console.log("RESP", res);
             dispatch({
                 type: LOAD_TEACHER_DETAILS_SUCCESS,
                 payload: res.data
