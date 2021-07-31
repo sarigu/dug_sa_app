@@ -20,7 +20,7 @@ const Menu = ({ logout, menuWasSet, openMenu, selectedCallback }) => {
                 <div onClick={() => { history.push("/work-in-progress"); selectedCallback() }}>Profile</div>
                 <div onClick={() => { history.push("/work-in-progress"); selectedCallback() }}>Languages</div>
                 <div onClick={() => { history.push("/work-in-progress"); selectedCallback() }}>Settings</div>
-                <div>About</div>
+                <div onClick={() => { history.push("/about"); selectedCallback() }}>About</div>
                 <div href='/' onClick={handleLogout}>Logout</div>
                 {redirect ? <Redirect to='/' /> : null}
             </div >
