@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 import Accordion from '../../components/Accordion/Accordion';
+import CloseButton from '../../components/Buttons/CloseButton'
 import { add_teacher_review } from '../../actions/data';
 import './TeacherDetails.css';
 
 const TeacherDetails = ({ teacher, add_teacher_review, selectedCallback }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [formattedDate, setFormattedDate] = useState();
+    const [showAdressProofDetails, setShowAdressProofDetails] = useState(false);
 
     useEffect(() => {
         if (teacher) {
@@ -40,7 +42,7 @@ const TeacherDetails = ({ teacher, add_teacher_review, selectedCallback }) => {
                         <div>
                             <div className="profile-image" style={{ backgroundImage: `url(${"http://localhost:8000" + teacher.profile_image})` }}></div>
                             <h3>Proof of address</h3>
-                            <div className="address-proof" style={{ backgroundImage: `url( ${"http://localhost:8000" + teacher.proof_of_address})` }}></div>
+                            <div onClick={() => { setShowAdressProofDetails(true) }} className="address-proof-image" style={{ backgroundImage: `url( ${"http://localhost:8000" + teacher.proof_of_address})` }}></div>
                         </div>
                         <button style={{ backgroundColor: "red" }} onClick={handleRejectTeacher}>Reject</button>
                     </div>
@@ -87,6 +89,16 @@ const TeacherDetails = ({ teacher, add_teacher_review, selectedCallback }) => {
                 </div>
                 : <LoadingIcon />
             }
+            {showAdressProofDetails ?
+                <div className="address-proof-detail-view">
+                    <div style={{ alignSelf: "flex-end" }}>
+                        <CloseButton selectedCallback={() => setShowAdressProofDetails(false)} />
+                    </div>
+                    <div className="address-proof-image">
+                        <img src={"http://localhost:8000" + teacher.proof_of_address}></img>
+                    </div>
+                </div>
+                : null}
         </div>
     );
 };

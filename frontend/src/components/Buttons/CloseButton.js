@@ -2,9 +2,9 @@ import React from 'react';
 import CloseIcon from '../../icons/CloseIcon'
 import './Buttons.css'
 
-const CloseButton = () => {
+const CloseButton = (props) => {
     return (
-        <div >
+        <div onClick={() => props.selectedCallback()}>
             <CloseIcon />
         </div>
     );

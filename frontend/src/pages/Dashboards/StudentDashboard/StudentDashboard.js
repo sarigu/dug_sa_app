@@ -12,11 +12,12 @@ import StudySessionFeedback from '../../../components/StudySessionFeedback/Study
 
 const StudentDashboard = ({ load_upcoming_booked_study_sessions, upcomingStudySessions, load_study_session }) => {
 
-    const history = useHistory();
     const [showPopup, setShowPopup] = useState(false);
     const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
     const [showFeedback, setShowFeedback] = useState(false);
     const [sessionType, setSessionType] = useState("booked-study-session");
+
+    const history = useHistory();
 
     useEffect(() => {
         load_upcoming_booked_study_sessions();
