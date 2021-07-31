@@ -12,7 +12,6 @@ import StudySessionFeedback from '../../../components/StudySessionFeedback/Study
 import StudySessionEdit from '../../../components/StudySessionEdit/StudySessionEdit';
 
 const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_session, load_study_session, isCancelled, isCreated }) => {
-
     const [showPopup, setShowPopup] = useState(false);
     const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
     const [showFeedback, setShowFeedback] = useState(false);

@@ -10,8 +10,8 @@ const About = () => {
 
     return (
         <div className="about-wrapper">
+            <BackButton buttonWidth={"70px"} selectedCallback={() => history.push("/dashboard")} />
             <div className="content-container">
-                <BackButton buttonWidth={"70px"} selectedCallback={() => history.push("/dashboard")} />
                 <h2 style={{ marginTop: "40px" }}>About</h2>
                 <img src={logo}></img>
                 <p>The youth of "Designers Without Borders South Africa" came up with the idea
