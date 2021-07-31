@@ -6,6 +6,7 @@ import TeacherCard from '../../components/TeacherCard/TeacherCard';
 import NextButton from '../../components/Buttons/NextButton';
 import PrevButton from '../../components/Buttons/PrevButton';
 import TeacherDetails from '../../components/TeacherDetails/TeacherDetails';
+import ApprovalFeedback from '../../components/ApprovalFeedback/ApprovalFeedback';
 import PopUp from '../../components/PopUp/PopUp';
 import { useHistory } from "react-router-dom";
 import { load_teachers, load_teacher_details, load_rejected_teachers } from '../../actions/data';
@@ -18,6 +19,7 @@ const AllTeachers = ({ load_teachers, teachers, load_teacher_details, totalTeach
     const [index, setIndex] = useState(1);
     const [sortByRejected, setSortByRejected] = useState(false);
     const [sortByAll, setSortByAll] = useState(true);
+    const [showFeedback, setShowFeedback] = useState(false);
 
     const history = useHistory();
 
@@ -171,8 +173,9 @@ const AllTeachers = ({ load_teachers, teachers, load_teacher_details, totalTeach
 
             {showPopup ?
                 <PopUp selectedCallback={() => setShowPopup(false)}>
-                    {showDetails ? <TeacherDetails selectedCallback={() => { setShowDetails(false) }} />
-                        : null}
+                    {showDetails ? <TeacherDetails selectedCallback={() => { setShowDetails(false); setShowFeedback(true) }} />
+                        : showFeedback ? <ApprovalFeedback selectedCallback={() => setShowPopup(false)} />
+                            : null}
                 </PopUp>
                 : null
             }

@@ -9,7 +9,7 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 import json
 from django.core.paginator import Paginator
 
-PAGINATION_LIMIT = 1; 
+PAGINATION_LIMIT = 15; 
 
 class TeacherView(viewsets.ModelViewSet):
     permissions_classes=[IsAuthenticated]

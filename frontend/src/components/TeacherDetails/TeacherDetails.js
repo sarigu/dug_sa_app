@@ -62,8 +62,11 @@ const TeacherDetails = ({ teacherData, add_teacher_review, selectedCallback }) =
                                 :
                                 null}
                         </div>
-                        {teacher.is_reviewed ? null :
-                            <button style={{ backgroundColor: "red" }} onClick={handleRejectTeacher}>Reject</button>
+                        {teacher.is_reviewed && teacher.is_approved ?
+                            <button style={{ backgroundColor: "red" }} onClick={handleRejectTeacher}>Remove</button> :
+                            teacher.is_reviewed && !teacher.is_approved ?
+                                <button style={{ backgroundColor: "green" }} onClick={handleApproveTeacher}>Reactivate</button>
+                                : <button style={{ backgroundColor: "red" }} onClick={handleRejectTeacher}>Reject</button>
                         }
                     </div>
                     <div className="info-container">

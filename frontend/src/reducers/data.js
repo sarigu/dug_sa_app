@@ -279,6 +279,7 @@ export default function (state = initialState, action) {
         case ADD_TEACHER_REVIEW_FAIL:
             return {
                 ...state,
+                isReviewed: false,
             }
         default:
             return state
