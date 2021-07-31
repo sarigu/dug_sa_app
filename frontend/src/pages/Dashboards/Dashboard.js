@@ -12,7 +12,6 @@ const Dashboard = ({ userType }) => {
         setIsLoaded(true);
     }, [userType]);
 
-    console.log(userType, "userType")
     return (
         <div className="dashboard-wrapper">
             {isLoaded ?

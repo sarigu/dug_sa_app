@@ -12,7 +12,6 @@ import StudySessionFeedback from '../../../components/StudySessionFeedback/Study
 import StudySessionEdit from '../../../components/StudySessionEdit/StudySessionEdit';
 
 const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_session, load_study_session, isCancelled, isCreated }) => {
-
     const [showPopup, setShowPopup] = useState(false);
     const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
     const [showFeedback, setShowFeedback] = useState(false);
@@ -71,7 +70,7 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
             </section>
             <section className="cards-container">
                 <Card emoji={<span>&#128198;</span>} title={"Schedule"} link="/schedule" />
-                <Card emoji={<span>&#128218;</span>} title={"Study material"} />
+                <Card emoji={<span>&#128218;</span>} title={"Study material"} link="/work-in-progress" />
             </section>
             {showPopup ?
                 <PopUp selectedCallback={() => setShowPopup(false)} >

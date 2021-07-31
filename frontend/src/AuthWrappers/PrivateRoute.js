@@ -15,7 +15,7 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
             isAuthenticated ?
                 <div className="page-wrapper">
                     <Navbar onMenuClick={() => { setOpenMenu(!openMenu); setMenuWasSet(true) }} menuShows={openMenu} />
-                    <Menu menuWasSet={menuWasSet} openMenu={openMenu} />
+                    <Menu menuWasSet={menuWasSet} openMenu={openMenu} selectedCallback={() => setOpenMenu(false)} />
                     <Component {...props} />
                 </div>
                 : <Redirect to='/' />
