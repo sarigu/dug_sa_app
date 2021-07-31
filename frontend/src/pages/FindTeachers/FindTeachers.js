@@ -199,7 +199,7 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
                                     allTeachers.map((teacher, index) =>
                                         <TeacherCard
                                             key={index}
-                                            user={teacher.user}
+                                            user={teacher}
                                             profileImage={teacher.profile_image}
                                             subjects={teacher.subjects}
                                             languages={teacher.languages}
