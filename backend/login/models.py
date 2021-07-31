@@ -76,6 +76,7 @@ class Teacher(models.Model):
     #others
     is_retired = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
+    is_reviewed = models.BooleanField(default=False)
     provided_information = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.user}"

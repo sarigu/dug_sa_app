@@ -38,6 +38,8 @@ import {
     EDIT_STUDY_SESSION_FAIL,
     LOAD_TEACHER_DETAILS_SUCCESS,
     LOAD_TEACHER_DETAILS_FAIL,
+    ADD_TEACHER_REVIEW_SUCCESS,
+    ADD_TEACHER_REVIEW_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -62,7 +64,8 @@ const initialState = {
     totalPreviousStudySessionPages: null,
     isCreated: false,
     isUpdated: false,
-    teacher: undefined
+    teacher: undefined,
+    isReviewed: false,
 };
 
 export default function (state = initialState, action) {
@@ -247,9 +250,19 @@ export default function (state = initialState, action) {
         case LOAD_TEACHER_DETAILS_SUCCESS:
             return {
                 ...state,
-                teacher: payload.teacher,
+                teacher: payload,
             }
         case LOAD_TEACHER_DETAILS_FAIL:
+            return {
+                ...state,
+            }
+
+        case ADD_TEACHER_REVIEW_SUCCESS:
+            return {
+                ...state,
+                isReviewed: true,
+            }
+        case ADD_TEACHER_REVIEW_FAIL:
             return {
                 ...state,
             }
@@ -257,3 +270,4 @@ export default function (state = initialState, action) {
             return state
     }
 };
+

@@ -5,6 +5,7 @@ import '../Dashboard.css';
 import TeacherCard from '../../../components/TeacherCard/TeacherCard';
 import PopUp from '../../../components/PopUp/PopUp';
 import TeacherDetails from '../../../components/TeacherDetails/TeacherDetails';
+import ApprovalFeedback from '../../../components/ApprovalFeedback/ApprovalFeedback';
 import { load_new_teachers, load_teacher_details } from '../../../actions/data';
 
 const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
@@ -13,6 +14,8 @@ const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
     const [index, setIndex] = useState(5);
     const [hideShowMore, setHideShowMore] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
+    const [showDetails, setShowDetails] = useState(false);
+    const [showFeedback, setShowFeedback] = useState(false);
 
     useEffect(() => {
         load_new_teachers().then((res) => {
@@ -44,6 +47,7 @@ const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
         console.log("handleSelectedTeacher---", teacherId)
         load_teacher_details(teacherId);
         setShowPopup(true);
+        setShowDetails(true);
     }
 
     return (
@@ -76,7 +80,9 @@ const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
             </section>
             {showPopup ?
                 <PopUp selectedCallback={() => setShowPopup(false)}>
-                    <TeacherDetails />
+                    {showDetails ? <TeacherDetails selectedCallback={() => { setShowFeedback(true); setShowDetails(false) }} /> :
+                        showFeedback ? <ApprovalFeedback selectedCallback={() => setShowPopup(false)} />
+                            : null}
                 </PopUp>
                 : null
             }

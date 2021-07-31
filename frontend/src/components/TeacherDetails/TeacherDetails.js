@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 import Accordion from '../../components/Accordion/Accordion';
+import { add_teacher_review } from '../../actions/data';
 import './TeacherDetails.css';
 
-const TeacherDetails = ({ teacher }) => {
+const TeacherDetails = ({ teacher, add_teacher_review, selectedCallback }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [formattedDate, setFormattedDate] = useState();
 
@@ -19,6 +20,18 @@ const TeacherDetails = ({ teacher }) => {
         }
     }, [teacher]);
 
+    const handleApproveTeacher = () => {
+        console.log("APPROVE");
+        add_teacher_review(teacher.id, true);
+        selectedCallback();
+    }
+
+    const handleRejectTeacher = () => {
+        console.log("REJECT");
+        add_teacher_review(teacher.id, false);
+        selectedCallback();
+    }
+
     return (
         <div className="teacher-details-container">
             {isLoaded && teacher ?
@@ -29,7 +42,7 @@ const TeacherDetails = ({ teacher }) => {
                             <h3>Proof of address</h3>
                             <div className="address-proof" style={{ backgroundImage: `url( ${"http://localhost:8000" + teacher.proof_of_address})` }}></div>
                         </div>
-                        <button style={{ backgroundColor: "red" }}>Reject</button>
+                        <button style={{ backgroundColor: "red" }} onClick={handleRejectTeacher}>Reject</button>
                     </div>
                     <div className="info-container">
                         <div>
@@ -69,7 +82,7 @@ const TeacherDetails = ({ teacher }) => {
                             </Accordion>
                         </div>
 
-                        <button>Approve</button>
+                        <button onClick={handleApproveTeacher}>Approve</button>
                     </div>
                 </div>
                 : <LoadingIcon />
@@ -78,8 +91,9 @@ const TeacherDetails = ({ teacher }) => {
     );
 };
 
-const mapStateToProps = state => ({
-    teacher: state.data.teacher
+const mapStateToProps = (state, props) => ({
+    teacher: state.data.teacher,
+    selectedCallback: props.selectedCallback
 });
 
-export default connect(mapStateToProps, null)(TeacherDetails);
+export default connect(mapStateToProps, { add_teacher_review })(TeacherDetails);

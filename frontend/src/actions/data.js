@@ -39,6 +39,8 @@ import {
     EDIT_STUDY_SESSION_FAIL,
     LOAD_TEACHER_DETAILS_SUCCESS,
     LOAD_TEACHER_DETAILS_FAIL,
+    ADD_TEACHER_REVIEW_SUCCESS,
+    ADD_TEACHER_REVIEW_FAIL,
 } from './types';
 
 
@@ -91,6 +93,32 @@ export const load_teacher_details = (teacherId) => async dispatch => {
 };
 
 
+export const add_teacher_review = (teacherId, isApproved) => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+            }
+        };
+
+        try {
+            const body = JSON.stringify({ isApproved });
+            console.log("BIDY", body)
+            const res = await axios.patch(`http://localhost:8000/api/teacher/${teacherId}/`, body, config);
+            dispatch({
+                type: ADD_TEACHER_REVIEW_SUCCESS,
+            });
+
+        } catch (err) {
+            dispatch({
+                type: ADD_TEACHER_REVIEW_FAIL
+            });
+        }
+    }
+};
+
+
+
 export const load_new_teachers = () => async dispatch => {
     if (localStorage.getItem('access')) {
         const config = {
@@ -102,8 +130,7 @@ export const load_new_teachers = () => async dispatch => {
         };
 
         try {
-            let res = await axios.get('http://localhost:8000/api/new_teachers/', config);
-
+            let res = await axios.get('http://localhost:8000/api/new/teachers/', config);
             dispatch({
                 type: NEW_TEACHERS_LOADED_SUCCESS,
             });

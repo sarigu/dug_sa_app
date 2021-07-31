@@ -86,7 +86,7 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
     );
 };
 
-const mapStateToProps = state => (console.log("stw", state.data), {
+const mapStateToProps = state => ({
     user: state.auth.user,
     upcomingStudySessions: state.data.upcomingStudySessions,
     isCancelled: state.data.isCancelled,

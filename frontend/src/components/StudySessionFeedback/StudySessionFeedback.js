@@ -70,7 +70,7 @@ const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, u
 
     useEffect(() => {
         setIsLoaded(true);
-    }, [isBooked, participationIsDeleted]);
+    }, [isBooked, participationIsDeleted, isCreated, isUpdated]);
 
     return (
         <div className="feedback-container" >
@@ -108,8 +108,6 @@ const StudySessionFeedback = ({ isBooked, participationIsDeleted, sessionType, u
 };
 
 
-
-
 const mapStateToProps = (state, props) => ({
     userType: state.auth.userType,
     isBooked: state.data.isBooked,
@@ -121,4 +119,4 @@ const mapStateToProps = (state, props) => ({
     isUpdated: state.data.isUpdated
 });
 
-export default connect(mapStateToProps, {})(StudySessionFeedback);
+export default connect(mapStateToProps, null)(StudySessionFeedback);

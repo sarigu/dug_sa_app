@@ -22,19 +22,42 @@ class TeacherView(viewsets.ModelViewSet):
             if request.user.role == "staff" or request.user.role == "teacher":
                 teacher = Teacher.objects.get(pk = teacher_id)
                 serializer = TeacherSerializer(teacher)
-                response_data = {"teacher": serializer.data}
+                return Response(serializer.data)
             else:
                 raise ValueError('Already class')
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response(response_data)
+        return Response()
+
+    def partial_update(self, request, **kwargs):
+        teacher_id =  self.kwargs['pk'] 
+        print("partial update", teacher_id)
+        try:
+            if request.user.role == "staff":
+                teacher = Teacher.objects.get(pk = teacher_id)
+                data = json.loads(request.body)    
+                print("data", data, "teacher", teacher)
+                if data["isApproved"] == True:
+                    teacher.is_approved = True
+                    teacher.is_reviewed = True
+                    teacher.save()
+                elif data["isApproved"] == False:
+                    teacher.is_approved = False
+                    teacher.is_reviewed = True
+                    teacher.save()
+            else:
+                raise ValueError('No access right')
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response({"status": "ok"})
+    
 
 
 class NewTeachersView(ListAPIView):
     permissions_classes=[IsAuthenticated]
     serializer_class = TeacherShortVersionSerializer
     def get_queryset(self):
-        all_new_teachers = Teacher.objects.filter(provided_information=True).filter(is_approved=False)
+        all_new_teachers = Teacher.objects.filter(provided_information=True).filter(is_approved=False).filter(is_reviewed=False)
         return all_new_teachers
   
 class SubjectView(viewsets.ModelViewSet):
