@@ -32,7 +32,7 @@ class TeacherShortVersionSerializer(serializers.ModelSerializer):
     user = UserShortVersionSerializer()
     class Meta:
         model = Teacher
-        fields = ('user', 'profile_image', 'is_approved', 'provided_information')
+        fields = ('user', 'profile_image', 'is_approved', 'provided_information', 'is_reviewed')
       
     def to_representation(self, instance):
         data = super(TeacherShortVersionSerializer, self).to_representation(instance)
@@ -87,3 +87,4 @@ class BookmarkedTeachersSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookmarkedTeacher
         fields = '__all__'
+

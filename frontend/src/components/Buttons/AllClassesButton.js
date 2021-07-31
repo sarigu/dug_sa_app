@@ -4,7 +4,7 @@ import './Buttons.css'
 
 const AllClassesButton = (props) => {
     return (
-        <div className="inline-button" style={{ width: props.buttonWidth }}>
+        <div className="inline-button" style={{ width: props.buttonWidth }} onClick={() => props.selectedCallback()}>
             <p>All classes</p>
             <ArrowRight />
         </div>

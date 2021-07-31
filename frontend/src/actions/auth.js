@@ -32,14 +32,20 @@ export const load_user = () => async dispatch => {
 
         try {
             let res = await axios.get('http://localhost:8000/auth/users/me/', config);
-
+            console.log("1", res.data)
             if (res.data.role === "teacher") {
-                res = await axios.get(`http://localhost:8000/api/teachers/${res.data.id}/`, config);
+                res = await axios.get(`http://localhost:8000/api/teacher/${res.data.id}/`, config);
+                dispatch({
+                    type: USER_LOADED_SUCCESS,
+                    payload: res.data.teacher,
+                });
+            } else {
+                dispatch({
+                    type: USER_LOADED_SUCCESS,
+                    payload: res.data,
+                });
             }
-            dispatch({
-                type: USER_LOADED_SUCCESS,
-                payload: res.data,
-            });
+
         } catch (err) {
             dispatch({
                 type: USER_LOADED_FAIL
@@ -82,8 +88,6 @@ export const login = (email, password) => async dispatch => {
             payload: res.data
         });
 
-        console.log("after login success dispatch laod user")
-
         dispatch(load_user());
     } catch (err) {
         dispatch({
@@ -107,8 +111,6 @@ export const signup = (first_name, last_name, email, access_code, password, re_p
             type: SIGNUP_SUCCESS,
             payload: res.data,
         });
-
-        console.log("after sign up success dispatch laod user", res.data)
 
         dispatch(login(email, password));
 
@@ -169,7 +171,7 @@ export const logout = () => dispatch => {
     });
 };
 
-export const update_teacher = (userID, degree, university, year_of_graduation, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, provided_information, selectedSubjects, selectedLanguages) => async dispatch => {
+export const update_teacher = (userID, degree, university, year_of_graduation, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, selectedSubjects, selectedLanguages) => async dispatch => {
     const config = {
         headers: {
             'Authorization': `JWT ${localStorage.getItem('access')}`,
@@ -177,43 +179,14 @@ export const update_teacher = (userID, degree, university, year_of_graduation, l
     };
 
     //format date because Django expects YYYY-MM-DD
-    let [day, month, year] = year_of_graduation.split('/');
+    let [day, month, year] = year_of_graduation.split('.');
     const formattedDate = year + "-" + month + "-" + day;
 
-    const formData = new FormData();
-    formData.append("degree", degree);
-    formData.append("university", university);
-    formData.append("year_of_graduation", formattedDate);
-    formData.append("last_position", last_position);
-    formData.append("last_workplace", last_school);
-
-    formData.append("years_of_experience", years_of_experience);
-    formData.append("street", street);
-    formData.append("postal_code", postal_code);
-    formData.append("city", city);
-    formData.append("proof_of_address", proof_of_address);
-    formData.append("profile_image", profile_image);
-    formData.append("phone", phone_number);
-    formData.append("provided_information", provided_information);
-
     try {
-        const res = await axios.patch(`http://localhost:8000/api/teachers/${userID}/`, formData, config);
-        if (res.status === 200) {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `JWT ${localStorage.getItem('access')}`,
-                    'Accept': 'application/json'
-                }
-            };
+        const body = JSON.stringify({ 'userID': userID, 'degree': degree, 'university': university, 'year_of_graduation': formattedDate, 'last_position': last_position, 'last_school': last_school, 'years_of_experience': years_of_experience, 'street': street, 'postal_code': postal_code, 'city': city, 'proof_of_address': proof_of_address, 'profile_image': profile_image, 'phone_number': phone_number, 'selectedSubjects': selectedSubjects, 'selectedLanguages': selectedLanguages });
+        console.log("body--", body)
+        const res = await axios.put(`http://localhost:8000/api/teacher/${userID}/`, body, config);
 
-            const subjects = JSON.stringify({ subjects: selectedSubjects });
-            const languages = JSON.stringify({ languages: selectedLanguages });
-
-            axios.post('http://localhost:8000/api/subjects_to_teach/', subjects, config);
-            axios.post('http://localhost:8000/api/languages_to_teach_in/', languages, config);
-
-        }
         dispatch({
             type: TEACHER_UPDATE_SUCCESS,
             payload: res.data,

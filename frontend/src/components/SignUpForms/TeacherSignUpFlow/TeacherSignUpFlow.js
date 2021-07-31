@@ -62,7 +62,7 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
     const handleSubmit = () => {
         const dataIsChecked = checkData();
         if (dataIsChecked) {
-            update_teacher(user.id, degree, university, graduationDate, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, true, selectedSubjects, selectedLanguages);
+            update_teacher(user.id, degree, university, graduationDate, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, selectedSubjects, selectedLanguages);
         }
     }
 
@@ -183,9 +183,7 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
         let allLanguages = selectedLanguages;
 
         let optionId = e.target.getAttribute("data-id");
-        console.log(optionId, "optionId")
         let optionType = e.target.getAttribute("data-type");
-        console.log(optionType, "optionType")
         if (optionType === "subject") {
             setSubjectsError(false);
         } else {
@@ -194,7 +192,6 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
         let optionCards = document.querySelectorAll(`[data-type="${optionType}"]`)
         let card;
         optionCards.forEach((elem) => { console.log(elem.dataset.id); if (elem.dataset.id == optionId) { card = elem } })
-        console.log(card, "--optionCard")
         if (card.classList.contains("active-card")) {
             if (optionType === "subject") {
                 card.classList.remove("active-card");
@@ -221,9 +218,6 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
                 allLanguages.push(optionId);
             }
         }
-
-        console.log("HANDLE", "sub", allSubjects, "lang", allLanguages)
-
         setSelectedSubjects(allSubjects);
         setSelectedLanguages(allLanguages);
     }
@@ -269,9 +263,9 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
                                 handleChange(e);
                                 let changedGraduationDate = e.target.value;
                                 changedGraduationDate = changedGraduationDate
-                                    .replace(/^(\d\d)(\d)$/g, "$1/$2")
-                                    .replace(/^(\d\d\/\d\d)(\d+)$/g, "$1/$2")
-                                    .replace(/[^\d\/]/g, "");
+                                    .replace(/^(\d\d)(\d)$/g, "$1.$2")
+                                    .replace(/^(\d\d\.\d\d)(\d+)$/g, "$1.$2")
+                                    .replace(/[^\d\.]/g, "");
                                 setGraduationDate(changedGraduationDate);
                             }}
                         />
@@ -322,6 +316,12 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
                         <h3>Languages you would <br></br>want to teach in</h3>
                         <div className="scroll-container">{languageList}</div>
 
+                    </div>
+                </CarouselItem>
+                <CarouselItem>
+                    <div>
+                        <h3>Location you will be teaching at</h3>
+                        <p>DUG facility</p>
                     </div>
                 </CarouselItem>
                 <CarouselItem>

@@ -16,7 +16,7 @@ import {
     TEACHER_UPDATE_FAIL,
     SELECTED_ROLE,
     SUBJECTS_LOADED_SUCCESS,
-    LANGUAGES_LOADED_SUCCESS
+    LANGUAGES_LOADED_SUCCESS,
 } from '../actions/types';
 
 const initialState = {
@@ -60,6 +60,7 @@ export default function (state = initialState, action) {
                 signUpStatus: "success",
             }
         case USER_LOADED_SUCCESS:
+            console.log("reducer", payload)
             return {
                 ...state,
                 user: payload,
