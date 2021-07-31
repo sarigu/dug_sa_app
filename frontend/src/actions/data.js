@@ -41,6 +41,8 @@ import {
     LOAD_TEACHER_DETAILS_FAIL,
     ADD_TEACHER_REVIEW_SUCCESS,
     ADD_TEACHER_REVIEW_FAIL,
+    LOAD_REJECTED_TEACHERS_SUCCESS,
+    LOAD_REJECTED_TEACHERS_FAIL,
 } from './types';
 
 
@@ -55,7 +57,7 @@ export const load_teachers = (index) => async dispatch => {
         };
 
         try {
-            let res = await axios.get(`http://localhost:8000/api/find/teachers/?page=${index}`, config);
+            let res = await axios.get(`http://localhost:8000/api/teachers/?page=${index}`, config);
             console.log("laoded teacehrs", res)
             dispatch({
                 type: TEACHERS_LOADED_SUCCESS,
@@ -64,6 +66,32 @@ export const load_teachers = (index) => async dispatch => {
         } catch (err) {
             dispatch({
                 type: TEACHERS_LOADED_FAIL
+            });
+        }
+    }
+};
+
+
+export const load_rejected_teachers = (index) => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            let res = await axios.get(`http://localhost:8000/api/rejected/teachers/?page=${index}`, config);
+            console.log("laoded rejected teacehrs", res.data)
+            dispatch({
+                type: LOAD_REJECTED_TEACHERS_SUCCESS,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: LOAD_REJECTED_TEACHERS_FAIL
             });
         }
     }

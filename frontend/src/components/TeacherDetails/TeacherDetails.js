@@ -49,9 +49,9 @@ const TeacherDetails = ({ teacherData, add_teacher_review, selectedCallback }) =
                 <div className="details-wrapper">
                     <div className="image-container">
                         <div>
-                            {teacher.is_reviewed ?
+                            {teacher.is_reviewed && teacher.is_approved ?
                                 <h2 style={{ margin: " 0 0 30px 0" }}>Teacher Details</h2>
-                                : null
+                                : <h2 style={{ margin: " 0 0 30px 0" }}>(Rejected) Teacher Details</h2>
                             }
                             <div className="profile-image" style={{ backgroundImage: `url(${"http://localhost:8000" + teacher.profile_image})` }}></div>
                             {!teacher.is_reviewed ?

@@ -52,7 +52,8 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
     useEffect(() => {
         if (sortByBookmarks) {
             setIsLoaded(false)
-            load_bookmarked_teachers();
+            setIndex(1)
+            load_bookmarked_teachers(1);
         }
     }, [sortByBookmarks]);
 
