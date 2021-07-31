@@ -36,14 +36,22 @@ import {
     CREATE_STUDY_SESSION_FAIL,
     EDIT_STUDY_SESSION_SUCCESS,
     EDIT_STUDY_SESSION_FAIL,
+    LOAD_TEACHER_DETAILS_SUCCESS,
+    LOAD_TEACHER_DETAILS_FAIL,
+    ADD_TEACHER_REVIEW_SUCCESS,
+    ADD_TEACHER_REVIEW_FAIL,
+    LOAD_REJECTED_TEACHERS_SUCCESS,
+    LOAD_REJECTED_TEACHERS_FAIL,
 } from '../actions/types';
 
 const initialState = {
     teachers: [],
     newTeachers: [],
+    rejectedTeachers: [],
     bookmarkedTeachers: [],
     bookmarksUpdated: false,
     totalTeacherPages: null,
+    totalRejectedTeacherPages: null,
     filteredTeachers: [],
     totalFilterPages: null,
     studySessions: [],
@@ -60,6 +68,8 @@ const initialState = {
     totalPreviousStudySessionPages: null,
     isCreated: false,
     isUpdated: false,
+    teacher: undefined,
+    isReviewed: false,
 };
 
 export default function (state = initialState, action) {
@@ -82,6 +92,16 @@ export default function (state = initialState, action) {
                 newTeachers: payload
             }
         case NEW_TEACHERS_LOADED_FAIL:
+            return {
+                ...state,
+            }
+        case LOAD_REJECTED_TEACHERS_SUCCESS:
+            return {
+                ...state,
+                rejectedTeachers: payload.data.length > 0 ? payload.data : state.rejectedTeachers,
+                totalRejectedTeacherPages: payload.total_pages
+            }
+        case LOAD_REJECTED_TEACHERS_FAIL:
             return {
                 ...state,
             }
@@ -241,7 +261,28 @@ export default function (state = initialState, action) {
             return {
                 ...state,
             }
+        case LOAD_TEACHER_DETAILS_SUCCESS:
+            return {
+                ...state,
+                teacher: payload,
+            }
+        case LOAD_TEACHER_DETAILS_FAIL:
+            return {
+                ...state,
+            }
+
+        case ADD_TEACHER_REVIEW_SUCCESS:
+            return {
+                ...state,
+                isReviewed: true,
+            }
+        case ADD_TEACHER_REVIEW_FAIL:
+            return {
+                ...state,
+                isReviewed: false,
+            }
         default:
             return state
     }
 };
+

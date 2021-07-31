@@ -37,6 +37,12 @@ import {
     CREATE_STUDY_SESSION_FAIL,
     EDIT_STUDY_SESSION_SUCCESS,
     EDIT_STUDY_SESSION_FAIL,
+    LOAD_TEACHER_DETAILS_SUCCESS,
+    LOAD_TEACHER_DETAILS_FAIL,
+    ADD_TEACHER_REVIEW_SUCCESS,
+    ADD_TEACHER_REVIEW_FAIL,
+    LOAD_REJECTED_TEACHERS_SUCCESS,
+    LOAD_REJECTED_TEACHERS_FAIL,
 } from './types';
 
 
@@ -51,7 +57,7 @@ export const load_teachers = (index) => async dispatch => {
         };
 
         try {
-            let res = await axios.get(`http://localhost:8000/api/find/teachers/?page=${index}`, config);
+            let res = await axios.get(`http://localhost:8000/api/teachers/?page=${index}`, config);
             dispatch({
                 type: TEACHERS_LOADED_SUCCESS,
                 payload: res.data
@@ -65,6 +71,80 @@ export const load_teachers = (index) => async dispatch => {
 };
 
 
+export const load_rejected_teachers = (index) => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            let res = await axios.get(`http://localhost:8000/api/rejected/teachers/?page=${index}`, config);
+            dispatch({
+                type: LOAD_REJECTED_TEACHERS_SUCCESS,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: LOAD_REJECTED_TEACHERS_FAIL
+            });
+        }
+    }
+};
+
+export const load_teacher_details = (teacherId) => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            let res = await axios.get(`http://localhost:8000/api/teacher/${teacherId}/`, config);
+            dispatch({
+                type: LOAD_TEACHER_DETAILS_SUCCESS,
+                payload: res.data
+            });
+        } catch (err) {
+            dispatch({
+                type: LOAD_TEACHER_DETAILS_FAIL
+            });
+        }
+    }
+};
+
+
+export const add_teacher_review = (teacherId, isApproved) => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+            }
+        };
+
+        try {
+            const body = JSON.stringify({ isApproved });
+            const res = await axios.patch(`http://localhost:8000/api/teacher/${teacherId}/`, body, config);
+            dispatch({
+                type: ADD_TEACHER_REVIEW_SUCCESS,
+            });
+
+        } catch (err) {
+            dispatch({
+                type: ADD_TEACHER_REVIEW_FAIL
+            });
+        }
+    }
+};
+
+
+
 export const load_new_teachers = () => async dispatch => {
     if (localStorage.getItem('access')) {
         const config = {
@@ -76,8 +156,7 @@ export const load_new_teachers = () => async dispatch => {
         };
 
         try {
-            let res = await axios.get('http://localhost:8000/api/new_teachers/', config);
-
+            let res = await axios.get('http://localhost:8000/api/new/teachers/', config);
             dispatch({
                 type: NEW_TEACHERS_LOADED_SUCCESS,
             });
@@ -103,7 +182,6 @@ export const load_bookmarked_teachers = () => async dispatch => {
 
         try {
             let res = await axios.get('http://localhost:8000/api/bookmarked/teachers/', config);
-
             dispatch({
                 type: BOOKMARKED_TEACHERS_LOADED_SUCCESS,
                 payload: res.data

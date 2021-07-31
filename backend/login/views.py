@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status
-from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer, FindTeacherSerializer, BookmarkedTeachersSerializer, LanguageSerializer
+from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer, FindTeacherSerializer, BookmarkedTeachersSerializer, LanguageSerializer, TeachingFacilitySerializer
 from .models import Teacher, CustomUser, Subject, Teacher_Subject, Teacher_Language, Language, BookmarkedTeacher,TeachingFacility, Teacher_TeachingFacility
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
@@ -16,11 +16,66 @@ class TeacherView(viewsets.ModelViewSet):
     serializer_class = TeacherSerializer
     queryset = Teacher.objects.all()
 
+    def retrieve(self, request, *args, **kwargs):
+        teacher_id =  self.kwargs['pk'] 
+        try:
+            if request.user.role == "staff" or request.user.role == "teacher":
+                teacher = Teacher.objects.get(pk = teacher_id)
+                teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
+                teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
+                teachers_facilities = Teacher_TeachingFacility.objects.filter(teacher=teacher)
+                subjects = []
+                languages = []
+                teaching_facilities = []
+                for elem in teachers_subjects:
+                    subjectData = Subject.objects.get(pk=elem.subject.pk)
+                    subjects.append(subjectData)
+                for elem in teachers_languages:
+                    languageData = Language.objects.get(pk=elem.language.pk)
+                    languages.append(languageData)
+                for elem in teachers_facilities:
+                    facilityData = TeachingFacility.objects.get(pk=elem.teaching_facility.pk)
+                    teaching_facilities.append(facilityData)
+                teacher_serializer =  TeacherSerializer(teacher)
+                subject_serializer =  SubjectSerializer(subjects, many=True)
+                langauge_serializer =  LanguageSerializer(languages, many=True)
+                facilities_serializer = TeachingFacilitySerializer(teaching_facilities, many=True)
+                data = {'teacher': teacher_serializer.data, 'subjects': subject_serializer.data, 'languages': langauge_serializer.data, 'facilities':facilities_serializer.data }
+     
+                return Response(data)
+            else:
+                raise ValueError('No access')
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response()
+
+    def partial_update(self, request, **kwargs):
+        teacher_id =  self.kwargs['pk'] 
+        try:
+            if request.user.role == "staff":
+                teacher = Teacher.objects.get(pk = teacher_id)
+                data = json.loads(request.body)    
+                if data["isApproved"] == True:
+                    teacher.is_approved = True
+                    teacher.is_reviewed = True
+                    teacher.save()
+                elif data["isApproved"] == False:
+                    teacher.is_approved = False
+                    teacher.is_reviewed = True
+                    teacher.save()
+            else:
+                raise ValueError('No access right')
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response({"status": "ok"})
+    
+
+
 class NewTeachersView(ListAPIView):
     permissions_classes=[IsAuthenticated]
     serializer_class = TeacherShortVersionSerializer
     def get_queryset(self):
-        all_new_teachers = Teacher.objects.filter(provided_information=True).filter(is_approved=False)
+        all_new_teachers = Teacher.objects.filter(provided_information=True).filter(is_approved=False).filter(is_reviewed=False)
         return all_new_teachers
   
 class SubjectView(viewsets.ModelViewSet):
@@ -53,46 +108,61 @@ class TeacherSubjectView(viewsets.ViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response({'status': 'ok'})
 
-class FindTeachersView(viewsets.ViewSet):
+class TeachersView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]
     def list(self, request):
         try:
-            all_teachers = []
-            teachers = Teacher.objects.filter(is_approved=True)
-            for teacher in teachers:
-                teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
-                teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
-                teachers_facilities = Teacher_TeachingFacility.objects.filter(teacher=teacher)
-                subjects = []
-                languages = []
-                teaching_facilities = []
-                for elem in teachers_subjects:
-                    subjectData = Subject.objects.get(pk=elem.subject.pk)
-                    subjects.append(subjectData)
-                for elem in teachers_languages:
-                    languageData = Language.objects.get(pk=elem.language.pk)
-                    languages.append(languageData)
-                for elem in teachers_facilities:
-                    facilityData = TeachingFacility.objects.get(pk=elem.teaching_facility.pk)
-                    teaching_facilities.append(facilityData)
-                
-                bookmark = BookmarkedTeacher.objects.filter(user=self.request.user).filter(teacher=teacher)
-                isBookmarked = False
-                if(bookmark):
-                    isBookmarked = True
+            if request.user.role == "student": 
+                all_teachers = []
+                teachers = Teacher.objects.filter(is_approved=True).filter(is_reviewed=True)
+                for teacher in teachers:
+                    teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
+                    teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
+                    teachers_facilities = Teacher_TeachingFacility.objects.filter(teacher=teacher)
+                    subjects = []
+                    languages = []
+                    teaching_facilities = []
+                    for elem in teachers_subjects:
+                        subjectData = Subject.objects.get(pk=elem.subject.pk)
+                        subjects.append(subjectData)
+                    for elem in teachers_languages:
+                        languageData = Language.objects.get(pk=elem.language.pk)
+                        languages.append(languageData)
+                    for elem in teachers_facilities:
+                        facilityData = TeachingFacility.objects.get(pk=elem.teaching_facility.pk)
+                        teaching_facilities.append(facilityData)
+                    
+                    if request.user.role == "student":
+                        bookmark = BookmarkedTeacher.objects.filter(user=self.request.user).filter(teacher=teacher)
+                        isBookmarked = False
+                        if(bookmark):
+                            isBookmarked = True
+                        data = {'user': teacher.user, 'facilities': teaching_facilities, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
+                        all_teachers.append(data)
+                paginator = Paginator(all_teachers, PAGINATION_LIMIT) 
+                page_number = self.request.GET.get('page')
+                total_pages = paginator.num_pages
 
-                data = {'user': teacher.user, 'facilities': teaching_facilities, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
-                all_teachers.append(data)
+                if int(page_number) <= total_pages:
+                    page_obj = paginator.get_page(page_number)    
+                    serializer = FindTeacherSerializer(page_obj, many=True)
+                    return Response({'total_pages': total_pages, 'data': serializer.data})
 
-            paginator = Paginator(all_teachers, PAGINATION_LIMIT) 
-            page_number = self.request.GET.get('page')
-            total_pages = paginator.num_pages
+            elif request.user.role == "staff": 
+                teachers = Teacher.objects.filter(is_approved=True).filter(is_reviewed=True)
+            
+                if len(teachers) > 0: 
+                    paginator = Paginator(teachers, PAGINATION_LIMIT) 
+                    page_number = self.request.GET.get('page')
+                    total_pages = paginator.num_pages
 
-            if int(page_number) <= total_pages:
-                page_obj = paginator.get_page(page_number)  
-                print(page_obj)     
-                serializer = FindTeacherSerializer(page_obj, many=True)
-                return Response({'total_pages': total_pages, 'data': serializer.data})
+                    if int(page_number) <= total_pages:
+                        page_obj = paginator.get_page(page_number) 
+                        serializer = TeacherSerializer(page_obj, many=True)   
+                        return Response({'total_pages': total_pages, 'data': serializer.data})
+            else: 
+                raise ValueError('No access')
+    
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response([])
@@ -226,14 +296,13 @@ class FilterTeachersView(viewsets.ViewSet):
                     data = {'user': teacher.user, 'facilities': teaching_facilities, 'profile_image': teacher.profile_image, 'subjects':subjects , 'languages': languages, 'isBookmarked': isBookmarked, 'experience': teacher.years_of_experience}
                     all_teachers.append(data)
 
-            if(all_teachers): 
+            if len(all_teachers) > 0: 
                 paginator = Paginator(all_teachers, PAGINATION_LIMIT) 
                 page_number = self.request.GET.get('page')
                 total_pages = paginator.num_pages
 
                 if int(page_number) <= total_pages:
                     page_obj = paginator.get_page(page_number)     
-                    print(page_obj)      
                     serializer = FindTeacherSerializer(page_obj, many=True)
                     return Response({'total_pages': total_pages, 'data': serializer.data})
         except Exception as e:
@@ -241,4 +310,25 @@ class FilterTeachersView(viewsets.ViewSet):
 
         return Response([])
        
+class RejectedTeachersView(viewsets.ViewSet):
+    permissions_classes=[IsAuthenticated]
+    def list(self, request):
+        try:
+            if request.user.role == "staff":
+                teachers = Teacher.objects.filter(is_approved=False).filter(is_reviewed=True)
+            
+                if len(teachers) > 0: 
+                    paginator = Paginator(teachers, PAGINATION_LIMIT) 
+                    page_number = self.request.GET.get('page')
+                    total_pages = paginator.num_pages
+
+                    if int(page_number) <= total_pages:
+                        page_obj = paginator.get_page(page_number) 
+                        serializer = TeacherSerializer(page_obj, many=True)   
+                        return Response({'total_pages': total_pages, 'data': serializer.data})
+            else: 
+                raise ValueError('No access')
        
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response([])

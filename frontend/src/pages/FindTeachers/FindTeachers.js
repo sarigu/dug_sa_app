@@ -52,7 +52,8 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
     useEffect(() => {
         if (sortByBookmarks) {
             setIsLoaded(false)
-            load_bookmarked_teachers();
+            setIndex(1)
+            load_bookmarked_teachers(1);
         }
     }, [sortByBookmarks]);
 
@@ -140,14 +141,12 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
     }
 
     const handleSelectedTeacher = (teacherId) => {
-        console.log("hello", teacherId)
         load_study_sessions(teacherId)
         setShowSchedule(true);
         setShowPopup(true);
     }
 
     const handleSelectedStudySession = (studySessionId, sessionType) => {
-        console.log("I HANDLE", studySessionId, sessionType);
         load_study_session(studySessionId);
         setSessionType(sessionType);
         setShowSchedule(false);
@@ -200,7 +199,7 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
                                     allTeachers.map((teacher, index) =>
                                         <TeacherCard
                                             key={index}
-                                            user={teacher.user}
+                                            user={teacher}
                                             profileImage={teacher.profile_image}
                                             subjects={teacher.subjects}
                                             languages={teacher.languages}
@@ -261,7 +260,6 @@ const mapStateToProps = state => ({
     subjects: state.auth.subjects,
     totalTeacherPages: state.data.totalTeacherPages,
     bookmarkedTeachers: state.data.bookmarkedTeachers,
-    totalTeacherPages: state.data.totalTeacherPages,
     filteredTeachers: state.data.filteredTeachers,
     totalFilterPages: state.data.totalFilterPages
 });

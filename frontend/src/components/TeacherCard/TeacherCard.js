@@ -30,7 +30,7 @@ const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages,
     return (
         <div>
             <div> {view === "overview" ?
-                <div className="teacher-card small" >
+                <div className="teacher-card small" onClick={() => selectedCallback(user.id)}>
                     <div className="teacher-information-container small-container">
                         <div className="teacher-image" style={{ backgroundImage: `url(${backgroundImage})` }}></div>
                         <div className="teacher-details">
@@ -85,9 +85,6 @@ const TeacherCard = ({ create_bookmark, user, profileImage, subjects, languages,
                             </div>
                         </div>
                     }
-
-
-
                 </>
 
             }
