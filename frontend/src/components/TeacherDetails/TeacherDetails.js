@@ -17,7 +17,6 @@ const TeacherDetails = ({ teacherData, add_teacher_review, selectedCallback }) =
 
     useEffect(() => {
         if (teacherData) {
-            console.log("teacherData", teacherData.teacher)
             setIsLoaded(true);
             setSubjects(teacherData.subjects)
             setLanguages(teacherData.languages)
@@ -32,13 +31,11 @@ const TeacherDetails = ({ teacherData, add_teacher_review, selectedCallback }) =
     }, [teacherData]);
 
     const handleApproveTeacher = () => {
-        console.log("APPROVE");
         add_teacher_review(teacher.id, true);
         selectedCallback();
     }
 
     const handleRejectTeacher = () => {
-        console.log("REJECT");
         add_teacher_review(teacher.id, false);
         selectedCallback();
     }

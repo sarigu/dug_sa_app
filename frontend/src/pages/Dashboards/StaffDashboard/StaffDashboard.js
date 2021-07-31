@@ -44,7 +44,6 @@ const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
     }
 
     const handleSelectedTeacher = (teacherId) => {
-        console.log("handleSelectedTeacher---", teacherId)
         load_teacher_details(teacherId);
         setShowPopup(true);
         setShowDetails(true);

@@ -21,7 +21,6 @@ class TeacherView(viewsets.ModelViewSet):
         try:
             if request.user.role == "staff" or request.user.role == "teacher":
                 teacher = Teacher.objects.get(pk = teacher_id)
-                print("TEAHCER", teacher)
                 teachers_subjects = Teacher_Subject.objects.filter(teacher=teacher)
                 teachers_languages = Teacher_Language.objects.filter(teacher=teacher)
                 teachers_facilities = Teacher_TeachingFacility.objects.filter(teacher=teacher)
@@ -47,18 +46,15 @@ class TeacherView(viewsets.ModelViewSet):
             else:
                 raise ValueError('No access')
         except Exception as e:
-            print("ERR", e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response()
 
     def partial_update(self, request, **kwargs):
         teacher_id =  self.kwargs['pk'] 
-        print("partial update", teacher_id)
         try:
             if request.user.role == "staff":
                 teacher = Teacher.objects.get(pk = teacher_id)
                 data = json.loads(request.body)    
-                print("data", data, "teacher", teacher)
                 if data["isApproved"] == True:
                     teacher.is_approved = True
                     teacher.is_reviewed = True
@@ -115,7 +111,6 @@ class TeacherSubjectView(viewsets.ViewSet):
 class TeachersView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]
     def list(self, request):
-        print("in find", request.user)
         try:
             if request.user.role == "student": 
                 all_teachers = []
@@ -318,7 +313,6 @@ class FilterTeachersView(viewsets.ViewSet):
 class RejectedTeachersView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]
     def list(self, request):
-        print("rejected", request.user)
         try:
             if request.user.role == "staff":
                 teachers = Teacher.objects.filter(is_approved=False).filter(is_reviewed=True)
@@ -336,6 +330,5 @@ class RejectedTeachersView(viewsets.ViewSet):
                 raise ValueError('No access')
        
         except Exception as e:
-            print("Err", e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response([])

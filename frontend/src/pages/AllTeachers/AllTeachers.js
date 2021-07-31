@@ -31,12 +31,10 @@ const AllTeachers = ({ load_teachers, teachers, load_teacher_details, totalTeach
         if (sortByAll) {
             setIsLoaded(true);
         }
-        console.log("in use effect", teachers)
     }, [teachers]);
 
 
     useEffect(() => {
-        console.log("REJECTED", rejectedTeachers)
         if (sortByRejected) {
             setIsLoaded(true)
         }
@@ -59,7 +57,6 @@ const AllTeachers = ({ load_teachers, teachers, load_teacher_details, totalTeach
     }, [sortByRejected]);
 
     const handleSelectedTeacher = (teacherId) => {
-        console.log(teacherId, "ID TEAHCER")
         load_teacher_details(teacherId);
         setShowPopup(true);
         setShowDetails(true);
@@ -108,7 +105,6 @@ const AllTeachers = ({ load_teachers, teachers, load_teacher_details, totalTeach
                     <div className={sortByAll ? "active" : null} onClick={() => { setSortByAll(true); setSortByRejected(false) }} >All</div>
                     <div className={sortByRejected ? "active" : null} onClick={() => { setSortByAll(false); setSortByRejected(true) }}>Rejected</div>
                 </div>
-
                 {!isLoaded ? <LoadingIcon /> :
                     <div>
                         {sortByAll ?
@@ -144,8 +140,6 @@ const AllTeachers = ({ load_teachers, teachers, load_teacher_details, totalTeach
                         }
                     </div>
                 }
-
-
                 <div className="bottom-navigation">
                     {sortByAll && teachers && teachers.length > 0 ?
                         <>

@@ -58,7 +58,6 @@ export const load_teachers = (index) => async dispatch => {
 
         try {
             let res = await axios.get(`http://localhost:8000/api/teachers/?page=${index}`, config);
-            console.log("laoded teacehrs", res)
             dispatch({
                 type: TEACHERS_LOADED_SUCCESS,
                 payload: res.data
@@ -84,7 +83,6 @@ export const load_rejected_teachers = (index) => async dispatch => {
 
         try {
             let res = await axios.get(`http://localhost:8000/api/rejected/teachers/?page=${index}`, config);
-            console.log("laoded rejected teacehrs", res.data)
             dispatch({
                 type: LOAD_REJECTED_TEACHERS_SUCCESS,
                 payload: res.data
@@ -109,7 +107,6 @@ export const load_teacher_details = (teacherId) => async dispatch => {
 
         try {
             let res = await axios.get(`http://localhost:8000/api/teacher/${teacherId}/`, config);
-            console.log("RESP", res);
             dispatch({
                 type: LOAD_TEACHER_DETAILS_SUCCESS,
                 payload: res.data
@@ -133,7 +130,6 @@ export const add_teacher_review = (teacherId, isApproved) => async dispatch => {
 
         try {
             const body = JSON.stringify({ isApproved });
-            console.log("BIDY", body)
             const res = await axios.patch(`http://localhost:8000/api/teacher/${teacherId}/`, body, config);
             dispatch({
                 type: ADD_TEACHER_REVIEW_SUCCESS,
@@ -186,7 +182,6 @@ export const load_bookmarked_teachers = () => async dispatch => {
 
         try {
             let res = await axios.get('http://localhost:8000/api/bookmarked/teachers/', config);
-
             dispatch({
                 type: BOOKMARKED_TEACHERS_LOADED_SUCCESS,
                 payload: res.data

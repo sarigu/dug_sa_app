@@ -28,10 +28,7 @@ const ApprovalFeedback = ({ isReviewed, selectedCallback }) => {
 
     useEffect(() => {
         setIsLoaded(true);
-        console.log("isReviewed", isReviewed)
     }, [isReviewed]);
-
-
 
     return (
         <div className="feedback-container" >

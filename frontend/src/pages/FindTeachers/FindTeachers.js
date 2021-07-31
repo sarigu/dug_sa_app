@@ -141,14 +141,12 @@ const FindTeachers = ({ load_teachers, teachers, load_bookmarked_teachers, bookm
     }
 
     const handleSelectedTeacher = (teacherId) => {
-        console.log("hello", teacherId)
         load_study_sessions(teacherId)
         setShowSchedule(true);
         setShowPopup(true);
     }
 
     const handleSelectedStudySession = (studySessionId, sessionType) => {
-        console.log("I HANDLE", studySessionId, sessionType);
         load_study_session(studySessionId);
         setSessionType(sessionType);
         setShowSchedule(false);
