@@ -71,7 +71,7 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
             </section>
             <section className="cards-container">
                 <Card emoji={<span>&#128198;</span>} title={"Schedule"} link="/schedule" />
-                <Card emoji={<span>&#128218;</span>} title={"Study material"} />
+                <Card emoji={<span>&#128218;</span>} title={"Study material"} link="/work-in-progress" />
             </section>
             {showPopup ?
                 <PopUp selectedCallback={() => setShowPopup(false)} >

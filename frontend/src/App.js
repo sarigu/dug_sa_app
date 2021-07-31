@@ -9,6 +9,7 @@ import FindTeachers from './pages/FindTeachers/FindTeachers';
 import SchedulePage from './pages/SchedulePage/SchedulePage';
 import AllClasses from './pages/AllClasses/AllClasses';
 import AllTeachers from './pages/AllTeachers/AllTeachers';
+import WorkInProgress from './pages/WorkInProgress/WorkInProgress';
 import { Provider } from 'react-redux';
 import store from './store';
 import AuthWrapper from './AuthWrappers/AuthWrapper';
@@ -28,6 +29,7 @@ const App = () => (
           <PrivateRoute exact path='/all-classes' component={AllClasses} />
           <PrivateRoute exact path='/schedule' component={SchedulePage} />
           <PrivateRoute exact path='/teachers' component={AllTeachers} />
+          <PrivateRoute exact path='/work-in-progress' component={WorkInProgress} />
         </Switch>
       </AuthWrapper>
     </Router>
