@@ -32,13 +32,20 @@ export const load_user = () => async dispatch => {
 
         try {
             let res = await axios.get('http://localhost:8000/auth/users/me/', config);
+            console.log("1", res.data)
             if (res.data.role === "teacher") {
                 res = await axios.get(`http://localhost:8000/api/teacher/${res.data.id}/`, config);
+                dispatch({
+                    type: USER_LOADED_SUCCESS,
+                    payload: res.data.teacher,
+                });
+            } else {
+                dispatch({
+                    type: USER_LOADED_SUCCESS,
+                    payload: res.data,
+                });
             }
-            dispatch({
-                type: USER_LOADED_SUCCESS,
-                payload: res.data,
-            });
+
         } catch (err) {
             dispatch({
                 type: USER_LOADED_FAIL
