@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { update_selected_role } from '../../actions/auth';
-import './SignUp.css'
+import logo from '../../assets/images/logo.png';
 import SignUpForm from '../../components/SignUpForms/SignUpForm';
+import './SignUp.css'
+
 
 const SignUp = ({ update_selected_role }) => {
     const [selectedRole, setSelectedRole] = useState("student");
@@ -21,6 +23,7 @@ const SignUp = ({ update_selected_role }) => {
 
     return (
         <div className="signup-page">
+            <img src={logo} className="dug-logo"></img>
             <div className="signup-wrapper">
                 <h1>Welcome <span>&#128075;&#127998;</span> </h1>
                 <p>Do you want to sign up as
