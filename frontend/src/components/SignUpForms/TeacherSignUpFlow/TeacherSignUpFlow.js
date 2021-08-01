@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { update_teacher, load_subjects } from '../../../actions/auth';
+import { update_teacher, load_subjects, load_languages } from '../../../actions/auth';
 import Carousel, { CarouselItem } from "../../Carousel/Carousel";
 import '../SignUpForms.css';
 import { validateYear, validateExperince, validatePhone } from '../utils';
 
-const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, error }) => {
+const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subjects, languages, user, error }) => {
 
     useEffect(() => {
         load_subjects();
+        load_languages();
     }, []);
 
     const [degreeError, setDegreeError] = useState(false);
@@ -21,10 +22,13 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
     const [poastalCodeError, setPoastalCodeError] = useState(false);
     const [cityError, setCityError] = useState(false);
     const [addressProofError, setAddressProofError] = useState(false);
+    const [subjectsError, setSubjectsError] = useState(false);
+    const [languagesError, setLanguagesError] = useState(false);
     const [profileImageError, setProfileImageError] = useState(false);
     const [phoneNumberError, setPhoneNumberError] = useState(false);
     const [carouselIndex, setCarouselIndex] = useState();
     const [selectedSubjects, setSelectedSubjects] = useState([]);
+    const [selectedLanguages, setSelectedLanguages] = useState([]);
     const [graduationDate, setGraduationDate] = useState();
 
     const [formData, setFormData] = useState({
@@ -58,50 +62,52 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
     const handleSubmit = () => {
         const dataIsChecked = checkData();
         if (dataIsChecked) {
-            update_teacher(user.id, degree, university, graduationDate, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, true, selectedSubjects);
+            update_teacher(user.id, degree, university, graduationDate, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, selectedSubjects, selectedLanguages);
         }
     }
 
     const checkData = () => {
         if (!phone_number) {
             setPhoneNumberError(true);
-            setCarouselIndex(4);
+            setCarouselIndex(6);
             return false;
         } else {
             const isValidated = validatePhone(phone_number);
             if (!isValidated) {
                 setPhoneNumberError(true);
+                setCarouselIndex(6);
                 return false;
             }
         }
 
         if (!profile_image) {
             setProfileImageError(true);
-            setCarouselIndex(4);
+            setCarouselIndex(6);
             return false;
         }
 
         if (!proof_of_address) {
+            console.log("set erro")
             setAddressProofError(true);
-            setCarouselIndex(3);
+            setCarouselIndex(5);
             return false;
         }
 
         if (!street) {
             setStreetError(true);
-            setCarouselIndex(3);
+            setCarouselIndex(5);
             return false;
         }
 
         if (!postal_code) {
             setPoastalCodeError(true);
-            setCarouselIndex(3);
+            setCarouselIndex(5);
             return false;
         }
 
         if (!city) {
             setCityError(true);
-            setCarouselIndex(3);
+            setCarouselIndex(5);
             return false;
         }
 
@@ -124,7 +130,6 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
         } else {
             const isValidated = validateExperince(years_of_experience);
             if (!isValidated) {
-                console.log("experience is not validated")
                 setExperienceError(true);
                 setCarouselIndex(1);
                 return false;
@@ -133,27 +138,39 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
 
         if (!degree) {
             setDegreeError(true);
-            setCarouselIndex(5);
+            setCarouselIndex(7);
             return false;
         }
 
         if (!university) {
             setUniversityError(true);
-            setCarouselIndex(5);
+            setCarouselIndex(7);
             return false;
         }
 
         if (!graduationDate) {
             setGraduationDateError(true);
-            setCarouselIndex(5);
+            setCarouselIndex(7);
             return false;
         } else {
             const isValidated = validateYear(graduationDate);
             if (!isValidated) {
                 setGraduationDateError(true);
-                setCarouselIndex(5);
+                setCarouselIndex(7);
                 return false;
             }
+        }
+
+        if (!selectedSubjects || selectedSubjects.length <= 0) {
+            setSubjectsError(true);
+            setCarouselIndex(2);
+            return false;
+        }
+
+        if (!selectedLanguages || selectedLanguages.length <= 0) {
+            setLanguagesError(true);
+            setCarouselIndex(3);
+            return false;
         }
 
         return true;
@@ -161,26 +178,58 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
     }
 
 
-    const handleSubjects = e => {
-        let allSubjects = selectedSubjects;
+    const handleSelectedOptions = e => {
         e.preventDefault();
-        let subjectId = e.target.getAttribute("data-id");
-        let subjectCard = document.querySelector(`[data-id="${subjectId}"]`)
-        if (subjectCard.classList.contains("active")) {
-            subjectCard.classList.remove("active");
-            let index = allSubjects.indexOf(subjectId);
-            if (index !== -1) {
-                allSubjects.splice(index, 1);
-            }
-        } else {
-            subjectCard.classList.add("active");
-            allSubjects.push(subjectId);
-        }
+        let allSubjects = selectedSubjects;
+        let allLanguages = selectedLanguages;
 
+        let optionId = e.target.getAttribute("data-id");
+        let optionType = e.target.getAttribute("data-type");
+        if (optionType === "subject") {
+            setSubjectsError(false);
+        } else {
+            setLanguagesError(false);
+        }
+        let optionCards = document.querySelectorAll(`[data-type="${optionType}"]`)
+        let card;
+        optionCards.forEach((elem) => {
+            if (elem.dataset.id == optionId) {
+                card = elem
+            }
+        })
+        if (card.classList.contains("active-card")) {
+            if (optionType === "subject") {
+                card.classList.remove("active-card");
+                let index = allSubjects.indexOf(optionId);
+                if (index !== -1) {
+                    allSubjects.splice(index, 1);
+                }
+            }
+            else {
+                card.classList.remove("active-card");
+                let index = allLanguages.indexOf(optionId);
+                if (index !== -1) {
+                    allLanguages.splice(index, 1);
+                }
+            }
+
+        } else {
+            if (optionType === "subject") {
+                card.classList.add("active-card");
+                allSubjects.push(optionId);
+            }
+            else {
+                card.classList.add("active-card");
+                allLanguages.push(optionId);
+            }
+        }
         setSelectedSubjects(allSubjects);
+        setSelectedLanguages(allLanguages);
     }
 
-    const subjectsList = subjects.map((subject) => <div onClick={handleSubjects} className="subject-card" data-id={subject.id}>{subject.name}</div>);
+    const subjectsList = subjects.map((subject) => <div onClick={handleSelectedOptions} className="options-card" data-type="subject" data-id={subject.id}>{subject.name}</div>);
+    const languageList = languages.map((language) => <div onClick={handleSelectedOptions} className="options-card" data-type="language" data-id={language.id}>{language.language}</div>);
+
 
     return (
         <div className="signup-flow-wrapper" >
@@ -260,15 +309,28 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
                 </CarouselItem>
                 <CarouselItem>
                     <div>
+                        {subjectsError ? <div className="error-message">Please select at least one subject</div> : null}
                         <h3>Subjects you would <br></br>want to teach</h3>
                         <div className="scroll-container">{subjectsList}</div>
+                    </div>
+                </CarouselItem>
+                <CarouselItem>
+                    <div>
+                        {languagesError ? <div className="error-message">Please select at least one language</div> : null}
+                        <h3>Languages you would <br></br>want to teach in</h3>
+                        <div className="scroll-container">{languageList}</div>
 
                     </div>
                 </CarouselItem>
                 <CarouselItem>
                     <div>
+                        <h3>Location you will be teaching at</h3>
+                        <div className="options-card active-card" >Dug facility</div>
+                    </div>
+                </CarouselItem>
+                <CarouselItem>
+                    <div>
                         <h3>Your address</h3>
-
                         <input
                             className={streetError ? "notValidated" : null}
                             placeholder="Street"
@@ -295,11 +357,22 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
                             value={city}
                             onChange={e => { setCityError(false); handleChange(e) }}
                         />
-                        {addressProofError ? <p className="errorMsg">Please upload a proof of address</p> : null}
+                        {addressProofError ?
+                            <p className="errorMsg">Please upload a proof of address</p>
+                            : null
+                        }
                         <div className="proof-of-address-container">
-                            <img id="proof-of-address" style={{ width: "60px", height: "50px", marginRight: "10px" }}></img>
-                            <button onClick={() => { setAddressProofError(false); hiddenFileInputAddress.current.click() }} style={{ width: "100%" }}>Upload a proof of address</button>
-                            <input type="file" ref={hiddenFileInputAddress} style={{ display: "none" }} placeholder="Proof of Address" name="proof_of_address" accept="image/*" onChange={e => { handleImageChange(e); document.getElementById('proof-of-address').src = window.URL.createObjectURL(e.target.files[0]) }} />
+                            <img id="proof-of-address" style={{ width: "160px", height: "180px", marginRight: "30px" }}></img>
+                            <button onClick={() => { setAddressProofError(false); hiddenFileInputAddress.current.click() }} >Upload a proof of address</button>
+                            <input
+                                type="file"
+                                ref={hiddenFileInputAddress}
+                                style={{ display: "none" }}
+                                placeholder="Proof of Address"
+                                name="proof_of_address"
+                                accept="image/*"
+                                onChange={e => { handleImageChange(e); document.getElementById('proof-of-address').src = window.URL.createObjectURL(e.target.files[0]) }}
+                            />
                         </div>
 
                     </div>
@@ -307,10 +380,20 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, subjects, user, erro
                 <CarouselItem>
                     <div>
                         <h3>Details about you</h3>
-                        {profileImageError ? <p className="errorMsg">Please upload a profile image</p> : null}
-                        <img id="profile-image" src="" width="160" height="160"></img>
+                        {profileImageError ?
+                            <p className="errorMsg">Please upload a profile image</p>
+                            : null}
+                        <img id="profile-image" src="" width="200" height="200"></img>
                         <button onClick={() => { setProfileImageError(false); hiddenFileInputProfileImage.current.click() }} style={{ width: "250px", margin: "10px 0 20px 0 " }}>Upload a profile image</button>
-                        <input type="file" ref={hiddenFileInputProfileImage} style={{ display: "none" }} placeholder="Profile Image" name="profile_image" accept="image/*" onChange={e => { handleImageChange(e); document.getElementById('profile-image').src = window.URL.createObjectURL(e.target.files[0]) }} />
+                        <input
+                            type="file"
+                            ref={hiddenFileInputProfileImage}
+                            style={{ display: "none" }}
+                            placeholder="Profile Image"
+                            name="profile_image"
+                            accept="image/*"
+                            onChange={e => { handleImageChange(e); document.getElementById('profile-image').src = window.URL.createObjectURL(e.target.files[0]) }}
+                        />
                         <input
                             className={phoneNumberError ? "notValidated" : null}
                             placeholder="Phone number"
@@ -331,6 +414,7 @@ const mapStateToProps = state => ({
     user: state.auth.user,
     subjects: state.auth.subjects,
     error: state.auth.error,
+    languages: state.auth.languages,
 });
 
-export default connect(mapStateToProps, { update_teacher, load_subjects })(TeacherSignUpFlow);
+export default connect(mapStateToProps, { update_teacher, load_subjects, load_languages })(TeacherSignUpFlow);

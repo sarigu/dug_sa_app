@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { login } from '../../actions/auth';
+import logo from '../../assets/images/logo.png';
 import './Login.css'
 
 const Login = ({ login, isAuthenticated, error }) => {
@@ -24,12 +25,12 @@ const Login = ({ login, isAuthenticated, error }) => {
     };
 
     if (isAuthenticated) {
-        console.log("is Authenticated after login in login page", isAuthenticated);
         return <Redirect to='/dashboard' />
     }
 
     return (
         <div className="login-page">
+            <img src={logo} className="dug-logo"></img>
             <div className="login-wrapper">
                 <h1>Welcome <span>&#128075;&#127998;</span> </h1>
                 {error === "login_fail" && showError ? <div className="error-message">Oops, something went wrong. Please try again</div> : null}

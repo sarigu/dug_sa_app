@@ -3,6 +3,12 @@
     width: 100vw;
     height:100vh;
 }
+
+.dug-logo{
+    width:8%;
+    float:right;
+}
+
 .login-wrapper{
     width:80%;
     max-width: 400px;

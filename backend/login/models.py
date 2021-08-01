@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from djoser.signals import user_registered
 from phonenumber_field.modelfields import PhoneNumberField
 from django.shortcuts import get_object_or_404
+from django_resized import ResizedImageField
 
 class CustomAccountManager(BaseUserManager):
     def create_superuser(self, email, user_name, first_name, password, **other_fields):
@@ -62,7 +63,8 @@ class Teacher(models.Model):
     street = models.CharField(max_length=255, blank=True, null=True)
     postal_code = models.CharField( max_length=50, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
-    proof_of_address = models.ImageField( upload_to="teachers/addressProof/" , blank=True, null=True)
+    proof_of_address = ResizedImageField(size=[600, 800], crop= ['middle', 'center'],quality=85,upload_to="teachers/addressProof/", blank=True, null=True)
+    #models.ImageField( upload_to="teachers/addressProof/" , blank=True, null=True)
     #education
     degree = models.CharField(max_length=255, blank=True, null=True)
     university = models.CharField(max_length=255, blank=True, null=True)
@@ -72,12 +74,13 @@ class Teacher(models.Model):
     last_workplace = models.CharField(max_length=255, blank=True, null=True)
     last_position = models.CharField(max_length=255, blank=True, null=True)
     #profile image
-    profile_image = models.ImageField( upload_to="teachers/profileImages/" , blank=True, null=True)
+    profile_image = ResizedImageField(size=[500, 500], crop= ['middle','center'],quality=85,upload_to="teachers/profileImages/", blank=True, null=True)
     #others
     is_retired = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
     is_reviewed = models.BooleanField(default=False)
     provided_information = models.BooleanField(default=False)
+
     def __str__(self):
         return f"{self.user}"
 
@@ -90,7 +93,6 @@ def create_teacher(user, sender, request, **kwargs):
         teacher.save()
         new_teacher = teacher
     
-
 class Subject(models.Model):
     name = models.CharField(max_length=255)
     color = models.CharField(max_length=255)
