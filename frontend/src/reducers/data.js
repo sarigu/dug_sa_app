@@ -46,6 +46,10 @@ import {
     LOAD_ACTIVE_ACCESS_CODES_FAIL,
     LOAD_INACTIVE_ACCESS_CODES_SUCCESS,
     LOAD_INACTIVE_ACCESS_CODES_FAIL,
+    LOAD_ACTIVE_ACCESS_CODE_SUCCESS,
+    LOAD_ACTIVE_ACCESS_CODE_FAIL,
+    REMOVE_ACTIVE_ACCESS_CODE_SUCCESS,
+    REMOVE_ACTIVE_ACCESS_CODE_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -76,6 +80,8 @@ const initialState = {
     isReviewed: false,
     accessCodes: [],
     inactiveAccessCodes: [],
+    accessCode: undefined,
+    accessCodeIsUpdated: false,
 };
 
 export default function (state = initialState, action) {
@@ -291,7 +297,7 @@ export default function (state = initialState, action) {
             console.log(payload, "payload.data")
             return {
                 ...state,
-                accessCodes: payload.length > 0 ? payload : state.accessCodes,
+                accessCodes: payload,
             }
         case LOAD_ACTIVE_ACCESS_CODES_FAIL:
             return {
@@ -300,11 +306,30 @@ export default function (state = initialState, action) {
         case LOAD_INACTIVE_ACCESS_CODES_SUCCESS:
             return {
                 ...state,
-                inactiveAccessCodes: payload.length > 0 ? payload : state.inactiveAccessCodes,
+                inactiveAccessCodes: payload,
             }
         case LOAD_INACTIVE_ACCESS_CODES_FAIL:
             return {
                 ...state,
+            }
+        case LOAD_ACTIVE_ACCESS_CODE_SUCCESS:
+            return {
+                ...state,
+                accessCode: payload,
+            }
+        case LOAD_ACTIVE_ACCESS_CODE_FAIL:
+            return {
+                ...state,
+            }
+        case REMOVE_ACTIVE_ACCESS_CODE_SUCCESS:
+            return {
+                ...state,
+                accessCodeIsUpdated: true,
+            }
+        case REMOVE_ACTIVE_ACCESS_CODE_FAIL:
+            return {
+                ...state,
+                accessCodeIsUpdated: false,
             }
         default:
             return state

@@ -47,6 +47,10 @@ import {
     LOAD_ACTIVE_ACCESS_CODES_FAIL,
     LOAD_INACTIVE_ACCESS_CODES_SUCCESS,
     LOAD_INACTIVE_ACCESS_CODES_FAIL,
+    LOAD_ACTIVE_ACCESS_CODE_SUCCESS,
+    LOAD_ACTIVE_ACCESS_CODE_FAIL,
+    REMOVE_ACTIVE_ACCESS_CODE_SUCCESS,
+    REMOVE_ACTIVE_ACCESS_CODE_FAIL,
 } from './types';
 
 
@@ -657,6 +661,59 @@ export const load_inactive_access_codes = (index) => async dispatch => {
         } catch (err) {
             dispatch({
                 type: LOAD_INACTIVE_ACCESS_CODES_FAIL
+            });
+        }
+    }
+};
+
+export const load_access_code = (accessCodeId) => async dispatch => {
+
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.get(`http://localhost:8000/api/accessCodes/${accessCodeId}/`, config);
+            console.log("action ONEEE----ACCESS COdes", res.data)
+            dispatch({
+                type: LOAD_ACTIVE_ACCESS_CODE_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: LOAD_ACTIVE_ACCESS_CODE_FAIL
+            });
+        }
+    }
+};
+
+
+export const update_access_code = (accessCodeId, isActive) => async dispatch => {
+
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+            }
+        };
+
+        const body = JSON.stringify({ isActive });
+
+        try {
+            const res = await axios.patch(`http://localhost:8000/api/accessCodes/${accessCodeId}/`, body, config);
+            dispatch({
+                type: REMOVE_ACTIVE_ACCESS_CODE_SUCCESS,
+            });
+
+        } catch (err) {
+            dispatch({
+                type: REMOVE_ACTIVE_ACCESS_CODE_FAIL
             });
         }
     }

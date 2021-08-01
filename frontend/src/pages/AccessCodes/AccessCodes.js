@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import LoadingIcon from '../../components/LoadingIcon/LoadingIcon';
 import BackButton from '../../components/Buttons/BackButton';
-import TeacherDetails from '../../components/TeacherDetails/TeacherDetails';
-import ApprovalFeedback from '../../components/ApprovalFeedback/ApprovalFeedback';
+import AccessCodeDetails from '../../components/AccessCodeDetails/AccessCodeDetails';
+import AccessCodeFeedback from '../../components/AccessCodeFeedback/AccessCodeFeedback';
 import PopUp from '../../components/PopUp/PopUp';
 import { useHistory } from "react-router-dom";
-import { load_active_access_codes, load_inactive_access_codes } from '../../actions/data';
+import { load_active_access_codes, load_inactive_access_codes, load_access_code } from '../../actions/data';
 import './AccessCodes.css';
 
-const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_codes, load_inactive_access_codes, rejectedTeachers, totalRejectedTeacherPages }) => {
+const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_codes, load_inactive_access_codes, load_access_code }) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
@@ -25,7 +25,7 @@ const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_code
     }, []);
 
     useEffect(() => {
-        console.log(accessCodes, "USE EFFECT")
+        console.log(accessCodes, "USE EFFECT", sortByActive)
         if (sortByActive) {
             setIsLoaded(true);
         }
@@ -52,6 +52,13 @@ const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_code
         }
     }, [sortByInactive]);
 
+    const handleSelectedAccessCode = (accessCodeId) => {
+        console.log(accessCodeId, "-----accessCodeId")
+        load_access_code(accessCodeId);
+        setShowPopup(true);
+        setShowDetails(true)
+    }
+
 
     return (
         <div className="all-teachers-wrapper" >
@@ -62,13 +69,14 @@ const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_code
                     <div className={sortByActive ? "active" : null} onClick={() => { setSortByActive(true); setSortByInactive(false) }} >Active</div>
                     <div className={sortByInactive ? "active" : null} onClick={() => { setSortByActive(false); setSortByInactive(true) }}>Inactive</div>
                 </div>
+                {console.log("idloaded", isLoaded)}
                 {!isLoaded ? <LoadingIcon /> :
                     <div>
                         {sortByActive ?
                             <div>
                                 {accessCodes && accessCodes.length > 0 ?
                                     accessCodes.map((accessCode, index) =>
-                                        <div className="access-code-card">
+                                        <div key={index} className="access-code-card" onClick={() => handleSelectedAccessCode(accessCode.id)}>
                                             <h4>{accessCode.code}</h4>
                                         </div>
                                     ) :
@@ -79,7 +87,7 @@ const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_code
                             <div>
                                 {inactiveAccessCodes && inactiveAccessCodes.length > 0 ?
                                     inactiveAccessCodes.map((inactiveAccessCode, index) =>
-                                        <div className="access-code-card">
+                                        <div key={index} className="access-code-card" onClick={() => handleSelectedAccessCode(inactiveAccessCode.id)}>
                                             <h4>{inactiveAccessCode.code}</h4>
                                         </div>
                                     ) :
@@ -92,8 +100,8 @@ const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_code
             </div>
             {showPopup ?
                 <PopUp selectedCallback={() => setShowPopup(false)}>
-                    {showDetails ? <TeacherDetails selectedCallback={() => { setShowDetails(false); setShowFeedback(true) }} />
-                        : showFeedback ? <ApprovalFeedback selectedCallback={() => setShowPopup(false)} />
+                    {showDetails ? <AccessCodeDetails selectedCallback={() => { setShowDetails(false); setShowFeedback(true) }} />
+                        : showFeedback ? <AccessCodeFeedback selectedCallback={() => setShowPopup(false)} />
                             : null}
                 </PopUp>
                 : null
@@ -107,4 +115,4 @@ const mapStateToProps = state => ({
     inactiveAccessCodes: state.data.inactiveAccessCodes,
 });
 
-export default connect(mapStateToProps, { load_active_access_codes, load_inactive_access_codes })(AccessCodes);
+export default connect(mapStateToProps, { load_active_access_codes, load_inactive_access_codes, load_access_code })(AccessCodes);

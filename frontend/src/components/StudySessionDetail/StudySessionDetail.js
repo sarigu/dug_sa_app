@@ -83,7 +83,6 @@ const StudySessionDetail = ({ userType, studySession, participate_in_study_sessi
                                 null
                                 : <div>
                                     {userType === "teacher" ? <button onClick={handleEditStudySession} style={{ backgroundColor: "lightgreen", marginBottom: "20px" }}>Edit the class</button> : null}
-
                                     <button onClick={handleCancelStudySession} style={{ backgroundColor: "red" }}>Cancel the class</button>
                                 </div>
                     }
