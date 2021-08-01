@@ -61,7 +61,6 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
 
     const handleSubmit = () => {
         const dataIsChecked = checkData();
-        console.log("----", selectedSubjects, selectedLanguages)
         if (dataIsChecked) {
             update_teacher(user.id, degree, university, graduationDate, last_position, last_school, years_of_experience, street, postal_code, city, proof_of_address, profile_image, phone_number, selectedSubjects, selectedLanguages);
         }
@@ -196,8 +195,7 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
             if (elem.dataset.id == optionId) {
                 card = elem
             }
-        }
-        )
+        })
         if (card.classList.contains("active-card")) {
             if (optionType === "subject") {
                 card.classList.remove("active-card");
