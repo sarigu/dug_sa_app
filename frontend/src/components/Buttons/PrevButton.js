@@ -1,13 +1,11 @@
 import React from 'react';
-import ArrowLeft from '../../icons/ArrowLeft'
-import './Buttons.css'
+import ArrowLeft from '../../assets/icons/ArrowLeft';
+import './Buttons.css';
 
-const PrevButton = () => {
-    return (
-        <div className="inline-button prev-button">
-            <ArrowLeft />
-        </div>
-    );
-};
+const PrevButton = () => (
+  <div className="inline-button prev-button">
+    <ArrowLeft />
+  </div>
+);
 
 export default PrevButton;

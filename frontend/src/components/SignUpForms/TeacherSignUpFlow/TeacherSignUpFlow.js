@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { update_teacher, load_subjects, load_languages } from '../../../actions/auth';
 import Carousel, { CarouselItem } from "../../Carousel/Carousel";
 import '../SignUpForms.css';
-import { validateYear, validateExperince, validatePhone } from '../utils';
+import { validateYear, validateExperince, validatePhone } from '../../../utils';
 
 const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subjects, languages, user, error }) => {
 
@@ -212,7 +212,6 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
                     allLanguages.splice(index, 1);
                 }
             }
-
         } else {
             if (optionType === "subject") {
                 card.classList.add("active-card");
@@ -223,6 +222,7 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
                 allLanguages.push(optionId);
             }
         }
+
         setSelectedSubjects(allSubjects);
         setSelectedLanguages(allLanguages);
     }

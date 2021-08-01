@@ -1,14 +1,12 @@
 import React from 'react';
-import ArrowLeft from '../../icons/ArrowLeft'
-import './Buttons.css'
+import ArrowLeft from '../../assets/icons/ArrowLeft';
+import './Buttons.css';
 
-const BackButton = (props) => {
-    return (
-        <div className="inline-button" style={{ width: props.buttonWidth }} onClick={() => props.selectedCallback()}>
-            <ArrowLeft />
-            <p>Back</p>
-        </div>
-    );
-};
+const BackButton = (props) => (
+  <div className="inline-button" style={{ width: props.buttonWidth }} onClick={() => props.selectedCallback()}>
+    <ArrowLeft />
+    <p>Back</p>
+  </div>
+);
 
 export default BackButton;

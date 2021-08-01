@@ -80,8 +80,10 @@ const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
             </section>
             {showPopup ?
                 <PopUp selectedCallback={() => setShowPopup(false)}>
-                    {showDetails ? <TeacherDetails selectedCallback={() => { setShowFeedback(true); setShowDetails(false) }} /> :
-                        showFeedback ? <ApprovalFeedback selectedCallback={() => setShowPopup(false)} />
+                    {showDetails
+                        ? <TeacherDetails selectedCallback={() => { setShowFeedback(true); setShowDetails(false) }} /> :
+                        showFeedback
+                            ? <ApprovalFeedback selectedCallback={() => setShowPopup(false)} />
                             : null}
                 </PopUp>
                 : null
