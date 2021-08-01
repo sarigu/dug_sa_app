@@ -61,7 +61,7 @@ const StudySessionEdit = ({
           <div className="study-session-container">
             <h2>Update the class</h2>
             {error ? <div className="error-message">Oops, something went wrong. Please check all the fields again</div> : null}
-            <div className="study-session-details">
+            <div style={{ margin: '40px 0' }}>
               <h3>Teacher</h3>
               <p>{studySession.teacher ? `${studySession.teacher.first_name} ${studySession.teacher.last_name}` : null}</p>
               <h3>Subject</h3>
@@ -103,7 +103,7 @@ const StudySessionEdit = ({
                 }}
               />
               <h3>Location</h3>
-              <p>{studySession.location ? studySession.location.name : null}</p>
+              <p style={{ marginBottom: '30px' }}>{studySession.location ? studySession.location.name : null}</p>
               <p>{studySession.location ? `${studySession.location.street} ,${studySession.location.postal_code} ,${studySession.location.city}` : null}</p>
               <h3>Spots</h3>
               <p>{`${studySession.taken_spots} taken from ${studySession.available_spots}`}</p>

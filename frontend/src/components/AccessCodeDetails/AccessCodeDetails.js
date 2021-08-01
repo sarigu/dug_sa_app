@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import { update_access_code } from '../../actions/data';
+import './AccessCodeDetails.css';
 
 const AccessCodeDetails = ({ accessCode, selectedCallback, update_access_code }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -31,19 +32,23 @@ const AccessCodeDetails = ({ accessCode, selectedCallback, update_access_code })
           <div>
             {accessCode.is_active
               ? (
-                <div className="study-session-container">
+                <div className="access-code-container">
                   <h2>Do you want to remove the code? </h2>
-                  <h3>Code</h3>
-                  <p>{accessCode.code}</p>
-                  <button onClick={handleRemoveAccessCode} style={{ backgroundColor: 'red' }}>Remove</button>
+                  <div style={{ margin: '40px 0' }}>
+                    <h3>Code</h3>
+                    <p>{accessCode.code}</p>
+                  </div>
+                  <button onClick={handleRemoveAccessCode} className="pink-background">Remove</button>
                 </div>
               )
               : (
-                <div className="study-session-container">
+                <div className="access-code-container">
                   <h2>Do you want to reactivate the code? </h2>
-                  <h3>Code</h3>
-                  <p>{accessCode.code}</p>
-                  <button onClick={handleActivateAccessCode} style={{ backgroundColor: 'green' }}>Activate</button>
+                  <div style={{ margin: '40px 0' }}>
+                    <h3>Code</h3>
+                    <p>{accessCode.code}</p>
+                  </div>
+                  <button onClick={handleActivateAccessCode} className="green-background">Activate</button>
                 </div>
               )}
           </div>

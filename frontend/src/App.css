@@ -33,6 +33,7 @@ input, select, textarea{
 
 textarea{
     height:unset !important;
+    padding:10px;
 }
 
 input:focus, textarea:focus{
@@ -52,4 +53,16 @@ button{
 
 a{
     text-decoration: none;
+}
+
+.pink-background{
+    background-color: #E83A78;
+}
+
+.green-background{
+    background-color: #77B837;
+}
+
+.yellow-background{
+    background-color: #FFD62E;
 }

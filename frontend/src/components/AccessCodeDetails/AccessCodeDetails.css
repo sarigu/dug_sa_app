@@ -1,0 +1,11 @@
+.access-code-container{
+    width:100%;
+}
+
+
+@media only screen and (min-width: 600px){
+    .access-code-container{ 
+        width:50%;
+        margin:auto;
+    }
+}

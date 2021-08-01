@@ -19,7 +19,7 @@ const Menu = ({
     <div className={menuWasSet && openMenu ? 'menu active' : menuWasSet && !openMenu ? 'menu inactive' : 'menu'}>
       <div className={menuWasSet && openMenu ? 'menu-links-container' : 'menu-links-container hidden'}>
         <div onClick={() => { history.push('/work-in-progress'); selectedCallback(); }}>Profile</div>
-        <div onClick={() => { history.push('/work-in-progress'); selectedCallback(); }}>Languages</div>
+        <div onClick={() => { history.push('/work-in-progress'); selectedCallback(); }}>Language</div>
         <div onClick={() => { history.push('/work-in-progress'); selectedCallback(); }}>Settings</div>
         <div onClick={() => { history.push('/about'); selectedCallback(); }}>About</div>
         <div href="/" onClick={handleLogout}>Logout</div>

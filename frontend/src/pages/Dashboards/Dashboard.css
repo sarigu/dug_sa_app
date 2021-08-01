@@ -16,6 +16,7 @@ section:nth-child(1){
     flex-direction: row;
     flex-wrap: nowrap;
     overflow-x: scroll;
+    padding: 5px;
 }
 
 .cards-container::-webkit-scrollbar {
@@ -67,4 +68,15 @@ section:nth-child(1){
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+@media only screen and (min-width: 600px){
+    .cards-container{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .cards-container * {
+        margin-bottom: 20px;
+    }
 }

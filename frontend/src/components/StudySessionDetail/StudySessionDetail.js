@@ -82,13 +82,13 @@ const StudySessionDetail = ({
             {userType === 'student' && sessionType && sessionType === 'study-session'
               ? <button onClick={handleStudySessionParticipation}>Yes, book a slot!</button>
               : userType === 'student' && sessionType && sessionType === 'booked-study-session'
-                ? <button onClick={handleCancelStudySessionParticipation} style={{ backgroundColor: 'red' }}>Drop out</button>
+                ? <button onClick={handleCancelStudySessionParticipation} className="pink-background">Drop out</button>
                 : sessionType && sessionType === 'cancelled-session'
                   ? null
                   : (
                     <div>
-                      {userType === 'teacher' ? <button onClick={handleEditStudySession} style={{ backgroundColor: 'lightgreen', marginBottom: '20px' }}>Edit the class</button> : null}
-                      <button onClick={handleCancelStudySession} style={{ backgroundColor: 'red' }}>Cancel the class</button>
+                      {userType === 'teacher' ? <button onClick={handleEditStudySession} className="green-background" style={{ marginBottom: '20px' }}>Edit the class</button> : null}
+                      <button onClick={handleCancelStudySession} className="pink-background">Cancel the class</button>
                     </div>
                   )}
           </div>

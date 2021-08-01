@@ -73,7 +73,7 @@ const StudySessionForm = ({
     <div>
       <h2>Add a study session</h2>
       {error ? <div className="error-message">Oops, something went wrong. Please check all the fields again</div> : null}
-      <div>
+      <div style={{ margin: '40px 0' }}>
         <h3>Subject</h3>
         <select onChange={(e) => { setError(false); setSubject(e.target.value); }}>{subjects && subjects.map((subject, index) => <option key={index} value={subject.name}>{subject.name}</option>)}</select>
         <h3>Language</h3>
@@ -128,7 +128,7 @@ const StudySessionForm = ({
           }}
         />
         <h3>Location</h3>
-        <p>Dug SA facility</p>
+        <p style={{ marginBottom: '30px' }}>Dug SA facility</p>
         <h3>Available Spots</h3>
         <input
           type="number"
@@ -139,6 +139,7 @@ const StudySessionForm = ({
           <h3 style={{ marginRight: '20px' }}>Description</h3>
           <span>
             Words left:
+            {' '}
             {wordCountdown}
           </span>
         </div>

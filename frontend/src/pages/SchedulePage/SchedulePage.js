@@ -42,7 +42,7 @@ const SchedulePage = ({ user, load_study_sessions, load_study_session }) => {
   return (
     <div className="schedule-wrapper">
       <BackButton buttonWidth="70px" selectedCallback={() => history.push('/dashboard')} />
-      <h2>Schedule</h2>
+      <h2 style={{ marginTop: '40px' }}>Schedule</h2>
       <Schedule selectedCallback={(studySessionId, sessionType) => handleSelectedStudySession(studySessionId, sessionType)} />
       <div className="plus-button-container">
         {' '}
