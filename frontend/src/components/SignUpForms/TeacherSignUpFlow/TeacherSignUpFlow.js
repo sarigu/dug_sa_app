@@ -69,43 +69,45 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
     const checkData = () => {
         if (!phone_number) {
             setPhoneNumberError(true);
-            setCarouselIndex(4);
+            setCarouselIndex(6);
             return false;
         } else {
             const isValidated = validatePhone(phone_number);
             if (!isValidated) {
                 setPhoneNumberError(true);
+                setCarouselIndex(6);
                 return false;
             }
         }
 
         if (!profile_image) {
             setProfileImageError(true);
-            setCarouselIndex(4);
+            setCarouselIndex(6);
             return false;
         }
 
         if (!proof_of_address) {
+            console.log("set erro")
             setAddressProofError(true);
-            setCarouselIndex(3);
+            setCarouselIndex(5);
             return false;
         }
 
         if (!street) {
             setStreetError(true);
-            setCarouselIndex(3);
+            setCarouselIndex(5);
             return false;
         }
 
         if (!postal_code) {
             setPoastalCodeError(true);
-            setCarouselIndex(3);
+            setCarouselIndex(5);
             return false;
         }
 
         if (!city) {
             setCityError(true);
-            setCarouselIndex(3);
+            setCarouselIndex(5);
             return false;
         }
 
@@ -128,7 +130,6 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
         } else {
             const isValidated = validateExperince(years_of_experience);
             if (!isValidated) {
-                console.log("experience is not validated")
                 setExperienceError(true);
                 setCarouselIndex(1);
                 return false;
@@ -137,25 +138,25 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
 
         if (!degree) {
             setDegreeError(true);
-            setCarouselIndex(5);
+            setCarouselIndex(7);
             return false;
         }
 
         if (!university) {
             setUniversityError(true);
-            setCarouselIndex(5);
+            setCarouselIndex(7);
             return false;
         }
 
         if (!graduationDate) {
             setGraduationDateError(true);
-            setCarouselIndex(5);
+            setCarouselIndex(7);
             return false;
         } else {
             const isValidated = validateYear(graduationDate);
             if (!isValidated) {
                 setGraduationDateError(true);
-                setCarouselIndex(5);
+                setCarouselIndex(7);
                 return false;
             }
         }
@@ -311,7 +312,6 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
                         {subjectsError ? <div className="error-message">Please select at least one subject</div> : null}
                         <h3>Subjects you would <br></br>want to teach</h3>
                         <div className="scroll-container">{subjectsList}</div>
-
                     </div>
                 </CarouselItem>
                 <CarouselItem>
@@ -325,13 +325,12 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
                 <CarouselItem>
                     <div>
                         <h3>Location you will be teaching at</h3>
-                        <p>DUG facility</p>
+                        <div className="options-card active-card" >Dug facility</div>
                     </div>
                 </CarouselItem>
                 <CarouselItem>
                     <div>
                         <h3>Your address</h3>
-
                         <input
                             className={streetError ? "notValidated" : null}
                             placeholder="Street"
@@ -358,11 +357,22 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
                             value={city}
                             onChange={e => { setCityError(false); handleChange(e) }}
                         />
-                        {addressProofError ? <p className="errorMsg">Please upload a proof of address</p> : null}
+                        {addressProofError ?
+                            <p className="errorMsg">Please upload a proof of address</p>
+                            : null
+                        }
                         <div className="proof-of-address-container">
-                            <img id="proof-of-address" style={{ width: "60px", height: "50px", marginRight: "10px" }}></img>
-                            <button onClick={() => { setAddressProofError(false); hiddenFileInputAddress.current.click() }} style={{ width: "100%" }}>Upload a proof of address</button>
-                            <input type="file" ref={hiddenFileInputAddress} style={{ display: "none" }} placeholder="Proof of Address" name="proof_of_address" accept="image/*" onChange={e => { handleImageChange(e); document.getElementById('proof-of-address').src = window.URL.createObjectURL(e.target.files[0]) }} />
+                            <img id="proof-of-address" style={{ width: "160px", height: "180px", marginRight: "30px" }}></img>
+                            <button onClick={() => { setAddressProofError(false); hiddenFileInputAddress.current.click() }} >Upload a proof of address</button>
+                            <input
+                                type="file"
+                                ref={hiddenFileInputAddress}
+                                style={{ display: "none" }}
+                                placeholder="Proof of Address"
+                                name="proof_of_address"
+                                accept="image/*"
+                                onChange={e => { handleImageChange(e); document.getElementById('proof-of-address').src = window.URL.createObjectURL(e.target.files[0]) }}
+                            />
                         </div>
 
                     </div>
@@ -370,10 +380,20 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
                 <CarouselItem>
                     <div>
                         <h3>Details about you</h3>
-                        {profileImageError ? <p className="errorMsg">Please upload a profile image</p> : null}
-                        <img id="profile-image" src="" width="160" height="160"></img>
+                        {profileImageError ?
+                            <p className="errorMsg">Please upload a profile image</p>
+                            : null}
+                        <img id="profile-image" src="" width="200" height="200"></img>
                         <button onClick={() => { setProfileImageError(false); hiddenFileInputProfileImage.current.click() }} style={{ width: "250px", margin: "10px 0 20px 0 " }}>Upload a profile image</button>
-                        <input type="file" ref={hiddenFileInputProfileImage} style={{ display: "none" }} placeholder="Profile Image" name="profile_image" accept="image/*" onChange={e => { handleImageChange(e); document.getElementById('profile-image').src = window.URL.createObjectURL(e.target.files[0]) }} />
+                        <input
+                            type="file"
+                            ref={hiddenFileInputProfileImage}
+                            style={{ display: "none" }}
+                            placeholder="Profile Image"
+                            name="profile_image"
+                            accept="image/*"
+                            onChange={e => { handleImageChange(e); document.getElementById('profile-image').src = window.URL.createObjectURL(e.target.files[0]) }}
+                        />
                         <input
                             className={phoneNumberError ? "notValidated" : null}
                             placeholder="Phone number"

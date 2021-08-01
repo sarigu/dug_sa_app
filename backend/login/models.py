@@ -63,7 +63,7 @@ class Teacher(models.Model):
     street = models.CharField(max_length=255, blank=True, null=True)
     postal_code = models.CharField( max_length=50, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
-    proof_of_address = ResizedImageField(size=[800, 600], crop= ['top', 'left'],quality=85,upload_to="teachers/addressProof/", blank=True, null=True)
+    proof_of_address = ResizedImageField(size=[600, 800], crop= ['middle', 'center'],quality=85,upload_to="teachers/addressProof/", blank=True, null=True)
     #models.ImageField( upload_to="teachers/addressProof/" , blank=True, null=True)
     #education
     degree = models.CharField(max_length=255, blank=True, null=True)
