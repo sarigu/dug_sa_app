@@ -42,6 +42,16 @@ import {
     ADD_TEACHER_REVIEW_FAIL,
     LOAD_REJECTED_TEACHERS_SUCCESS,
     LOAD_REJECTED_TEACHERS_FAIL,
+    LOAD_ACTIVE_ACCESS_CODES_SUCCESS,
+    LOAD_ACTIVE_ACCESS_CODES_FAIL,
+    LOAD_INACTIVE_ACCESS_CODES_SUCCESS,
+    LOAD_INACTIVE_ACCESS_CODES_FAIL,
+    LOAD_ACTIVE_ACCESS_CODE_SUCCESS,
+    LOAD_ACTIVE_ACCESS_CODE_FAIL,
+    REMOVE_ACTIVE_ACCESS_CODE_SUCCESS,
+    REMOVE_ACTIVE_ACCESS_CODE_FAIL,
+    ADD_ACTIVE_ACCESS_CODE_SUCCESS,
+    ADD_ACTIVE_ACCESS_CODE_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -70,6 +80,11 @@ const initialState = {
     isUpdated: false,
     teacher: undefined,
     isReviewed: false,
+    accessCodes: [],
+    inactiveAccessCodes: [],
+    accessCode: undefined,
+    accessCodeIsUpdated: false,
+    accessCodeIsCreated: false,
 };
 
 export default function (state = initialState, action) {
@@ -281,8 +296,55 @@ export default function (state = initialState, action) {
                 ...state,
                 isReviewed: false,
             }
+        case LOAD_ACTIVE_ACCESS_CODES_SUCCESS:
+            console.log(payload, "payload.data")
+            return {
+                ...state,
+                accessCodes: payload,
+            }
+        case LOAD_ACTIVE_ACCESS_CODES_FAIL:
+            return {
+                ...state,
+            }
+        case LOAD_INACTIVE_ACCESS_CODES_SUCCESS:
+            return {
+                ...state,
+                inactiveAccessCodes: payload,
+            }
+        case LOAD_INACTIVE_ACCESS_CODES_FAIL:
+            return {
+                ...state,
+            }
+        case LOAD_ACTIVE_ACCESS_CODE_SUCCESS:
+            return {
+                ...state,
+                accessCode: payload,
+            }
+        case LOAD_ACTIVE_ACCESS_CODE_FAIL:
+            return {
+                ...state,
+            }
+        case REMOVE_ACTIVE_ACCESS_CODE_SUCCESS:
+            return {
+                ...state,
+                accessCodeIsUpdated: true,
+            }
+        case REMOVE_ACTIVE_ACCESS_CODE_FAIL:
+            return {
+                ...state,
+                accessCodeIsUpdated: false,
+            }
+        case ADD_ACTIVE_ACCESS_CODE_SUCCESS:
+            return {
+                ...state,
+                accessCodeIsCreated: true,
+            }
+        case ADD_ACTIVE_ACCESS_CODE_FAIL:
+            return {
+                ...state,
+                accessCodeIsCreated: false,
+            }
         default:
             return state
     }
 };
-
