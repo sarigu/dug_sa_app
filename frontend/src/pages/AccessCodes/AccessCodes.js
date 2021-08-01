@@ -99,7 +99,8 @@ const AccessCodes = ({
                           <h4>{inactiveAccessCode.code}</h4>
                         </div>
                       ))
-                      : <p>No access codes</p>}
+                      : <p>No access codes</p>
+                    }
                   </div>
                 )}
             </div>
@@ -114,10 +115,14 @@ const AccessCodes = ({
       {showPopup
         ? (
           <PopUp selectedCallback={() => setShowPopup(false)}>
-            {showDetails ? <AccessCodeDetails selectedCallback={() => { setShowDetails(false); setShowFeedback(true); }} />
-              : showFeedback ? <AccessCodeFeedback feedbackType="updated-access-code" />
-                : addAccessCode ? <AccessCodeForm selectedCallback={() => { setShowAccessCodeCreatedFeeback(true); setAddAccessCode(false); }} />
-                  : showAccessCodeCreatedFeeback ? <AccessCodeFeedback feedbackType="added-access-code" />
+            {showDetails
+              ? <AccessCodeDetails selectedCallback={() => { setShowDetails(false); setShowFeedback(true); }} />
+              : showFeedback
+                ? <AccessCodeFeedback feedbackType="updated-access-code" />
+                : addAccessCode
+                  ? <AccessCodeForm selectedCallback={() => { setShowAccessCodeCreatedFeeback(true); setAddAccessCode(false); }} />
+                  : showAccessCodeCreatedFeeback
+                    ? <AccessCodeFeedback feedbackType="added-access-code" />
                     : null}
           </PopUp>
         )

@@ -212,7 +212,6 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
                     allLanguages.splice(index, 1);
                 }
             }
-
         } else {
             if (optionType === "subject") {
                 card.classList.add("active-card");
@@ -223,6 +222,7 @@ const TeacherSignUpFlow = ({ update_teacher, load_subjects, load_languages, subj
                 allLanguages.push(optionId);
             }
         }
+
         setSelectedSubjects(allSubjects);
         setSelectedLanguages(allLanguages);
     }

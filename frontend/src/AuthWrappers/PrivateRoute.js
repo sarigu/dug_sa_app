@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 import Navbar from '../components/Navbar/Navbar';
 import Menu from '../components/Menu/Menu';
 import './PrivateRoute.css';

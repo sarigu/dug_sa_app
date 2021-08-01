@@ -109,7 +109,12 @@ const StudySessionEdit = ({
               <p>{studySession.location ? `${studySession.location.street} ,${studySession.location.postal_code} ,${studySession.location.city}` : null}</p>
               <h3>Spots</h3>
               <p>{`${studySession.taken_spots} taken from ${studySession.available_spots}`}</p>
-              <h3>Description</h3>
+              <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+                <h3 style={{ marginRight: '20px' }}>Description</h3>
+                <span>
+                  Words left: {wordCountdown}
+                </span>
+              </div>
               <textarea
                 onKeyUp={(e) => (500 - e.target.value.length > 0 ? setWordCountdown(500 - e.target.value.length) : setWordCountdown(0))}
                 rows="10"

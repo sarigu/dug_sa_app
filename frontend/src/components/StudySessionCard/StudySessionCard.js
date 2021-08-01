@@ -13,7 +13,11 @@ const StudySessionCard = (props) => {
   }, [props]);
 
   return (
-    <div onClick={() => props.selectedCallback(props.sessionId, props.isActive)} className={props.isActive ? 'reminder-card' : 'reminder-card cancelled-card'} style={{ backgroundColor: `${props.subjectColor}` }}>
+    <div
+      onClick={() => props.selectedCallback(props.sessionId, props.isActive)}
+      className={props.isActive ? 'reminder-card' : 'reminder-card cancelled-card'}
+      style={{ backgroundColor: `${props.subjectColor}` }}
+    >
       {!props.isActive ? (
         <div className="cancelled-heading-wrapper">
           <strong>Cancelled</strong>

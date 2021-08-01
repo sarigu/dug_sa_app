@@ -79,8 +79,10 @@ const StudentDashboard = ({ load_upcoming_booked_study_sessions, upcomingStudySe
             </section>
             {showPopup ?
                 <PopUp selectedCallback={() => setShowPopup(false)} >
-                    {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
-                        : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                    {showStudySessionDetails
+                        ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} />
+                        : showFeedback
+                            ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
                             : null}
                 </PopUp>
                 : null

@@ -44,8 +44,25 @@ const FilterComponent = (props) => {
         <ArrowDown />
       </div>
       <div className="dropdown-content">
-        {props.options && props.filterBy === 'subjects' ? props.options.map((option, index) => <Checkbox key={index} optionId={option.id} optionValue={option.name} setButtonText={setButtonText} onSelected={(optionId) => { addOrRemove(optionId); }} />) : props.options && props.filterBy === 'languages'
-          ? props.options.map((option, index) => <Checkbox key={index} optionId={option.id} optionValue={option.language} setButtonText={setButtonText} onSelected={(optionId) => { addOrRemove(optionId); }} />) : null}
+        {props.options && props.filterBy === 'subjects' ?
+          props.options.map((option, index) =>
+            <Checkbox
+              key={index}
+              optionId={option.id}
+              optionValue={option.name}
+              setButtonText={setButtonText}
+              onSelected={(optionId) => { addOrRemove(optionId); }}
+            />
+          ) : props.options && props.filterBy === 'languages'
+            ? props.options.map((option, index) =>
+              <Checkbox
+                key={index}
+                optionId={option.id}
+                optionValue={option.language}
+                setButtonText={setButtonText}
+                onSelected={(optionId) => { addOrRemove(optionId); }}
+              />
+            ) : null}
         <button onClick={() => { props.onApplyFilter(); setButtonText('Applied'); }} style={{ margin: '10px 0', height: '30px' }}>{buttonText}</button>
       </div>
     </div>

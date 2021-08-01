@@ -74,9 +74,12 @@ const DashboardContent = ({ upcomingStudySessions, load_upcoming_teachers_study_
             </section>
             {showPopup ?
                 <PopUp selectedCallback={() => setShowPopup(false)} >
-                    {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} handleEdit={() => { setShowStudySessionEdit(true); setShowStudySessionDetails(false) }} />
-                        : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} /> :
-                            showStudySessionEdit ? <StudySessionEdit selectedCallback={() => { setShowFeedback(true); setShowStudySessionEdit(false); setSessionType("updated-session") }} /> :
+                    {showStudySessionDetails
+                        ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false) }} handleEdit={() => { setShowStudySessionEdit(true); setShowStudySessionDetails(false) }} />
+                        : showFeedback
+                            ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} /> :
+                            showStudySessionEdit
+                                ? <StudySessionEdit selectedCallback={() => { setShowFeedback(true); setShowStudySessionEdit(false); setSessionType("updated-session") }} /> :
                                 null}
                 </PopUp>
                 : null
