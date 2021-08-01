@@ -1,13 +1,11 @@
 import React from 'react';
-import ArrowRight from '../../icons/ArrowRight'
-import './Buttons.css'
+import ArrowRight from '../../assets/icons/ArrowRight';
+import './Buttons.css';
 
-const NextButton = () => {
-    return (
-        <div className="inline-button next-button" >
-            <ArrowRight />
-        </div>
-    );
-};
+const NextButton = () => (
+  <div className="inline-button next-button">
+    <ArrowRight />
+  </div>
+);
 
 export default NextButton;

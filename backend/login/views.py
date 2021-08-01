@@ -74,9 +74,6 @@ class TeacherView(viewsets.ModelViewSet):
             teacher_id =  self.kwargs['pk']
             if request.user.role == "teacher":
                 teacher = Teacher.objects.get(pk = teacher_id)
-                print(teacher)
-                print(request.data)
-       
                 data = request.data
                 teacher.phone = data["phone"]
                 teacher.street = data["street"]
@@ -93,10 +90,8 @@ class TeacherView(viewsets.ModelViewSet):
                 teacher.provided_information = True
                 teacher.save()
                 subjects = data["selectedSubjects"]
-                print("subjects", subjects)
                 for elem in subjects:
                     if elem.isdigit():
-                        print("subject", elem)
                         subject = Subject.objects.get(pk=elem)
                         if Teacher_Subject.objects.filter(subject=subject).filter(teacher=teacher).exists():
                             continue
@@ -110,7 +105,6 @@ class TeacherView(viewsets.ModelViewSet):
                 languages = data["selectedLanguages"]
                 for elem in languages:
                     if elem.isdigit():
-                        print("lang", elem)
                         language = Language.objects.get(pk=elem)
                         if Teacher_Language.objects.filter(language=language).filter(teacher=teacher).exists():
                             continue
@@ -122,19 +116,15 @@ class TeacherView(viewsets.ModelViewSet):
                     else:
                         continue
                 facility = TeachingFacility.objects.get(pk=1)
-                print(facility, "FAcility")
                 teachers_facilities = Teacher_TeachingFacility.objects.create(
                     teacher = teacher,
                     teaching_facility = facility
                 )
-
                 serializer = TeacherSerializer(teacher)
-
                 response_data = {'teacher': serializer.data}
             else:
                 raise ValueError('No access right')
         except Exception as e:
-            print("ERR", e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
 
@@ -255,6 +245,7 @@ class BookmarkedTeachersView(viewsets.ViewSet):
         try: 
             json_data = json.loads(request.body)
             teacherId = json_data["teacherId"]
+            print(teacherId,"teacherId")
             teacher = Teacher.objects.get(pk=teacherId)
             if BookmarkedTeacher.objects.filter(teacher=teacher).filter(user=request.user).exists():
                 BookmarkedTeacher.objects.get(teacher=teacher, user=request.user).delete()
@@ -263,6 +254,7 @@ class BookmarkedTeachersView(viewsets.ViewSet):
                 new_bookmark.save()
             response_data = {"status": "ok"}
         except Exception as e:
+            print("ERR", e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         return Response(response_data)
@@ -387,11 +379,9 @@ class AccessCodesView(viewsets.ModelViewSet):
     queryset = AccessCode.objects.all()
 
     def list(self, request, *args, **kwargs):
-        print("in retreive")
         try:
             if request.user.role == "staff":
                 access_codes = AccessCode.objects.filter(is_active = True)
-                print(access_codes)
                 serializer = AccessCodeSerializer(access_codes, many=True)
                 return Response(serializer.data)
             else:
