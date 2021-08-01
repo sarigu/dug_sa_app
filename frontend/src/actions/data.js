@@ -51,6 +51,8 @@ import {
     LOAD_ACTIVE_ACCESS_CODE_FAIL,
     REMOVE_ACTIVE_ACCESS_CODE_SUCCESS,
     REMOVE_ACTIVE_ACCESS_CODE_FAIL,
+    ADD_ACTIVE_ACCESS_CODE_SUCCESS,
+    ADD_ACTIVE_ACCESS_CODE_FAIL,
 } from './types';
 
 
@@ -718,4 +720,38 @@ export const update_access_code = (accessCodeId, isActive) => async dispatch => 
         }
     }
 };
+
+
+export const add_access_code = (code) => async dispatch => {
+
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+
+        const body = JSON.stringify({ code });
+
+        try {
+            const res = await axios.post('http://localhost:8000/api/accessCodes/', body, config);
+
+            dispatch({
+                type: ADD_ACTIVE_ACCESS_CODE_SUCCESS,
+            });
+
+        } catch (err) {
+            dispatch({
+                type: ADD_ACTIVE_ACCESS_CODE_FAIL
+            });
+        }
+    }
+};
+
+
+
+
 

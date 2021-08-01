@@ -55,7 +55,7 @@ const AccessCodeDetails = ({ accessCode, selectedCallback, update_access_code })
 
 const mapStateToProps = (state, props) => ({
     selectedCallback: props.selectedCallback,
-    accessCode: state.data.accessCode
+    accessCode: state.data.accessCode,
 });
 
 export default connect(mapStateToProps, { update_access_code })(AccessCodeDetails);

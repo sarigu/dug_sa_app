@@ -421,11 +421,9 @@ class AccessCodesView(viewsets.ModelViewSet):
     def create(self, request):
         try: 
             if request.user.role == "staff":
-                json_data = json.loads(request.body)
-                access_code_id = json_data["accessCodeId"]
                 access_code = AccessCode.objects.create(
                         is_active = True,
-                        code = json_data["code"]
+                        code = request.data["code"]
                 )
                 response_data = {"status": "ok"}
             else:

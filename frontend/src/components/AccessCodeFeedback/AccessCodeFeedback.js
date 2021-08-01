@@ -12,6 +12,16 @@ const AccessCodeUpdateSuccess = () => {
     );
 };
 
+const AccessCodeCreateSuccess = () => {
+    return (
+        <div className="feedback-content">
+            <span className="feedback-icon" >&#128272;</span>
+            <h3>You successfully created a new access code!</h3>
+            <button onClick={() => { window.location.href = "/dashboard" }}>Go back</button>
+        </div>
+    );
+};
+
 const FailMessage = () => {
     return (
         <div className="feedback-content">
@@ -23,21 +33,22 @@ const FailMessage = () => {
 };
 
 
-const AccessCodeFeedback = ({ accessCodeIsUpdated, selectedCallback }) => {
+const AccessCodeFeedback = ({ accessCodeIsUpdated, feedbackType, accessCodeIsCreated }) => {
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        console.log(accessCodeIsUpdated, "accessCodeIsUpdated")
         setIsLoaded(true);
-    }, [accessCodeIsUpdated]);
+    }, [accessCodeIsUpdated, accessCodeIsCreated]);
 
     return (
         <div className="feedback-container" >
             {isLoaded ?
                 <div>
-                    {accessCodeIsUpdated ?
-                        <AccessCodeUpdateSuccess selectedCallback={selectedCallback} />
-                        : <FailMessage selectedCallback={selectedCallback} />}
+                    {feedbackType && feedbackType === "updated-access-code" && accessCodeIsUpdated ?
+                        <AccessCodeUpdateSuccess />
+                        : feedbackType && feedbackType === "added-access-code" && accessCodeIsCreated ?
+                            <AccessCodeCreateSuccess />
+                            : <FailMessage />}
                 </div>
                 :
                 <div className="feedback-loading-icon">
@@ -51,7 +62,8 @@ const AccessCodeFeedback = ({ accessCodeIsUpdated, selectedCallback }) => {
 
 const mapStateToProps = (state, props) => ({
     accessCodeIsUpdated: state.data.accessCodeIsUpdated,
-    selectedCallback: props.selectedCallback
+    accessCodeIsCreated: state.data.accessCodeIsCreated,
+    feedbackType: props.feedbackType,
 });
 
 export default connect(mapStateToProps, null)(AccessCodeFeedback);

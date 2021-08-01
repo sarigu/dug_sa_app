@@ -50,6 +50,8 @@ import {
     LOAD_ACTIVE_ACCESS_CODE_FAIL,
     REMOVE_ACTIVE_ACCESS_CODE_SUCCESS,
     REMOVE_ACTIVE_ACCESS_CODE_FAIL,
+    ADD_ACTIVE_ACCESS_CODE_SUCCESS,
+    ADD_ACTIVE_ACCESS_CODE_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -82,6 +84,7 @@ const initialState = {
     inactiveAccessCodes: [],
     accessCode: undefined,
     accessCodeIsUpdated: false,
+    accessCodeIsCreated: false,
 };
 
 export default function (state = initialState, action) {
@@ -330,6 +333,16 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 accessCodeIsUpdated: false,
+            }
+        case ADD_ACTIVE_ACCESS_CODE_SUCCESS:
+            return {
+                ...state,
+                accessCodeIsCreated: true,
+            }
+        case ADD_ACTIVE_ACCESS_CODE_FAIL:
+            return {
+                ...state,
+                accessCodeIsCreated: false,
             }
         default:
             return state

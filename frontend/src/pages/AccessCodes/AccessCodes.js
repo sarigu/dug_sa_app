@@ -5,6 +5,8 @@ import BackButton from '../../components/Buttons/BackButton';
 import AccessCodeDetails from '../../components/AccessCodeDetails/AccessCodeDetails';
 import AccessCodeFeedback from '../../components/AccessCodeFeedback/AccessCodeFeedback';
 import PopUp from '../../components/PopUp/PopUp';
+import PlusButton from '../../components/Buttons/PlusButton';
+import AccessCodeForm from '../../components/AccessCodeForm/AccessCodeForm'
 import { useHistory } from "react-router-dom";
 import { load_active_access_codes, load_inactive_access_codes, load_access_code } from '../../actions/data';
 import './AccessCodes.css';
@@ -13,10 +15,11 @@ const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_code
     const [isLoaded, setIsLoaded] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [showDetails, setShowDetails] = useState(false);
-    const [index, setIndex] = useState(1);
     const [sortByInactive, setSortByInactive] = useState(false);
     const [sortByActive, setSortByActive] = useState(true);
     const [showFeedback, setShowFeedback] = useState(false);
+    const [addAccessCode, setAddAccessCode] = useState(false);
+    const [showAccessCodeCreatedFeeback, setShowAccessCodeCreatedFeeback] = useState(false);
 
     const history = useHistory();
 
@@ -25,7 +28,6 @@ const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_code
     }, []);
 
     useEffect(() => {
-        console.log(accessCodes, "USE EFFECT", sortByActive)
         if (sortByActive) {
             setIsLoaded(true);
         }
@@ -59,6 +61,11 @@ const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_code
         setShowDetails(true)
     }
 
+    const handleCreateAccessCode = () => {
+        setAddAccessCode(true);
+        setShowDetails(false);
+        setShowPopup(true);
+    }
 
     return (
         <div className="all-teachers-wrapper" >
@@ -69,7 +76,6 @@ const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_code
                     <div className={sortByActive ? "active" : null} onClick={() => { setSortByActive(true); setSortByInactive(false) }} >Active</div>
                     <div className={sortByInactive ? "active" : null} onClick={() => { setSortByActive(false); setSortByInactive(true) }}>Inactive</div>
                 </div>
-                {console.log("idloaded", isLoaded)}
                 {!isLoaded ? <LoadingIcon /> :
                     <div>
                         {sortByActive ?
@@ -97,12 +103,15 @@ const AccessCodes = ({ accessCodes, inactiveAccessCodes, load_active_access_code
                         }
                     </div>
                 }
+                {sortByActive ? <div className="plus-button-container">  <PlusButton selectedCallback={handleCreateAccessCode} /></div> : null}
             </div>
             {showPopup ?
                 <PopUp selectedCallback={() => setShowPopup(false)}>
                     {showDetails ? <AccessCodeDetails selectedCallback={() => { setShowDetails(false); setShowFeedback(true) }} />
-                        : showFeedback ? <AccessCodeFeedback selectedCallback={() => setShowPopup(false)} />
-                            : null}
+                        : showFeedback ? <AccessCodeFeedback feedbackType="updated-access-code" /> :
+                            addAccessCode ? <AccessCodeForm selectedCallback={() => { setShowAccessCodeCreatedFeeback(true); setAddAccessCode(false) }} /> :
+                                showAccessCodeCreatedFeeback ? <AccessCodeFeedback feedbackType="added-access-code" />
+                                    : null}
                 </PopUp>
                 : null
             }
