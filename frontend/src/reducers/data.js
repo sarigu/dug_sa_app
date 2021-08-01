@@ -42,6 +42,10 @@ import {
     ADD_TEACHER_REVIEW_FAIL,
     LOAD_REJECTED_TEACHERS_SUCCESS,
     LOAD_REJECTED_TEACHERS_FAIL,
+    LOAD_ACTIVE_ACCESS_CODES_SUCCESS,
+    LOAD_ACTIVE_ACCESS_CODES_FAIL,
+    LOAD_INACTIVE_ACCESS_CODES_SUCCESS,
+    LOAD_INACTIVE_ACCESS_CODES_FAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -70,6 +74,8 @@ const initialState = {
     isUpdated: false,
     teacher: undefined,
     isReviewed: false,
+    accessCodes: [],
+    inactiveAccessCodes: [],
 };
 
 export default function (state = initialState, action) {
@@ -281,8 +287,26 @@ export default function (state = initialState, action) {
                 ...state,
                 isReviewed: false,
             }
+        case LOAD_ACTIVE_ACCESS_CODES_SUCCESS:
+            console.log(payload, "payload.data")
+            return {
+                ...state,
+                accessCodes: payload.length > 0 ? payload : state.accessCodes,
+            }
+        case LOAD_ACTIVE_ACCESS_CODES_FAIL:
+            return {
+                ...state,
+            }
+        case LOAD_INACTIVE_ACCESS_CODES_SUCCESS:
+            return {
+                ...state,
+                inactiveAccessCodes: payload.length > 0 ? payload : state.inactiveAccessCodes,
+            }
+        case LOAD_INACTIVE_ACCESS_CODES_FAIL:
+            return {
+                ...state,
+            }
         default:
             return state
     }
 };
-

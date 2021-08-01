@@ -1,6 +1,6 @@
 from rest_framework import viewsets, status
-from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer, FindTeacherSerializer, BookmarkedTeachersSerializer, TeacherLanguageSerializer, LanguageSerializer, TeachingFacilitySerializer
-from .models import Teacher, CustomUser, Subject, Teacher_Subject, Teacher_Language, Language, BookmarkedTeacher,TeachingFacility, Teacher_TeachingFacility
+from .serializers import TeacherSerializer, SubjectSerializer, TeacherSubjectSerializer,TeacherShortVersionSerializer, FindTeacherSerializer, BookmarkedTeachersSerializer, TeacherLanguageSerializer, LanguageSerializer, TeachingFacilitySerializer, AccessCodeSerializer
+from .models import Teacher, CustomUser, Subject, Teacher_Subject, Teacher_Language, Language, BookmarkedTeacher,TeachingFacility, Teacher_TeachingFacility, AccessCode
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -138,23 +138,6 @@ class TeacherView(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
 
-        try:
-            if request.user.role == "staff":
-                teacher = Teacher.objects.get(pk = teacher_id)
-                data = json.loads(request.body)    
-                if data["isApproved"] == True:
-                    teacher.is_approved = True
-                    teacher.is_reviewed = True
-                    teacher.save()
-                elif data["isApproved"] == False:
-                    teacher.is_approved = False
-                    teacher.is_reviewed = True
-                    teacher.save()
-            else:
-                raise ValueError('No access right')
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response({"status": "ok"})
     
 
 class NewTeachersView(ListAPIView):
@@ -397,3 +380,72 @@ class RejectedTeachersView(viewsets.ViewSet):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response([])
+
+class AccessCodesView(viewsets.ModelViewSet):
+    permissions_classes=[IsAuthenticated]
+    serializer_class = AccessCodeSerializer
+    queryset = AccessCode.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        print("in retreive")
+        try:
+            if request.user.role == "staff":
+                access_codes = AccessCode.objects.filter(is_active = True)
+                print(access_codes)
+                serializer = AccessCodeSerializer(access_codes, many=True)
+                return Response(serializer.data)
+            else:
+                raise ValueError('No access')
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response()
+
+    def partial_update(self, request, **kwargs):
+        try:
+            access_code_id =  self.kwargs['pk'] 
+            if request.user.role == "staff":
+                access_code = AccessCode.objects.get(pk = access_code_id)
+                data = json.loads(request.body)    
+                if data["isActive"] == True:
+                    access_code.is_active = True
+                    access_code.save()
+                elif data["isActive"] == False:
+                    access_code.is_active = False
+                    access_code.save()
+            else:
+                raise ValueError('No access right')
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response({"status": "ok"})
+
+    def create(self, request):
+        try: 
+            if request.user.role == "staff":
+                json_data = json.loads(request.body)
+                access_code_id = json_data["accessCodeId"]
+                access_code = AccessCode.objects.create(
+                        is_active = True,
+                        code = json_data["code"]
+                )
+                response_data = {"status": "ok"}
+            else:
+                raise ValueError('No access right')
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(response_data)
+
+
+class InactiveAccessCodesView(viewsets.ViewSet):
+    permissions_classes=[IsAuthenticated]
+    def list(self, request):
+        try:
+            if request.user.role == "staff":
+                access_codes = AccessCode.objects.filter(is_active = False)
+                serializer = AccessCodeSerializer(access_codes, many=True)
+                return Response(serializer.data)
+            else:
+                raise ValueError('No access')
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response()

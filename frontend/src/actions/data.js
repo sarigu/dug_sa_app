@@ -43,6 +43,10 @@ import {
     ADD_TEACHER_REVIEW_FAIL,
     LOAD_REJECTED_TEACHERS_SUCCESS,
     LOAD_REJECTED_TEACHERS_FAIL,
+    LOAD_ACTIVE_ACCESS_CODES_SUCCESS,
+    LOAD_ACTIVE_ACCESS_CODES_FAIL,
+    LOAD_INACTIVE_ACCESS_CODES_SUCCESS,
+    LOAD_INACTIVE_ACCESS_CODES_FAIL,
 } from './types';
 
 
@@ -603,3 +607,58 @@ export const edit_study_session = (studySessionId, language, subject, startTime,
         }
     }
 };
+
+export const load_active_access_codes = (index) => async dispatch => {
+
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.get('http://localhost:8000/api/accessCodes/', config);
+            console.log("action ALL ACCESS COdes", res.data)
+            dispatch({
+                type: LOAD_ACTIVE_ACCESS_CODES_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: LOAD_ACTIVE_ACCESS_CODES_FAIL
+            });
+        }
+    }
+};
+
+export const load_inactive_access_codes = (index) => async dispatch => {
+
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json'
+            }
+        };
+
+        try {
+            const res = await axios.get('http://localhost:8000/api/inactive/accessCodes/', config);
+            console.log("action ALL IN----ACCESS COdes", res.data)
+            dispatch({
+                type: LOAD_INACTIVE_ACCESS_CODES_SUCCESS,
+                payload: res.data
+            });
+
+        } catch (err) {
+            dispatch({
+                type: LOAD_INACTIVE_ACCESS_CODES_FAIL
+            });
+        }
+    }
+};
+
