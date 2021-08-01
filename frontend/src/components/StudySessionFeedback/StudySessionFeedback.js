@@ -71,42 +71,37 @@ const StudySessionFeedback = ({
           <div>
             {userType === 'student' && sessionType && sessionType === 'study-session' ? (
               <div>
-                {isBooked ?
-                  <BookingSuccessMessage selectedCallback={selectedCallback} />
-                  : <FailMessage selectedCallback={selectedCallback} />
-                }
+                {isBooked
+                  ? <BookingSuccessMessage selectedCallback={selectedCallback} />
+                  : <FailMessage selectedCallback={selectedCallback} />}
               </div>
             )
               : userType === 'student' && sessionType && sessionType !== 'study-session' ? (
                 <div>
-                  {participationIsDeleted ?
-                    <DropOutOfStudySessionSuccessMessage selectedCallback={selectedCallback} />
-                    : <FailMessage selectedCallback={selectedCallback} />
-                  }
+                  {participationIsDeleted
+                    ? <DropOutOfStudySessionSuccessMessage selectedCallback={selectedCallback} />
+                    : <FailMessage selectedCallback={selectedCallback} />}
                 </div>
               )
                 : (userType === 'teacher' || userType === 'staff') && sessionType && sessionType === 'teacher-study-session' ? (
                   <div>
-                    {isCancelled ?
-                      <CancelStudySessionSuccessMessage selectedCallback={selectedCallback} />
-                      : <FailMessage selectedCallback={selectedCallback} />
-                    }
+                    {isCancelled
+                      ? <CancelStudySessionSuccessMessage selectedCallback={selectedCallback} />
+                      : <FailMessage selectedCallback={selectedCallback} />}
                   </div>
                 )
                   : (userType === 'teacher' || userType === 'staff') && sessionType && sessionType === 'added-class' ? (
                     <div>
-                      {isCreated ?
-                        <CreatedStudySessionSuccessMessage selectedCallback={selectedCallback} />
-                        : <FailMessage selectedCallback={selectedCallback} />
-                      }
+                      {isCreated
+                        ? <CreatedStudySessionSuccessMessage selectedCallback={selectedCallback} />
+                        : <FailMessage selectedCallback={selectedCallback} />}
                     </div>
                   )
                     : (userType === 'teacher' || userType === 'staff') && sessionType && sessionType === 'updated-session' ? (
                       <div>
-                        {isUpdated ?
-                          <UpdatedStudySessionSuccessMessage selectedCallback={selectedCallback} />
-                          : <FailMessage selectedCallback={selectedCallback} />
-                        }
+                        {isUpdated
+                          ? <UpdatedStudySessionSuccessMessage selectedCallback={selectedCallback} />
+                          : <FailMessage selectedCallback={selectedCallback} />}
                       </div>
                     )
                       : <FailMessage selectedCallback={selectedCallback} />}

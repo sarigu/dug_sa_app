@@ -130,7 +130,7 @@ const TeacherDetails = ({ teacherData, add_teacher_review, selectedCallback }) =
               <CloseButton selectedCallback={() => setShowAdressProofDetails(false)} />
             </div>
             <div className="address-proof-image">
-              <img src={`http://localhost:8000${teacher.proof_of_address}`} />
+              <img alt="address-proof" src={`http://localhost:8000${teacher.proof_of_address}`} />
             </div>
           </div>
         )

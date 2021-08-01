@@ -99,8 +99,7 @@ const AccessCodes = ({
                           <h4>{inactiveAccessCode.code}</h4>
                         </div>
                       ))
-                      : <p>No access codes</p>
-                    }
+                      : <p>No access codes</p>}
                   </div>
                 )}
             </div>

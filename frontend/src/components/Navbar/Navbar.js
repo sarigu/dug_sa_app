@@ -12,7 +12,7 @@ const Navbar = ({ user, onMenuClick, menuShows }) => {
       <div className="navbar">
         <h2 style={{ cursor: 'pointer' }} onClick={() => { history.push('/dashboard'); }}>
           Hi,
-          {user ? " " + user.first_name : null}
+          {user ? ` ${user.first_name}` : null}
           <span>&#128075;&#127998;</span>
           {' '}
         </h2>

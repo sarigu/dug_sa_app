@@ -12,18 +12,18 @@ function Event({ event }) {
   return (
     <span className="event-card">
       <div style={{ width: '70%' }} className="event-card-content">
-        {event.type === 'cancelled-session' ?
-          <div>Cancelled</div>
-          : event.type === 'updated-study-session' ?
-            <div>Updated</div>
+        {event.type === 'cancelled-session'
+          ? <div>Cancelled</div>
+          : event.type === 'updated-study-session'
+            ? <div>Updated</div>
             : null}
         <div style={{ fontWeight: 600 }}>{event.title}</div>
-        {event.type === 'booked-study-session' || event.type === 'updated-study-session' ?
-          <div>{event.description}</div>
+        {event.type === 'booked-study-session' || event.type === 'updated-study-session'
+          ? <div>{event.description}</div>
           : null}
         <div>{event.location}</div>
-        {event.type === 'study-session' || event.type === 'booked-study-session' || event.type === 'teacher-study-session' || event.type === 'updated-study-session' ?
-          (
+        {event.type === 'study-session' || event.type === 'booked-study-session' || event.type === 'teacher-study-session' || event.type === 'updated-study-session'
+          ? (
             <div>
               {`${event.taken_spots} taken from `}
               {' '}
@@ -34,13 +34,13 @@ function Event({ event }) {
       </div>
       <div style={{ width: '30%', alignSelf: 'center' }}>
         {' '}
-        {event.type === 'study-session' ?
-          <button>Book</button>
-          : event.type === 'booked-study-session' ?
-            <span style={{ fontSize: '30px' }}>&#128161;</span>
+        {event.type === 'study-session'
+          ? <button>Book</button>
+          : event.type === 'booked-study-session'
+            ? <span style={{ fontSize: '30px' }}>&#128161;</span>
             : event.type === 'updated-study-session' ? <span>&#128227;</span>
-              : event.type === 'cancelled-session' ?
-                <span>&#128680;</span>
+              : event.type === 'cancelled-session'
+                ? <span>&#128680;</span>
                 : null}
       </div>
     </span>

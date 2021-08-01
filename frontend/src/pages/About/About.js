@@ -12,7 +12,7 @@ const About = () => {
       <BackButton buttonWidth="70px" selectedCallback={() => history.push('/dashboard')} />
       <div className="content-container">
         <h2 style={{ marginTop: '40px' }}>About</h2>
-        <img src={logo} />
+        <img alt="dug-logo" src={logo} />
         <p>
           The youth of "Designers Without Borders South Africa" came up with the idea
           to link students and volunteering teachers in the area for study sessions

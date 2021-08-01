@@ -10,12 +10,6 @@ export const CarouselItem = ({ children }) => (
 const Carousel = (props) => {
   const { children, backToIndex } = props;
 
-  useEffect(() => {
-    if (backToIndex) {
-      updateIndex(backToIndex);
-    }
-  }, [backToIndex]);
-
   const [activeIndex, setActiveIndex] = useState(0);
 
   const updateIndex = (newIndex) => {
@@ -26,6 +20,12 @@ const Carousel = (props) => {
     }
     setActiveIndex(newIndex);
   };
+
+  useEffect(() => {
+    if (backToIndex) {
+      updateIndex(backToIndex);
+    }
+  }, [backToIndex]);
 
   return (
     <div className="carousel" id="carousel">
@@ -49,9 +49,9 @@ const Carousel = (props) => {
         className="inner-container"
         style={{ transform: `translateX(-${activeIndex * 100}%)` }}
       >
-        {React.Children.map(children, (child, index) => React.cloneElement(child, { width: '100%' }))}
+        {React.Children.map(children, (child) => React.cloneElement(child, { width: '100%' }))}
       </div>
-      {activeIndex == React.Children.count(children) - 1
+      {activeIndex === React.Children.count(children) - 1
         ? (
           <button style={{ marginTop: '30px' }} onClick={() => { props.onSubmit(); }}>
             Submit

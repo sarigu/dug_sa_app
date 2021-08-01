@@ -16,7 +16,6 @@ const StudySessionEdit = ({
   const [error, setError] = useState(false);
   const [description, setDescription] = useState('');
   const [wordCountdown, setWordCountdown] = useState(500);
-  const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     load_subjects();
@@ -47,10 +46,10 @@ const StudySessionEdit = ({
   }, [studySession]);
 
   const handleUpdate = () => {
-    if (error || startTime > endTime || startTime == endTime) {
+    if (error || startTime > endTime || startTime === endTime) {
       setError(true);
     } else {
-      edit_study_session(studySession.id, language, subject, startTime, endTime, description, isActive);
+      edit_study_session(studySession.id, language, subject, startTime, endTime, description, true);
       selectedCallback();
     }
   };
@@ -66,9 +65,9 @@ const StudySessionEdit = ({
               <h3>Teacher</h3>
               <p>{studySession.teacher ? `${studySession.teacher.first_name} ${studySession.teacher.last_name}` : null}</p>
               <h3>Subject</h3>
-              <select onChange={(e) => { setError(false); setSubject(e.target.value); }}>{subjects && subjects.map((elem, index) => <option key={index} selected={elem.name == subject} value={elem.name}>{elem.name}</option>)}</select>
+              <select onChange={(e) => { setError(false); setSubject(e.target.value); }}>{subjects && subjects.map((elem, index) => <option key={index} selected={elem.name === subject} value={elem.name}>{elem.name}</option>)}</select>
               <h3>Language</h3>
-              <select onChange={(e) => { setError(false); setLanguage(e.target.value); }}>{languages && languages.map((elem, index) => <option key={index} selected={elem.language == language} value={elem.language}>{elem.language}</option>)}</select>
+              <select onChange={(e) => { setError(false); setLanguage(e.target.value); }}>{languages && languages.map((elem, index) => <option key={index} selected={elem.language === language} value={elem.language}>{elem.language}</option>)}</select>
               <h3>Date</h3>
               <p>{formattedDate || null}</p>
               <h3>Start Time</h3>
@@ -95,7 +94,6 @@ const StudySessionEdit = ({
                 value={endTime}
                 onChange={(e) => {
                   setError(false);
-                  console.log(e.target.value);
                   let newEndTime = e.target.value;
                   newEndTime = newEndTime
                     .replace(/^(\d\d)(\d)$/g, '$1:$2')
@@ -112,7 +110,9 @@ const StudySessionEdit = ({
               <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                 <h3 style={{ marginRight: '20px' }}>Description</h3>
                 <span>
-                  Words left: {wordCountdown}
+                  Words left:
+                  {' '}
+                  {wordCountdown}
                 </span>
               </div>
               <textarea
