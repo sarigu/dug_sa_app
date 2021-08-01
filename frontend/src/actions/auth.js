@@ -182,10 +182,26 @@ export const update_teacher = (userID, degree, university, year_of_graduation, l
     let [day, month, year] = year_of_graduation.split('.');
     const formattedDate = year + "-" + month + "-" + day;
 
+    const formData = new FormData();
+    formData.append("degree", degree);
+    formData.append("university", university);
+    formData.append("year_of_graduation", formattedDate);
+    formData.append("last_position", last_position);
+    formData.append("last_workplace", last_school);
+    formData.append("years_of_experience", years_of_experience);
+    formData.append("street", street);
+    formData.append("postal_code", postal_code);
+    formData.append("city", city);
+    formData.append("proof_of_address", proof_of_address);
+    formData.append("profile_image", profile_image);
+    formData.append("phone", phone_number);
+    formData.append("selectedSubjects", selectedSubjects);
+    formData.append("selectedLanguages", selectedLanguages);
+
+
     try {
-        const body = JSON.stringify({ 'userID': userID, 'degree': degree, 'university': university, 'year_of_graduation': formattedDate, 'last_position': last_position, 'last_school': last_school, 'years_of_experience': years_of_experience, 'street': street, 'postal_code': postal_code, 'city': city, 'proof_of_address': proof_of_address, 'profile_image': profile_image, 'phone_number': phone_number, 'selectedSubjects': selectedSubjects, 'selectedLanguages': selectedLanguages });
-        console.log("body--", body)
-        const res = await axios.put(`http://localhost:8000/api/teacher/${userID}/`, body, config);
+
+        const res = await axios.put(`http://localhost:8000/api/teacher/${userID}/`, formData, config);
 
         dispatch({
             type: TEACHER_UPDATE_SUCCESS,

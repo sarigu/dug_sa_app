@@ -75,10 +75,10 @@ class TeacherView(viewsets.ModelViewSet):
             if request.user.role == "teacher":
                 teacher = Teacher.objects.get(pk = teacher_id)
                 print(teacher)
-                data = json.loads(request.body)  
-                print(data) 
-                print(data["phone_number"], "phone")
-                teacher.phone = data["phone_number"]
+                print(request.data)
+       
+                data = request.data
+                teacher.phone = data["phone"]
                 teacher.street = data["street"]
                 teacher.postal_code = data["postal_code"]
                 teacher.city = data["city"]
@@ -87,44 +87,56 @@ class TeacherView(viewsets.ModelViewSet):
                 teacher.university = data["university"]
                 teacher.year_of_graduation = data["year_of_graduation"]
                 teacher.years_of_experience = data["years_of_experience"]
-                teacher.last_workplace = data["last_school"]
+                teacher.last_workplace = data["last_workplace"]
                 teacher.last_position = data["last_position"]
                 teacher.profile_image = data["profile_image"]
                 teacher.provided_information = True
                 teacher.save()
-                print(teacher_id)
-                print(request.data)
                 subjects = data["selectedSubjects"]
+                print("subjects", subjects)
                 for elem in subjects:
-                    subject = Subject.objects.get(pk=elem)
-                    if Teacher_Subject.objects.filter(subject=subject).filter(teacher=teacher).exists():
-                        continue
+                    if elem.isdigit():
+                        print("subject", elem)
+                        subject = Subject.objects.get(pk=elem)
+                        if Teacher_Subject.objects.filter(subject=subject).filter(teacher=teacher).exists():
+                            continue
+                        else:
+                            teachers_subject = Teacher_Subject.objects.create(
+                                teacher = teacher,
+                                subject = subject
+                            )
                     else:
-                        teachers_subject = Teacher_Subject.objects.create(
-                            teacher = teacher,
-                            subject = subject
-                        )
+                        continue
                 languages = data["selectedLanguages"]
                 for elem in languages:
-                    language = Language.objects.get(pk=elem)
-                    if Teacher_Language.objects.filter(language=language).filter(teacher=teacher).exists():
-                        continue
+                    if elem.isdigit():
+                        print("lang", elem)
+                        language = Language.objects.get(pk=elem)
+                        if Teacher_Language.objects.filter(language=language).filter(teacher=teacher).exists():
+                            continue
+                        else:
+                            teachers_language = Teacher_Language.objects.create(
+                                teacher = teacher,
+                                language = language
+                            )
                     else:
-                        teachers_language = Teacher_Language.objects.create(
-                            teacher = teacher,
-                            language = language
-                        )
+                        continue
                 facility = TeachingFacility.objects.get(pk=1)
+                print(facility, "FAcility")
                 teachers_facilities = Teacher_TeachingFacility.objects.create(
                     teacher = teacher,
                     teaching_facility = facility
                 )
+
+                serializer = TeacherSerializer(teacher)
+
+                response_data = {'teacher': serializer.data}
             else:
                 raise ValueError('No access right')
         except Exception as e:
             print("ERR", e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response({"status": "ok"})
+        return Response(response_data)
 
         try:
             if request.user.role == "staff":
@@ -160,78 +172,6 @@ class LanguageView(viewsets.ModelViewSet):
     serializer_class = LanguageSerializer
     queryset = Language.objects.all()
 
-class TeacherSubjectView(viewsets.ViewSet):
-    permissions_classes=[DjangoModelPermissions]
-    serializer_class = TeacherSubjectSerializer
-
-    def create(self, request):
-        try: 
-            if(request.user.role == "teacher"):
-                subjects = request.data["subjects"]
-                user = CustomUser.objects.get(email=self.request.user)
-                teacher = Teacher.objects.get(user=user)
-                for elem in subjects:
-                    subject = Subject.objects.get(pk=elem)
-                    if Teacher_Subject.objects.filter(subject=subject).filter(teacher=teacher).exists():
-                        continue
-                    else:
-                        teachers_subject = Teacher_Subject.objects.create(
-                            teacher = teacher,
-                            subject = subject
-                        )
-            else:
-                raise ValueError('No access right')
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response({'status': 'ok'})
-
-class TeacherLanguageView(viewsets.ViewSet):
-    permissions_classes=[DjangoModelPermissions]
-    serializer_class = TeacherLanguageSerializer
-
-    def create(self, request):
-        try: 
-            if(request.user.role == "teacher"):
-                languages = request.data["languages"]
-                user = CustomUser.objects.get(email=self.request.user)
-                teacher = Teacher.objects.get(user=user)
-                for elem in languages:
-                    language = Language.objects.get(pk=elem)
-                    if Teacher_Language.objects.filter(language=language).filter(teacher=teacher).exists():
-                        continue
-                    else:
-                        teachers_language = Teacher_Language.objects.create(
-                            teacher = teacher,
-                            language = language
-                        )
-            else:
-                raise ValueError('No access right')
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response({'status': 'ok'})
-
-
-class TeacherTeachingFacilitiesView(viewsets.ViewSet):
-    def create(self, request):
-        try: 
-            if(request.user.role == "teacher"):
-                facilities = request.data["facilities"]
-                user = CustomUser.objects.get(email=self.request.user)
-                teacher = Teacher.objects.get(user=user)
-                for elem in facilities:
-                    facility = TeachingFacility.objects.get(pk=elem)
-                    if Teacher_TeachingFacility.objects.filter(facility=facility).filter(teacher=teacher).exists():
-                        continue
-                    else:
-                        teachers_facilities = Teacher_TeachingFacility.objects.create(
-                            teacher = teacher,
-                            teaching_facility = facility
-                        )
-            else:
-                raise ValueError('No access right')
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response({'status': 'ok'})
 
 class TeachersView(viewsets.ViewSet):
     permissions_classes=[IsAuthenticated]

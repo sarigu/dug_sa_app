@@ -6,9 +6,6 @@ router = DefaultRouter()
 router.register(r'teacher', views.TeacherView, 'teacher') 
 router.register(r'subjects', views.SubjectView, 'subjects') 
 router.register(r'languages', views.LanguageView, 'languages') 
-router.register(r'subjects_taught', views.TeacherSubjectView, 'subjects_taught') 
-router.register(r'teaching_languages', views.TeacherLanguageView, 'teaching_languages') 
-router.register(r'teaching_facilities', views.TeacherTeachingFacilitiesView, 'teaching_facilities') 
 
 urlpatterns = [
     path("new/teachers/", views.NewTeachersView.as_view()),

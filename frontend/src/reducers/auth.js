@@ -60,7 +60,6 @@ export default function (state = initialState, action) {
                 signUpStatus: "success",
             }
         case USER_LOADED_SUCCESS:
-            console.log("reducer", payload)
             return {
                 ...state,
                 user: payload,
@@ -126,7 +125,7 @@ export default function (state = initialState, action) {
         case TEACHER_UPDATE_SUCCESS:
             return {
                 ...state,
-                user: payload,
+                user: payload.teacher,
                 error: null,
             }
         case SELECTED_ROLE:
