@@ -30,7 +30,7 @@ const Login = ({ login, isAuthenticated, error }) => {
 
   return (
     <div className="login-page">
-      <img src={logo} className="dug-logo" />
+      <img alt="dug-logo" src={logo} className="dug-logo" />
       <div className="login-wrapper">
         <h1>
           Welcome

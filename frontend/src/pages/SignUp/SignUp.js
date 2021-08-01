@@ -27,7 +27,7 @@ const SignUp = ({ update_selected_role }) => {
 
   return (
     <div className="signup-page">
-      <img src={logo} className="dug-logo" />
+      <img alt="dug-logo" src={logo} className="dug-logo" />
       <div className="signup-wrapper">
         <h1>
           Welcome

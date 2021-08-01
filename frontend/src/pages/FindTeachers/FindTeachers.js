@@ -183,68 +183,68 @@ const FindTeachers = ({
                   <div>
                     {' '}
                     {allBookmarkTeachers && allBookmarkTeachers.length > 0
-                        ? allBookmarkTeachers.map((teacher, index) => (
-                            <TeacherCard
-                                key={index}
-                                user={teacher.user}
-                                profileImage={teacher.profile_image}
-                                subjects={teacher.subjects}
-                                languages={teacher.languages}
-                                isBookmarked={teacher.isBookmarked}
-                                teachingFacilities={teacher.facilities}
-                                sortByBookmarks={sortByBookmarks}
-                                selectedCallback={(teacherId) => handleSelectedTeacher(teacherId)}
-                              />
-                        ))
-                        : <p>No teachers</p>}
+                      ? allBookmarkTeachers.map((teacher, index) => (
+                        <TeacherCard
+                          key={index}
+                          user={teacher.user}
+                          profileImage={teacher.profile_image}
+                          subjects={teacher.subjects}
+                          languages={teacher.languages}
+                          isBookmarked={teacher.isBookmarked}
+                          teachingFacilities={teacher.facilities}
+                          sortByBookmarks={sortByBookmarks}
+                          selectedCallback={(teacherId) => handleSelectedTeacher(teacherId)}
+                        />
+                      ))
+                      : <p>No teachers</p>}
 
                   </div>
                 )
                 : (
                   <div>
                     {allTeachers && allTeachers.length > 0
-                        ? allTeachers.map((teacher, index) => (
-                            <TeacherCard
-                                key={index}
-                                user={teacher.user}
-                                profileImage={teacher.profile_image}
-                                subjects={teacher.subjects}
-                                languages={teacher.languages}
-                                isBookmarked={teacher.isBookmarked}
-                                experience={teacher.experience}
-                                teachingFacilities={teacher.facilities}
-                                sortByBookmarks={sortByBookmarks}
-                                selectedCallback={(teacherId) => handleSelectedTeacher(teacherId)}
-                              />
-                        ))
-                        : <p style={{ fontWeight: 600 }}>No teachers</p>}
+                      ? allTeachers.map((teacher, index) => (
+                        <TeacherCard
+                          key={index}
+                          user={teacher.user}
+                          profileImage={teacher.profile_image}
+                          subjects={teacher.subjects}
+                          languages={teacher.languages}
+                          isBookmarked={teacher.isBookmarked}
+                          experience={teacher.experience}
+                          teachingFacilities={teacher.facilities}
+                          sortByBookmarks={sortByBookmarks}
+                          selectedCallback={(teacherId) => handleSelectedTeacher(teacherId)}
+                        />
+                      ))
+                      : <p style={{ fontWeight: 600 }}>No teachers</p>}
                     <div className="bottom-navigation">
-                        {sortByAll && !activeFilter && allTeachers && allTeachers.length > 0
-                            ? (
-                                <>
-                                    {index <= 1 ? null
-                                        : <div onClick={handlePrevPage}><PrevButton /></div>}
-                                    <p>
-                                        {' '}
-                                        {index <= totalTeacherPages && index > 0 ? index : index <= 0 ? 1 : totalTeacherPages}
-                                      </p>
-                                    {index >= totalTeacherPages ? null
-                                        : <div onClick={handleNextPage}><NextButton /></div>}
-                                  </>
-                            )
-                            : sortByAll && activeFilter && allTeachers && allTeachers.length > 0 ? (
-                                <>
-                                    {filterIndex <= 1 ? null
-                                        : <div onClick={handlePrevFilterPage}><PrevButton /></div>}
-                                    <p>
-                                        {' '}
-                                        {filterIndex <= totalFilterPages && filterIndex > 0 ? filterIndex : filterIndex <= 0 ? 1 : totalFilterPages}
-                                      </p>
-                                    {filterIndex >= totalFilterPages ? null
-                                        : <div onClick={handleNextFilterPage}><NextButton /></div>}
-                                  </>
-                            ) : null}
-                      </div>
+                      {sortByAll && !activeFilter && allTeachers && allTeachers.length > 0
+                        ? (
+                          <>
+                            {index <= 1 ? null
+                              : <div onClick={handlePrevPage}><PrevButton /></div>}
+                            <p>
+                              {' '}
+                              {index <= totalTeacherPages && index > 0 ? index : index <= 0 ? 1 : totalTeacherPages}
+                            </p>
+                            {index >= totalTeacherPages ? null
+                              : <div onClick={handleNextPage}><NextButton /></div>}
+                          </>
+                        )
+                        : sortByAll && activeFilter && allTeachers && allTeachers.length > 0 ? (
+                          <>
+                            {filterIndex <= 1 ? null
+                              : <div onClick={handlePrevFilterPage}><PrevButton /></div>}
+                            <p>
+                              {' '}
+                              {filterIndex <= totalFilterPages && filterIndex > 0 ? filterIndex : filterIndex <= 0 ? 1 : totalFilterPages}
+                            </p>
+                            {filterIndex >= totalFilterPages ? null
+                              : <div onClick={handleNextFilterPage}><NextButton /></div>}
+                          </>
+                        ) : null}
+                    </div>
                   </div>
                 )}
             </div>

@@ -35,12 +35,17 @@
         "jsx-a11y/click-events-have-key-events": "warn",
         "no-nested-ternary": "warn",
         "no-mixed-operators": "warn",
-        "quotes": [
-            2,
-            "single",
-            {
-                "avoidEscape": true
-            }
-        ]
+        "jsx-a11y/no-static-element-interactions": "warn",
+        "no-shadow": "warn",
+        "max-len": "warn",
+        "react/no-unescaped-entities": "warn",
+        "no-useless-escape": "warn",
+        "react/destructuring-assignment": "warn",
+        "jsx-a11y/no-noninteractive-element-interactions": "warn",
+        "no-param-reassign": "warn",
+        "jsx-a11y/label-has-associated-control": "warn",
+        "consistent-return": "warn",
+        "no-sequences": "warn",
+        "no-else-return": "warn"
     }
 }

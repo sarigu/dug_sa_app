@@ -185,7 +185,7 @@ const AllTeachers = ({
   );
 };
 
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = (state) => ({
   teachers: state.data.teachers,
   totalTeacherPages: state.data.totalTeacherPages,
   rejectedTeachers: state.data.rejectedTeachers,

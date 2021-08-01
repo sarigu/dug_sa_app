@@ -28,11 +28,10 @@ const SignUpForm = ({
     access_code: '',
     password: '',
     re_password: '',
-    role: selectedRole,
   });
 
   const {
-    first_name, last_name, email, access_code, password, re_password, role,
+    first_name, last_name, email, access_code, password, re_password,
   } = formData;
 
   const handleChange = (e) => {
