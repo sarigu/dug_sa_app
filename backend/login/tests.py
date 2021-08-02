@@ -1,6 +1,7 @@
 from .models import Subject, Teacher_Subject,AccessCode, Teacher
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.db.utils import IntegrityError
 
 # Create your tests here.
 USER_MODEL = get_user_model()
@@ -55,8 +56,9 @@ class Teacher_SubjectModel(TestCase):
 
     def test_create_same_teacher_subject_relation(self):
         "expect that no new object will be created"
-        same_subject_relation, created = Teacher_Subject.objects.get_or_create(
-            teacher=self.teacher,
-            subject=self.subject
-        )
-        self.assertEqual(created, False)
+        with self.assertRaises(Exception) as raised:  # top level exception as we want to figure out its exact type
+            same_subject_relation = Teacher_Subject.objects.create(
+                teacher=self.teacher,
+                subject=self.subject
+            )
+        self.assertEqual(IntegrityError, type(raised.exception))
