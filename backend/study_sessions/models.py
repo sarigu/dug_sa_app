@@ -24,6 +24,9 @@ class StudySession(models.Model):
 class Participant(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     study_session = models.ForeignKey(StudySession, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'study_session')
     
     def __str__(self):
         return f"{self.user} - {self.study_session}"

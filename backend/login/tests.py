@@ -1,4 +1,4 @@
-from .models import Subject, Teacher_Subject,AccessCode, Teacher
+from .models import Subject, Teacher_Subject,AccessCode, Teacher, CustomUser
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.db.utils import IntegrityError
@@ -6,14 +6,19 @@ from django.db.utils import IntegrityError
 # Create your tests here.
 USER_MODEL = get_user_model()
 
-class Teacher_SubjectModel(TestCase):
+class UserModel(TestCase):
 
     @classmethod
     def setUpTestData(cls):
 
         cls.accessCode = AccessCode.objects.create(
-            code="dug_teacher",
+            code="dug teacher test code",
             is_active = True
+        )
+
+        cls.inactiveAccessCode = AccessCode.objects.create(
+            code="dug test code",
+            is_active = False
         )
 
         cls.user = USER_MODEL.objects.create_user(
@@ -22,7 +27,7 @@ class Teacher_SubjectModel(TestCase):
             last_name='Doe',
             password='password456',
             role="teacher",
-            access_code="dug_teacher",
+            access_code="dug teacher test code",
             is_active = True
         )
 
@@ -45,20 +50,63 @@ class Teacher_SubjectModel(TestCase):
             subject=cls.subject
         )
 
-
-    def test_create_teacher_subject_relation(self):
-        new_subject_relation = Teacher_Subject.objects.create(
-            teacher=self.teacher,
-            subject=self.subject2
-        )
-        self.assertEqual(new_subject_relation.subject, self.subject2)
-    
-
-    def test_create_same_teacher_subject_relation(self):
-        "expect that no new object will be created"
-        with self.assertRaises(Exception) as raised:  # top level exception as we want to figure out its exact type
-            same_subject_relation = Teacher_Subject.objects.create(
-                teacher=self.teacher,
-                subject=self.subject
+    def test_create_user_with_wrong_access_code(self):
+        "expect that value error will be raised"
+        with self.assertRaises(Exception) as raised:
+            user = CustomUser.objects.create_user(
+                email='jessie@test.com',
+                first_name='Jessie',
+                last_name='Reyez',
+                password='password456',
+                role="student",
+                access_code="wrong test access code 1234",
+                is_active = True
             )
-        self.assertEqual(IntegrityError, type(raised.exception))
+        self.assertEqual(ValueError, type(raised.exception))
+
+    def test_create_user_with_inactive_access_code(self):
+        "expect that value error will be raised"
+        with self.assertRaises(Exception) as raised:
+            user = CustomUser.objects.create_user(
+                email='jessie@test.com',
+                first_name='Jessie',
+                last_name='Reyez',
+                password='password456',
+                role="student",
+                access_code="dug test code",
+                is_active = True
+            )
+        self.assertEqual(ValueError, type(raised.exception))
+
+    def test_create_user_with_no_access_code(self):
+        "expect that value error will be raised"
+        with self.assertRaises(Exception) as raised:
+            user = CustomUser.objects.create_user(
+                email='jessie@test.com',
+                first_name='Jessie',
+                last_name='Reyez',
+                password='password456',
+                role="student",
+                access_code="",
+                is_active = True
+            )
+        self.assertEqual(ValueError, type(raised.exception))
+
+    def test_create_user_with_active_access_code(self):
+        "expect that user will be created"
+        user = CustomUser.objects.create_user(
+            email='jessie@test.com',
+            first_name='Jessie',
+            last_name='Reyez',
+            password='password456',
+            role="student",
+            access_code="dug teacher test code",
+            is_active = True
+            )
+        self.assertEqual(user.email, 'jessie@test.com')
+        self.assertEqual(user.first_name, 'Jessie')
+        self.assertEqual(user.last_name, 'Reyez')
+        self.assertEqual(user.role, 'student')
+        self.assertNotEqual(user.password, 'password456')
+        self.assertEqual(user.access_code, 'dug teacher test code')
+        self.assertEqual(user.is_active, True)

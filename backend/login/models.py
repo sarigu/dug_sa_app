@@ -104,7 +104,7 @@ class Teacher_Subject(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('teacher', 'subject',)
+        unique_together = ('teacher', 'subject')
 
     def __str__(self):
         return f"{self.teacher} - {self.subject}"
@@ -125,7 +125,7 @@ class Teacher_Language(models.Model):
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('teacher', 'language',)
+        unique_together = ('teacher', 'language')
 
     def __str__(self):
         return f"{self.teacher} - {self.language}"
@@ -145,7 +145,7 @@ class Teacher_TeachingFacility(models.Model):
     teaching_facility = models.ForeignKey(TeachingFacility, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('teacher', 'teaching_facility',)
+        unique_together = ('teacher', 'teaching_facility')
     
     def __str__(self):
         return f"{self.teacher} - {self.teaching_facility}"
@@ -156,7 +156,7 @@ class BookmarkedTeacher(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('user', 'teacher',)
+        unique_together = ('user', 'teacher')
 
     def __str__(self):
         return f"{self.user} - {self.teacher}"
