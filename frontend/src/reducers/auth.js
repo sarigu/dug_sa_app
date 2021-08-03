@@ -26,7 +26,7 @@ const initialState = {
   user: null,
   userType: null,
   error: null,
-  selectedRole: 'student',
+  selectedRole: undefined,
   signUpStatus: '',
   subjects: [],
   languages: [],
@@ -112,6 +112,7 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         user: null,
         userType: null,
+        selectedRole: undefined,
       };
     case PASSWORD_RESET_SUCCESS:
     case PASSWORD_RESET_FAIL:
