@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { update_selected_role } from '../../actions/auth';
-import logo from '../../assets/images/logo.png';
+import Logo from '../../components/Logo/Logo';
 import SignUpForm from '../../components/SignUpForms/SignUpForm';
 import './SignUp.css';
 
@@ -27,7 +27,7 @@ const SignUp = ({ update_selected_role }) => {
 
   return (
     <div className="signup-page">
-      <img alt="dug-logo" src={logo} className="dug-logo" />
+      <Logo />
       <div className="signup-wrapper">
         <h1>
           Welcome

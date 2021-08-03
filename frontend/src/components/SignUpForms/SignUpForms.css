@@ -9,11 +9,11 @@
 }
 
 .notValidated{
-    border: 1px red solid;
+    border: 1px #E83A78 solid;
 }
 
-.errorMsg{
-    color:red;
+.error-message{
+    color:#E83A78;
 }
 
 .scroll-container{

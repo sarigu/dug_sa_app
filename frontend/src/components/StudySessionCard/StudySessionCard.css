@@ -8,6 +8,7 @@
     padding:20px;
     display: flex;
     flex-direction: column;
+    color: #363636;
 }
 
 .reminder-card * {
@@ -15,7 +16,7 @@
 }
 
 .cancelled-card{
-    background-color: rgba(243, 155, 155, 0.384) !important;
+    background-color: rgba(232, 58, 119, 0.288) !important;
 }
 
 .cancelled-heading-wrapper{

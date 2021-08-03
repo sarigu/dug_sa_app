@@ -1,7 +1,7 @@
 .work-in-progress-wrapper{
     padding:30px;
     overflow: hidden;
-    width:100vw;
+    width:100%;
     height:calc(100% - 200px);
 }
 

@@ -100,7 +100,7 @@ const TeacherCard = ({
                         {subjects ? subjects.map((subject, index) => <h5 key={index} className="subtext">{subject.name}</h5>) : <h5 className="subtext">No subjects</h5>}
                         <h5>Languages</h5>
                         {languages ? languages.map((language, index) => <h5 key={index} className="subtext">{language.language}</h5>) : <h5 className="subtext">No languages</h5>}
-                        <h5>Teaching Location</h5>
+                        <h5>Teaching Locations</h5>
                         {teachingFacilities ? teachingFacilities.map((facility, index) => <h5 key={index} className="subtext">{facility.name}</h5>) : <h5 className="subtext">No facilities</h5>}
                         <h5>Teaching Experience</h5>
                         <h5 className="subtext">
