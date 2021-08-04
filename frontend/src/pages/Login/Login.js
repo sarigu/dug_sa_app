@@ -34,7 +34,7 @@ const Login = ({ login, isAuthenticated, error }) => {
       <div className="login-wrapper">
         <h1>
           Welcome
-          <span>&#128075;&#127998;</span>
+          <span style={{ marginLeft: '5px' }}>&#128075;&#127998;</span>
         </h1>
         {error === 'login_fail' && showError ? <div className="error-message">Oops, something went wrong. Please try again</div> : null}
         <form onSubmit={(e) => handleSubmit(e)}>
