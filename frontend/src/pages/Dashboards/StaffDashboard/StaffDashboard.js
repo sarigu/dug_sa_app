@@ -74,7 +74,7 @@ const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
         <Card emoji={<span>&#128198;</span>} title="Schedule" link="/schedule" />
         <Card emoji={<span>&#127891;</span>} title="All teachers" link="/teachers" />
         <Card emoji={<span>&#128587;&#127998;</span>} title="Add staff" link="/work-in-progress" />
-        <Card emoji={<span>&#128172;</span>} title="Add motivational quote" link="/work-in-progress" />
+        <Card emoji={<span>&#128172;</span>} title="Add motivational quotes" link="/work-in-progress" />
         <Card emoji={<span>&#128272;</span>} title="Edit access codes" link="/access-codes" />
       </section>
       {showPopup

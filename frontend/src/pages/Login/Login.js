@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { login } from '../../actions/auth';
-import logo from '../../assets/images/logo.png';
+import Logo from '../../components/Logo/Logo';
 import './Login.css';
 
 const Login = ({ login, isAuthenticated, error }) => {
@@ -30,11 +30,11 @@ const Login = ({ login, isAuthenticated, error }) => {
 
   return (
     <div className="login-page">
-      <img alt="dug-logo" src={logo} className="dug-logo" />
+      <Logo />
       <div className="login-wrapper">
         <h1>
           Welcome
-          <span>&#128075;&#127998;</span>
+          <span style={{ marginLeft: '5px' }}>&#128075;&#127998;</span>
         </h1>
         {error === 'login_fail' && showError ? <div className="error-message">Oops, something went wrong. Please try again</div> : null}
         <form onSubmit={(e) => handleSubmit(e)}>

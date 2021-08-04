@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { reset_password } from '../../actions/auth';
+import Logo from '../../components/Logo/Logo';
 import './PasswordReset.css';
 
 const ResetPassword = ({ reset_password }) => {
@@ -28,6 +29,7 @@ const ResetPassword = ({ reset_password }) => {
 
   return (
     <div className="password-reset-page">
+      <Logo />
       <div className="request-password-reset-wrapper">
         <h1>Get a password reset link</h1>
         <form onSubmit={(e) => handleSubmit(e)}>
@@ -43,6 +45,7 @@ const ResetPassword = ({ reset_password }) => {
           </div>
           <button type="submit">Reset Password</button>
         </form>
+        <Link to="/" className="to-login-link"> Go back to Sign in </Link>
       </div>
     </div>
   );

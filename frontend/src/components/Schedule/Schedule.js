@@ -11,9 +11,9 @@ const localizer = momentLocalizer(moment);
 function Event({ event }) {
   return (
     <span className="event-card">
-      <div style={{ width: '70%' }} className="event-card-content">
+      <div style={{ width: '70%', marginTop: '5px' }} className="event-card-content">
         {event.type === 'cancelled-session'
-          ? <div>Cancelled</div>
+          ? <strong>Cancelled</strong>
           : event.type === 'updated-study-session'
             ? <div>Updated</div>
             : null}
@@ -97,7 +97,7 @@ const Schedule = ({
         const end = (moment(`${studySession.date} ${studySession.end_time}`).toDate());
         const sessionType = studySession.is_active ? 'study-session' : 'cancelled-session';
         allStudySessionSlots.push({
-          id: studySession.id, title: `${studySession.subject.name} with ${studySession.teacher.first_name} ${studySession.teacher.last_name} in ${studySession.language.language}`, start, end, type: sessionType, location: `at ${studySession.location.name}`, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: studySession.subject.color,
+          id: studySession.id, title: `${studySession.subject.name} with ${studySession.teacher.first_name} ${studySession.teacher.last_name} in ${studySession.language.language}`, start, end, type: sessionType, location: `at the ${studySession.location.name}`, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: studySession.subject.color,
         });
       });
 
@@ -106,7 +106,7 @@ const Schedule = ({
         const end = (moment(`${studySession.date} ${studySession.end_time}`).toDate());
         const sessionType = studySession.is_active && studySession.was_updated ? 'updated-study-session' : studySession.is_active ? 'booked-study-session' : 'cancelled-session';
         allStudySessionSlots.push({
-          id: studySession.id, title: 'You have a class here', start, end, type: sessionType, description: `${studySession.subject.name} with ${studySession.teacher.first_name} ${studySession.teacher.last_name} in ${studySession.language.language}`, location: `at ${studySession.location.name}`, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: 'lightgrey',
+          id: studySession.id, title: 'You have a class here', start, end, type: sessionType, description: `${studySession.subject.name} with ${studySession.teacher.first_name} ${studySession.teacher.last_name} in ${studySession.language.language}`, location: `at the ${studySession.location.name}`, available_spots: studySession.available_spots, taken_spots: studySession.taken_spots, color: 'lightgrey',
         });
       });
       setList(allStudySessionSlots, bookedStudySessions);
