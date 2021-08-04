@@ -20,7 +20,7 @@ describe('auth Reducer', () => {
         expect(reducer).toEqual(initialState);
     });
 
-    it('if authentication is success then set isAuthenticated to true', () => {
+    it('if authentication was successfull then set isAuthenticated to true', () => {
         const reducer = auth(initialState, { type: 'AUTHENTICATED_SUCCESS' });
         expect(reducer.isAuthenticated).toEqual(true);
     });
@@ -30,7 +30,7 @@ describe('auth Reducer', () => {
         expect(reducer.isAuthenticated).toEqual(false);
     });
 
-    it('if user is logout then reset state', () => {
+    it('if user is logged out then reset state', () => {
         const reducer = auth(initialState, { type: 'LOGOUT' });
         expect(reducer).toEqual({
             access: null,

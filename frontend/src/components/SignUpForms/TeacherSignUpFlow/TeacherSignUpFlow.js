@@ -83,7 +83,6 @@ const TeacherSignUpFlow = ({
     }
 
     if (!proof_of_address) {
-      console.log('set erro');
       setAddressProofError(true);
       setCarouselIndex(5);
       return false;

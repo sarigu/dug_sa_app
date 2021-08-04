@@ -196,7 +196,7 @@ const FindTeachers = ({
                           selectedCallback={(teacherId) => handleSelectedTeacher(teacherId)}
                         />
                       ))
-                      : <p>No teachers</p>}
+                      : <p>No bookmarked teachers</p>}
 
                   </div>
                 )
@@ -217,7 +217,7 @@ const FindTeachers = ({
                           selectedCallback={(teacherId) => handleSelectedTeacher(teacherId)}
                         />
                       ))
-                      : <p style={{ fontWeight: 600 }}>No teachers</p>}
+                      : <p>No teachers</p>}
                     <div className="bottom-navigation">
                       {sortByAll && !activeFilter && allTeachers && allTeachers.length > 0
                         ? (

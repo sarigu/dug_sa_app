@@ -26,7 +26,7 @@ const initialState = {
   user: null,
   userType: null,
   error: null,
-  selectedRole: undefined,
+  selectedRole: 'student',
   signUpStatus: '',
   subjects: [],
   languages: [],
