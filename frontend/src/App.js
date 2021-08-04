@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import axios from 'axios';
 import store from './store';
 import Dashboard from './pages/Dashboards/Dashboard';
 import Login from './pages/Login/Login';
@@ -16,6 +17,9 @@ import WorkInProgress from './pages/WorkInProgress/WorkInProgress';
 import About from './pages/About/About';
 import AuthWrapper from './AuthWrappers/AuthWrapper';
 import PrivateRoute from './AuthWrappers/PrivateRoute';
+
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 const App = () => (
   <Provider store={store}>
