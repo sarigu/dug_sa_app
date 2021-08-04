@@ -31,9 +31,9 @@ export const load_user = () => async (dispatch) => {
     };
 
     try {
-      let res = await axios.get('http://localhost:8000/auth/users/me/', config);
+      let res = await axios.get('/auth/users/me/', config);
       if (res.data.role === 'teacher') {
-        res = await axios.get(`http://localhost:8000/api/teacher/${res.data.id}/`, config);
+        res = await axios.get(`/api/teacher/${res.data.id}/`, config);
         dispatch({
           type: USER_LOADED_SUCCESS,
           payload: res.data.teacher,
@@ -78,7 +78,7 @@ export const login = (email, password) => async (dispatch) => {
   const body = JSON.stringify({ email, password });
 
   try {
-    const res = await axios.post('http://localhost:8000/auth/jwt/create/', body, config);
+    const res = await axios.post('/auth/jwt/create/', body, config);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,
@@ -110,7 +110,7 @@ export const signup = (
   });
 
   try {
-    const res = await axios.post('http://localhost:8000/auth/users/', body, config);
+    const res = await axios.post('/auth/users/', body, config);
     dispatch({
       type: SIGNUP_SUCCESS,
       payload: res.data,
@@ -134,7 +134,7 @@ export const reset_password = (email) => async (dispatch) => {
   const body = JSON.stringify({ email });
 
   try {
-    await axios.post('http://localhost:8000/auth/users/reset_password/', body, config);
+    await axios.post('/auth/users/reset_password/', body, config);
 
     dispatch({
       type: PASSWORD_RESET_SUCCESS,
@@ -163,7 +163,7 @@ export const reset_password_confirm = (
   });
 
   try {
-    await axios.post('http://localhost:8000/auth/users/reset_password_confirm/', body, config);
+    await axios.post('/auth/users/reset_password_confirm/', body, config);
 
     dispatch({
       type: PASSWORD_RESET_CONFIRM_SUCCESS,
@@ -225,7 +225,7 @@ export const update_teacher = (
   formData.append('selectedLanguages', selectedLanguages);
 
   try {
-    const res = await axios.put(`http://localhost:8000/api/teacher/${userID}/`, formData, config);
+    const res = await axios.put(`/api/teacher/${userID}/`, formData, config);
 
     dispatch({
       type: TEACHER_UPDATE_SUCCESS,
@@ -254,7 +254,7 @@ export const load_subjects = () => async (dispatch) => {
     },
   };
 
-  const res = await axios.get('http://localhost:8000/api/subjects/', config);
+  const res = await axios.get('/api/subjects/', config);
 
   dispatch({
     type: SUBJECTS_LOADED_SUCCESS,
@@ -271,7 +271,7 @@ export const load_languages = () => async (dispatch) => {
     },
   };
 
-  const res = await axios.get('http://localhost:8000/api/languages/', config);
+  const res = await axios.get('/api/languages/', config);
 
   dispatch({
     type: LANGUAGES_LOADED_SUCCESS,

@@ -65,7 +65,7 @@ export const load_teachers = (index) => async (dispatch) => {
   };
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/teachers/?page=${index}`, config);
+    const res = await axios.get(`/api/teachers/?page=${index}`, config);
     dispatch({
       type: TEACHERS_LOADED_SUCCESS,
       payload: res.data,
@@ -87,7 +87,7 @@ export const load_rejected_teachers = (index) => async (dispatch) => {
   };
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/rejected/teachers/?page=${index}`, config);
+    const res = await axios.get(`/api/rejected/teachers/?page=${index}`, config);
     dispatch({
       type: LOAD_REJECTED_TEACHERS_SUCCESS,
       payload: res.data,
@@ -109,7 +109,7 @@ export const load_teacher_details = (teacherId) => async (dispatch) => {
   };
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/teacher/${teacherId}/`, config);
+    const res = await axios.get(`/api/teacher/${teacherId}/`, config);
     dispatch({
       type: LOAD_TEACHER_DETAILS_SUCCESS,
       payload: res.data,
@@ -130,7 +130,7 @@ export const add_teacher_review = (teacherId, isApproved) => async (dispatch) =>
 
   try {
     const body = JSON.stringify({ isApproved });
-    await axios.patch(`http://localhost:8000/api/teacher/${teacherId}/`, body, config);
+    await axios.patch(`/api/teacher/${teacherId}/`, body, config);
     dispatch({
       type: ADD_TEACHER_REVIEW_SUCCESS,
     });
@@ -151,7 +151,7 @@ export const load_new_teachers = () => async (dispatch) => {
   };
 
   try {
-    const res = await axios.get('http://localhost:8000/api/new/teachers/', config);
+    const res = await axios.get('/api/new/teachers/', config);
     dispatch({
       type: NEW_TEACHERS_LOADED_SUCCESS,
     });
@@ -174,7 +174,7 @@ export const load_bookmarked_teachers = () => async (dispatch) => {
   };
 
   try {
-    const res = await axios.get('http://localhost:8000/api/bookmarked/teachers/', config);
+    const res = await axios.get('/api/bookmarked/teachers/', config);
     dispatch({
       type: BOOKMARKED_TEACHERS_LOADED_SUCCESS,
       payload: res.data,
@@ -198,7 +198,7 @@ export const create_bookmark = (teacherId) => async (dispatch) => {
   try {
     const body = JSON.stringify({ teacherId });
 
-    await axios.post('http://localhost:8000/api/bookmarked/teachers/', body, config);
+    await axios.post('/api/bookmarked/teachers/', body, config);
     dispatch({
       type: ADD_BOOKMARK_SUCCESS,
     });
@@ -227,7 +227,7 @@ export const filter_teachers = (subjectsFilter, languageFilter, index) => async 
   const body = JSON.stringify({ subjectsFilter, languageFilter });
 
   try {
-    const res = await axios.post(`http://localhost:8000/api/filter/teachers/?page=${index}`, body, config);
+    const res = await axios.post(`/api/filter/teachers/?page=${index}`, body, config);
     dispatch({
       type: FILTER_TEACHERS_SUCCESS,
       payload: res.data,
@@ -250,7 +250,7 @@ export const load_study_sessions = (teacherId) => async (dispatch) => {
 
   try {
     const body = JSON.stringify({ teacherId });
-    const res = await axios.post('http://localhost:8000/api/studysessions/', body, config);
+    const res = await axios.post('/api/studysessions/', body, config);
 
     dispatch({
       type: STUDY_SESSIONS_LOADED_SUCCESS,
@@ -275,7 +275,7 @@ export const load_study_session = (studySessionId) => async (dispatch) => {
   };
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/studysession/${studySessionId}/`, config);
+    const res = await axios.get(`/api/studysession/${studySessionId}/`, config);
     dispatch({
       type: STUDY_SESSION_DETAILS_LOADED_SUCCESS,
       payload: res.data,
@@ -298,7 +298,7 @@ export const participate_in_study_session = (studySessionId) => async (dispatch)
 
   try {
     const body = JSON.stringify({ studySessionId });
-    const res = await axios.post('http://localhost:8000/api/studysession/participation/', body, config);
+    const res = await axios.post('/api/studysession/participation/', body, config);
 
     dispatch({
       type: PARTICIPATE_IN_STUDY_SESSION_SUCCESS,
@@ -321,7 +321,7 @@ export const cancle_participation_in_study_session = (studySessionId) => async (
   };
 
   try {
-    const res = await axios.delete(`http://localhost:8000/api/studysession/participation/?session=${studySessionId}`, config);
+    const res = await axios.delete(`/api/studysession/participation/?session=${studySessionId}`, config);
     dispatch({
       type: CANCEL_STUDY_SESSION_PARTICIPATION_SUCCESS,
       payload: res.data,
@@ -343,7 +343,7 @@ export const load_upcoming_booked_study_sessions = () => async (dispatch) => {
   };
 
   try {
-    const res = await axios.get('http://localhost:8000/api/studysession/participation/', config);
+    const res = await axios.get('/api/studysession/participation/', config);
     dispatch({
       type: UPCOMING_STUDY_SESSIONS_LOADED_SUCCESS,
       payload: res.data,
@@ -365,7 +365,7 @@ export const load_upcoming_booked_study_sessions_list = (index) => async (dispat
   };
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/studysession/participation/?type=upcoming&page=${index}`, config);
+    const res = await axios.get(`/api/studysession/participation/?type=upcoming&page=${index}`, config);
     dispatch({
       type: UPCOMING_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
       payload: res.data,
@@ -387,7 +387,7 @@ export const load_previous_booked_study_sessions_list = (index) => async (dispat
   };
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/studysession/participation/?type=previous&page=${index}`, config);
+    const res = await axios.get(`/api/studysession/participation/?type=previous&page=${index}`, config);
     dispatch({
       type: PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
       payload: res.data,
@@ -409,7 +409,7 @@ export const load_upcoming_teachers_study_session = () => async (dispatch) => {
   };
 
   try {
-    const res = await axios.get('http://localhost:8000/api/studysessions/', config);
+    const res = await axios.get('/api/studysessions/', config);
     dispatch({
       type: TEACHERS_UPCOMING_STUDY_SESSIONS_LOADED_SUCCESS,
       payload: res.data,
@@ -431,7 +431,7 @@ export const load_teachers_upcoming_study_sessions_list = (index) => async (disp
   };
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/studysessions/?type=upcoming&page=${index}`, config);
+    const res = await axios.get(`/api/studysessions/?type=upcoming&page=${index}`, config);
     dispatch({
       type: TEACHERS_UPCOMING_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
       payload: res.data,
@@ -453,7 +453,7 @@ export const load_teachers_previous_study_sessions_list = (index) => async (disp
   };
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/studysessions/?type=previous&page=${index}`, config);
+    const res = await axios.get(`/api/studysessions/?type=previous&page=${index}`, config);
     dispatch({
       type: TEACHERS_PREVIOUS_STUDY_SESSIONS_LIST_LOADED_SUCCESS,
       payload: res.data,
@@ -475,7 +475,7 @@ export const cancel_study_session = (studySessionId) => async (dispatch) => {
   const body = JSON.stringify({ isActive: false });
 
   try {
-    await axios.patch(`http://localhost:8000/api/studysession/${studySessionId}/`, body, config);
+    await axios.patch(`/api/studysession/${studySessionId}/`, body, config);
     dispatch({
       type: CANCEL_STUDY_SESSION_SUCCESS,
     });
@@ -504,7 +504,7 @@ export const create_study_session = (date, language, subject, spots, startTime, 
   });
 
   try {
-    await axios.post('http://localhost:8000/api/studysession/', body, config);
+    await axios.post('/api/studysession/', body, config);
 
     dispatch({
       type: CREATE_STUDY_SESSION_SUCCESS,
@@ -528,7 +528,7 @@ export const edit_study_session = (studySessionId, language, subject, startTime,
   });
 
   try {
-    await axios.patch(`http://localhost:8000/api/studysession/${studySessionId}/`, body, config);
+    await axios.patch(`/api/studysession/${studySessionId}/`, body, config);
     dispatch({
       type: EDIT_STUDY_SESSION_SUCCESS,
     });
@@ -549,7 +549,7 @@ export const load_active_access_codes = () => async (dispatch) => {
   };
 
   try {
-    const res = await axios.get('http://localhost:8000/api/accessCodes/', config);
+    const res = await axios.get('/api/accessCodes/', config);
 
     dispatch({
       type: LOAD_ACTIVE_ACCESS_CODES_SUCCESS,
@@ -572,7 +572,7 @@ export const load_inactive_access_codes = () => async (dispatch) => {
   };
 
   try {
-    const res = await axios.get('http://localhost:8000/api/inactive/accessCodes/', config);
+    const res = await axios.get('/api/inactive/accessCodes/', config);
 
     dispatch({
       type: LOAD_INACTIVE_ACCESS_CODES_SUCCESS,
@@ -595,7 +595,7 @@ export const load_access_code = (accessCodeId) => async (dispatch) => {
   };
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/accessCodes/${accessCodeId}/`, config);
+    const res = await axios.get(`/api/accessCodes/${accessCodeId}/`, config);
 
     dispatch({
       type: LOAD_ACTIVE_ACCESS_CODE_SUCCESS,
@@ -618,7 +618,7 @@ export const update_access_code = (accessCodeId, isActive) => async (dispatch) =
   const body = JSON.stringify({ isActive });
 
   try {
-    await axios.patch(`http://localhost:8000/api/accessCodes/${accessCodeId}/`, body, config);
+    await axios.patch(`/api/accessCodes/${accessCodeId}/`, body, config);
     dispatch({
       type: REMOVE_ACTIVE_ACCESS_CODE_SUCCESS,
     });
@@ -641,7 +641,7 @@ export const add_access_code = (code) => async (dispatch) => {
   const body = JSON.stringify({ code });
 
   try {
-    await axios.post('http://localhost:8000/api/accessCodes/', body, config);
+    await axios.post('/api/accessCodes/', body, config);
 
     dispatch({
       type: ADD_ACTIVE_ACCESS_CODE_SUCCESS,
