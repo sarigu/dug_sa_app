@@ -19,7 +19,7 @@ const TeacherDashboard = ({ user }) => (
           ? (
             <div style={{ margin: '0 30px 30px 0' }}>
               <h2>We are sorry to inform you that you have not been approved</h2>
-              <p>Please contact the staff at DUG if you have any questions regarding the reason behind the decision.</p>
+              <p>Please contact the staff at DWB SA if you have any questions regarding the reason behind the decision.</p>
             </div>
           )
           : <TeacherSignUpFlow />}
