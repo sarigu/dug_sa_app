@@ -51,7 +51,7 @@ const StudentDashboard = ({ load_upcoming_booked_study_sessions, upcomingStudySe
       <section className="reminder-container">
         <div className="heading-wrapper">
           <h2>Reminder</h2>
-          <AllClassesButton buttonWidth="120px" selectedCallback={() => history.push('/all-classes')} />
+          <AllClassesButton buttonWidth="105px" selectedCallback={() => history.push('/all-classes')} />
         </div>
         <div>
           {upcomingStudySessions && upcomingStudySessions.length > 0

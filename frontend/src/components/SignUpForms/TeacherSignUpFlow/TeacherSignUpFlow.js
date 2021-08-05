@@ -323,7 +323,11 @@ const TeacherSignUpFlow = ({
         </CarouselItem>
         <CarouselItem>
           <div>
-            <h3>Location you will be teaching at</h3>
+            <h3>
+              Location you
+              <br />
+              want to teach at
+            </h3>
             <div className="options-card active-card">Dug facility</div>
           </div>
         </CarouselItem>

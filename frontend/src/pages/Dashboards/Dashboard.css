@@ -56,7 +56,7 @@ section:nth-child(1){
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin-right:30px;
+    margin-right:20px;
 }
 
 .numberCircle{
@@ -70,6 +70,14 @@ section:nth-child(1){
     align-items: center;
 }
 
+.teachers-container{
+    width:calc(100% - 30px);
+}
+
+.teachers-container .heading-wrapper{
+    width:100%
+}
+
 @media only screen and (min-width: 600px){
     .cards-container{
         display: flex;
@@ -78,5 +86,9 @@ section:nth-child(1){
     }
     .cards-container * {
         margin-bottom: 20px;
+    }
+
+    .teachers-container{
+        width:450px
     }
 }

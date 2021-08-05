@@ -52,7 +52,7 @@ const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
   return (
     <div>
       <section className="teachers-container">
-        <div className="heading-wrapper" style={{ width: '300px' }}>
+        <div className="heading-wrapper">
           <h2>New teachers</h2>
           <div>
             <div className="numberCircle"><p>{teachersList ? teachersList.length : '0'}</p></div>
