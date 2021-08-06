@@ -31,7 +31,7 @@ const SchedulePage = ({
   }, []);
 
   useEffect(() => {
-    if (afterFeedback) {
+    if (afterFeedback && userType === 'teacher') {
       load_study_sessions(user.id);
     }
     setShowFeedback(false);

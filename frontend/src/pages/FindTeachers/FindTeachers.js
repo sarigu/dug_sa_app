@@ -35,6 +35,7 @@ const FindTeachers = ({
   const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [sessionType, setSessionType] = useState();
+  const [afterFeedback, setAfterFeedback] = useState(false);
 
   const history = useHistory();
 
@@ -67,6 +68,13 @@ const FindTeachers = ({
       setIsLoaded(true);
     }
   }, [bookmarkedTeachers]);
+
+  useEffect(() => {
+    if (afterFeedback) {
+      setShowFeedback(false);
+      history.push('/dashboard');
+    }
+  }, [afterFeedback]);
 
   useEffect(() => {
     setAllTeachers(teachers);
@@ -258,7 +266,7 @@ const FindTeachers = ({
               : showStudySessionDetails
                 ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false); }} />
                 : showFeedback
-                  ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                  ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => { setShowPopup(false); setAfterFeedback(true); }} />
                   : null}
           </PopUp>
         )

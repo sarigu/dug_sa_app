@@ -58,6 +58,12 @@ const AllClasses = ({
       } else {
         load_teachers_previous_study_sessions_list(index);
       }
+    } else if (userType === 'student' && afterFeedback) {
+      if (sortByUpcoming) {
+        load_upcoming_booked_study_sessions_list(index);
+      } else {
+        load_previous_booked_study_sessions_list(index);
+      }
     }
     setShowFeedback(false);
   }, [afterFeedback]);
