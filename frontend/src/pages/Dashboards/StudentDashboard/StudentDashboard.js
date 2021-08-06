@@ -15,12 +15,20 @@ const StudentDashboard = ({ load_upcoming_booked_study_sessions, upcomingStudySe
   const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [sessionType, setSessionType] = useState('booked-study-session');
+  const [afterFeedback, setAfterFeedback] = useState(false);
 
   const history = useHistory();
 
   useEffect(() => {
     load_upcoming_booked_study_sessions();
   }, []);
+
+  useEffect(() => {
+    if (afterFeedback) {
+      load_upcoming_booked_study_sessions();
+    }
+    setShowFeedback(false);
+  }, [afterFeedback]);
 
   const handleSelectedStudySession = (studySessionId, isActive) => {
     load_study_session(studySessionId);
@@ -51,7 +59,7 @@ const StudentDashboard = ({ load_upcoming_booked_study_sessions, upcomingStudySe
       <section className="reminder-container">
         <div className="heading-wrapper">
           <h2>Reminder</h2>
-          <AllClassesButton buttonWidth="120px" selectedCallback={() => history.push('/all-classes')} />
+          <AllClassesButton buttonWidth="105px" selectedCallback={() => history.push('/all-classes')} />
         </div>
         <div>
           {upcomingStudySessions && upcomingStudySessions.length > 0
@@ -82,7 +90,7 @@ const StudentDashboard = ({ load_upcoming_booked_study_sessions, upcomingStudySe
             {showStudySessionDetails
               ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false); }} />
               : showFeedback
-                ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => { setShowPopup(false); setAfterFeedback(true); }} />
                 : null}
           </PopUp>
         )
@@ -91,7 +99,7 @@ const StudentDashboard = ({ load_upcoming_booked_study_sessions, upcomingStudySe
   );
 };
 
-const mapStateToProps = (state) => (console.log(state.data), {
+const mapStateToProps = (state) => ({
   user: state.auth.user,
   upcomingStudySessions: state.data.upcomingStudySessions,
 });

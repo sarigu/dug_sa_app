@@ -22,12 +22,26 @@ const AllTeachers = ({
   const [sortByRejected, setSortByRejected] = useState(false);
   const [sortByAll, setSortByAll] = useState(true);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [afterFeedback, setAfterFeedback] = useState(false);
 
   const history = useHistory();
 
   useEffect(() => {
     load_teachers(index);
   }, []);
+
+  useEffect(() => {
+    if (afterFeedback) {
+      setIsLoaded(false);
+      setIndex(1);
+      if (sortByAll) {
+        load_teachers(1);
+      } else {
+        load_rejected_teachers(1);
+      }
+    }
+    setShowFeedback(false);
+  }, [afterFeedback]);
 
   useEffect(() => {
     if (sortByAll) {
@@ -175,8 +189,8 @@ const AllTeachers = ({
       {showPopup
         ? (
           <PopUp selectedCallback={() => setShowPopup(false)}>
-            {showDetails ? <TeacherDetails selectedCallback={() => { setShowDetails(false); setShowFeedback(true); }} />
-              : showFeedback ? <ApprovalFeedback selectedCallback={() => setShowPopup(false)} />
+            {showDetails ? <TeacherDetails selectedCallback={() => { setShowDetails(false); setShowFeedback(true); setAfterFeedback(false); }} />
+              : showFeedback ? <ApprovalFeedback selectedCallback={() => { setShowPopup(false); setAfterFeedback(true); }} />
                 : null}
           </PopUp>
         )

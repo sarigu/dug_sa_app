@@ -129,7 +129,6 @@ class TeacherView(viewsets.ModelViewSet):
         return Response(response_data)
 
     
-
 class NewTeachersView(ListAPIView):
     permissions_classes=[IsAuthenticated]
     serializer_class = TeacherShortVersionSerializer

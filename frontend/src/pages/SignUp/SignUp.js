@@ -21,7 +21,7 @@ const SignUp = ({ update_selected_role }) => {
   const staffSignUp = (
     <div>
       <h3>Nice to have you here!</h3>
-      <p>You need to be added by the Designers Withou Borders South Africa administration if you are staff.</p>
+      <p>You need to be added by the Designers Without Borders South Africa staff, if you are part of the team.</p>
     </div>
   );
 
@@ -31,7 +31,7 @@ const SignUp = ({ update_selected_role }) => {
       <div className="signup-wrapper">
         <h1>
           Welcome
-          <span>&#128075;&#127998;</span>
+          <span style={{ marginLeft: '5px' }}>&#128075;&#127998;</span>
         </h1>
         <p>
           Do you want to sign up as

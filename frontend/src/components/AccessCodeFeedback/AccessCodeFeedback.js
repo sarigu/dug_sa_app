@@ -2,23 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 
-const AccessCodeUpdateSuccess = () => (
+const AccessCodeUpdateSuccess = (props) => (
   <div className="feedback-content">
     <span className="feedback-icon">&#9989;</span>
     <h3>You've updated the access code successfully!</h3>
-    <button onClick={() => { window.location.href = '/access-codes'; }}>Go back</button>
+    <button onClick={props.selectedCallback}>Go back</button>
   </div>
 );
 
-const AccessCodeCreateSuccess = () => (
+const AccessCodeCreateSuccess = (props) => (
   <div className="feedback-content">
     <span className="feedback-icon">&#128272;</span>
     <h3>You successfully created a new access code!</h3>
-    <button onClick={() => { window.location.href = '/access-codes'; }}>Go back</button>
+    <button onClick={props.selectedCallback}>Go back</button>
   </div>
 );
 
-const FailMessage = () => (
+const FailMessage = (props) => (
   <div className="feedback-content">
     <span className="feedback-icon">&#127871;</span>
     <h3>
@@ -26,11 +26,13 @@ const FailMessage = () => (
       <br />
       Please try again later
     </h3>
-    <button onClick={() => { window.location.href = '/access-codes'; }}>Go back</button>
+    <button onClick={props.selectedCallback}>Go back</button>
   </div>
 );
 
-const AccessCodeFeedback = ({ accessCodeIsUpdated, feedbackType, accessCodeIsCreated }) => {
+const AccessCodeFeedback = ({
+  accessCodeIsUpdated, feedbackType, accessCodeIsCreated, selectedCallback,
+}) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -43,10 +45,10 @@ const AccessCodeFeedback = ({ accessCodeIsUpdated, feedbackType, accessCodeIsCre
         ? (
           <div>
             {feedbackType && feedbackType === 'updated-access-code' && accessCodeIsUpdated
-              ? <AccessCodeUpdateSuccess />
+              ? <AccessCodeUpdateSuccess selectedCallback={selectedCallback} />
               : feedbackType && feedbackType === 'added-access-code' && accessCodeIsCreated
-                ? <AccessCodeCreateSuccess />
-                : <FailMessage />}
+                ? <AccessCodeCreateSuccess selectedCallback={selectedCallback} />
+                : <FailMessage selectedCallback={selectedCallback} />}
           </div>
         )
         : (
@@ -62,6 +64,7 @@ const mapStateToProps = (state, props) => ({
   accessCodeIsUpdated: state.data.accessCodeIsUpdated,
   accessCodeIsCreated: state.data.accessCodeIsCreated,
   feedbackType: props.feedbackType,
+  selectedCallback: props.selectedCallback,
 });
 
 export default connect(mapStateToProps, null)(AccessCodeFeedback);

@@ -19,6 +19,7 @@ const DashboardContent = ({
   const [showFeedback, setShowFeedback] = useState(false);
   const [showStudySessionEdit, setShowStudySessionEdit] = useState(false);
   const [sessionType, setSessionType] = useState('teacher-study-session');
+  const [afterFeedback, setAfterFeedback] = useState(false);
 
   const history = useHistory();
 
@@ -29,6 +30,13 @@ const DashboardContent = ({
   useEffect(() => {
     load_upcoming_teachers_study_session();
   }, [isCancelled, isCreated]);
+
+  useEffect(() => {
+    if (afterFeedback) {
+      load_upcoming_teachers_study_session();
+    }
+    setShowFeedback(false);
+  }, [afterFeedback]);
 
   const handleSelectedStudySession = (studySessionId, isActive) => {
     load_study_session(studySessionId);
@@ -80,7 +88,7 @@ const DashboardContent = ({
             {showStudySessionDetails
               ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false); }} handleEdit={() => { setShowStudySessionEdit(true); setShowStudySessionDetails(false); }} />
               : showFeedback
-                ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => { setShowPopup(false); setAfterFeedback(true); }} />
                 : showStudySessionEdit
                   ? <StudySessionEdit selectedCallback={() => { setShowFeedback(true); setShowStudySessionEdit(false); setSessionType('updated-session'); }} />
                   : null}

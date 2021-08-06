@@ -43,19 +43,38 @@
 
 .active-card{
     filter: none !important; 
-    background-color: rgba(211, 211, 211, 0.151);
+    background-color: rgba(128, 128, 128, 0.055);
 }
 
 .proof-of-address-container{
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     flex-direction: row !important;
     align-items: center;
     margin-top: 10px;
 }
+
+
+.proof-of-address-container img{
+    margin-bottom: 20px;
+}
+
 
 @media only screen and (max-width: 1024px){
     .signup-flow-wrapper{
         margin:10% auto 200px auto ;
     } 
 }
+
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+    .proof-of-address-container{
+        flex-wrap: nowrap;
+    }  
+    .proof-of-address-container img{
+        margin-bottom: 0px;
+    }
+    
+}
+
+
+

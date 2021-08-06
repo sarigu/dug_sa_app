@@ -4,6 +4,7 @@
     overflow: scroll;
     background-color: #FFF5F4;
 }
+
 .signup-wrapper{
     width:80%;
     max-width: 400px;
@@ -24,10 +25,10 @@
 .signup-options * {
   background-color: white;
   border-radius: 15px;
-  font-weight: 500;
-  font-size: 10px;
-  padding:5px 15px;
-  margin: 20px 20px 20px 0;
+  font-weight: 600;
+  font-size: 12px;
+  padding:8px 15px;
+  margin: 10px 20px 20px 0;
 }
 
 .clicked{

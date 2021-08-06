@@ -30,6 +30,7 @@ const AllClasses = ({
   const [sessionType, setSessionType] = useState();
   const [showPopup, setShowPopup] = useState(false);
   const [showStudySessionEdit, setShowStudySessionEdit] = useState(false);
+  const [afterFeedback, setAfterFeedback] = useState(false);
 
   const history = useHistory();
 
@@ -49,6 +50,23 @@ const AllClasses = ({
       load_teachers_previous_study_sessions_list(index);
     }
   }, [isCancelled, isCreated]);
+
+  useEffect(() => {
+    if (userType === 'teacher' && afterFeedback) {
+      if (sortByUpcoming) {
+        load_teachers_upcoming_study_sessions_list(index);
+      } else {
+        load_teachers_previous_study_sessions_list(index);
+      }
+    } else if (userType === 'student' && afterFeedback) {
+      if (sortByUpcoming) {
+        load_upcoming_booked_study_sessions_list(index);
+      } else {
+        load_previous_booked_study_sessions_list(index);
+      }
+    }
+    setShowFeedback(false);
+  }, [afterFeedback]);
 
   useEffect(() => {
     setUpcomingIsLoaded(true);
@@ -169,26 +187,26 @@ const AllClasses = ({
             ? (
               <>
                 {
-                                allPreviousStudySessions && allPreviousStudySessions.length > 0
-                                  ? allPreviousStudySessions.map((studySession, index) => (
-                                    <StudySessionCard
-                                      key={index}
-                                      selectedCallback={(sessionId, isActive) => { handleSelectedStudySession(sessionId, isActive); }}
-                                      sessionId={studySession.id}
-                                      isActive={studySession.is_active}
-                                      subject={studySession.subject.name}
-                                      language={studySession.language.language}
-                                      location={studySession.location.name}
-                                      teacher={studySession.teacher}
-                                      startTime={studySession.start_time}
-                                      endTime={studySession.end_time}
-                                      date={studySession.date}
-                                      subjectColor={studySession.subject.color}
-                                      wasUpdated={studySession.was_updated}
-                                    />
-                                  ))
-                                  : <p>No classes</p>
-                            }
+                  allPreviousStudySessions && allPreviousStudySessions.length > 0
+                    ? allPreviousStudySessions.map((studySession, index) => (
+                      <StudySessionCard
+                        key={index}
+                        selectedCallback={(sessionId, isActive) => { handleSelectedStudySession(sessionId, isActive); }}
+                        sessionId={studySession.id}
+                        isActive={studySession.is_active}
+                        subject={studySession.subject.name}
+                        language={studySession.language.language}
+                        location={studySession.location.name}
+                        teacher={studySession.teacher}
+                        startTime={studySession.start_time}
+                        endTime={studySession.end_time}
+                        date={studySession.date}
+                        subjectColor={studySession.subject.color}
+                        wasUpdated={studySession.was_updated}
+                      />
+                    ))
+                    : <p>No classes</p>
+                }
               </>
             )
             : <LoadingIcon />}
@@ -223,9 +241,9 @@ const AllClasses = ({
       {showPopup
         ? (
           <PopUp selectedCallback={() => setShowPopup(false)}>
-            {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false); }} handleEdit={() => { setShowStudySessionEdit(true); setShowStudySessionDetails(false); }} />
-              : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
-                : showStudySessionEdit ? <StudySessionEdit selectedCallback={() => { setShowFeedback(true); setShowStudySessionEdit(false); setSessionType('updated-session'); }} />
+            {showStudySessionDetails ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false); setAfterFeedback(false); }} handleEdit={() => { setShowStudySessionEdit(true); setShowStudySessionDetails(false); }} />
+              : showFeedback ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => { setShowPopup(false); setAfterFeedback(true); }} />
+                : showStudySessionEdit ? <StudySessionEdit selectedCallback={() => { setShowFeedback(true); setShowStudySessionEdit(false); setSessionType('updated-session'); setAfterFeedback(false); }} />
                   : null}
           </PopUp>
         )

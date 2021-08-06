@@ -3,15 +3,15 @@ import { connect } from 'react-redux';
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 import './StudySessionFeedback.css';
 
-const BookingSuccessMessage = () => (
+const BookingSuccessMessage = (props) => (
   <div className="feedback-content">
     <span className="feedback-icon">&#127881;</span>
     <h3>You successfully booked your spot!</h3>
-    <button onClick={() => { window.location.href = '/dashboard'; }}>Go back</button>
+    <button onClick={props.selectedCallback}>Go back</button>
   </div>
 );
 
-const FailMessage = () => (
+const FailMessage = (props) => (
   <div className="feedback-content">
     <span className="feedback-icon">&#127871;</span>
     <h3>
@@ -19,39 +19,39 @@ const FailMessage = () => (
       <br />
       Please try again later
     </h3>
-    <button onClick={() => { window.location.href = '/dashboard'; }}>Go back</button>
+    <button onClick={props.selectedCallback}>Go back</button>
   </div>
 );
 
-const DropOutOfStudySessionSuccessMessage = () => (
+const DropOutOfStudySessionSuccessMessage = (props) => (
   <div className="feedback-content">
     <span className="feedback-icon">&#9989;</span>
     <h3>Your spot in the study session is cancelled!</h3>
-    <button onClick={() => { window.location.href = '/dashboard'; }}>Go back</button>
+    <button onClick={props.selectedCallback}>Go back</button>
   </div>
 );
 
-const CancelStudySessionSuccessMessage = () => (
+const CancelStudySessionSuccessMessage = (props) => (
   <div className="feedback-content">
     <span className="feedback-icon">&#9989;</span>
     <h3>The study session is cancelled!</h3>
-    <button onClick={() => { window.location.href = '/dashboard'; }}>Go back</button>
+    <button onClick={props.selectedCallback}>Go back</button>
   </div>
 );
 
-const CreatedStudySessionSuccessMessage = () => (
+const CreatedStudySessionSuccessMessage = (props) => (
   <div className="feedback-content">
     <span className="feedback-icon">&#128218;</span>
     <h3>The new study session was created!</h3>
-    <button onClick={() => { window.location.href = '/dashboard'; }}>Go back</button>
+    <button onClick={props.selectedCallback}>Go back</button>
   </div>
 );
 
-const UpdatedStudySessionSuccessMessage = () => (
+const UpdatedStudySessionSuccessMessage = (props) => (
   <div className="feedback-content">
     <span className="feedback-icon">&#128221;</span>
     <h3>You updated the study session!</h3>
-    <button onClick={() => { window.location.href = '/dashboard'; }}>Go back</button>
+    <button onClick={props.selectedCallback}>Go back</button>
   </div>
 );
 

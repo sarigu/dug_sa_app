@@ -1,12 +1,12 @@
 .work-in-progress-wrapper{
-    padding:30px;
+    padding:30px 30px 50px 30px;
     overflow: hidden;
     width:100%;
     height:calc(100% - 200px);
 }
 
 .work-in-progress-wrapper .content-container{
-    width:50%;
+    width:80%;
     height:fit-content;
     text-align: center;
     margin: 0;
@@ -18,4 +18,10 @@
 
 .work-in-progress-wrapper .content-container span{
     font-size: 120px;
+}
+
+@media only screen and (min-width: 600px){
+    .work-in-progress-wrapper .content-container{
+        width:50%;
+    }
 }

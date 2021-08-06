@@ -1,0 +1,11 @@
+.logo-img{
+    cursor: pointer;
+    width: 20%;
+    float: right; 
+}
+
+@media only screen and (min-width: 600px) {
+    .logo-img{
+        width: 6%;
+    }
+}
