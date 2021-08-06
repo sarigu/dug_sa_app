@@ -1,16 +1,17 @@
+/*eslint-disable*/
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import LoadingIcon from '../LoadingIcon/LoadingIcon';
 
-const ApprovalSuccessMessage = () => (
+const ApprovalSuccessMessage = (props) => (
   <div className="feedback-content">
     <span className="feedback-icon">&#9989;</span>
     <h3>The teacher is reviewed and will be notified!</h3>
-    <button onClick={() => { window.location.href = '/dashboard'; }}>Go back</button>
+    <button onClick={props.selectedCallback}>Go back</button>
   </div>
 );
 
-const FailMessage = () => (
+const FailMessage = (props) => (
   <div className="feedback-content">
     <span className="feedback-icon">&#127871;</span>
     <h3>
@@ -18,7 +19,7 @@ const FailMessage = () => (
       <br />
       Please try again later
     </h3>
-    <button onClick={() => { window.location.href = '/dashboard'; }}>Go back</button>
+    <button onClick={props.selectedCallback}>Go back</button>
   </div>
 );
 

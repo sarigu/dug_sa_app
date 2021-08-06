@@ -12,7 +12,9 @@ import { load_study_sessions, load_study_session } from '../../actions/data';
 import './SchedulePage.css';
 import StudySessionEdit from '../../components/StudySessionEdit/StudySessionEdit';
 
-const SchedulePage = ({ user, load_study_sessions, load_study_session }) => {
+const SchedulePage = ({
+  user, load_study_sessions, load_study_session, userType,
+}) => {
   const [showPopup, setShowPopup] = useState(false);
   const [showStudySessionDetails, setShowStudySessionDetails] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -20,12 +22,20 @@ const SchedulePage = ({ user, load_study_sessions, load_study_session }) => {
   const [sessionType, setSessionType] = useState();
   const [addStudySessionFeeback, setAddStudySessionFeedback] = useState(false);
   const [showStudySessionEdit, setShowStudySessionEdit] = useState(false);
+  const [afterFeedback, setAfterFeedback] = useState(false);
 
   const history = useHistory();
 
   useEffect(() => {
     load_study_sessions(user.id);
   }, []);
+
+  useEffect(() => {
+    if (afterFeedback) {
+      load_study_sessions(user.id);
+    }
+    setShowFeedback(false);
+  }, [afterFeedback]);
 
   const handleSelectedStudySession = (studySessionId, sessionType) => {
     load_study_session(studySessionId);
@@ -44,23 +54,25 @@ const SchedulePage = ({ user, load_study_sessions, load_study_session }) => {
       <BackButton buttonWidth="70px" selectedCallback={() => history.push('/dashboard')} />
       <h2 style={{ marginTop: '40px' }}>Schedule</h2>
       <Schedule selectedCallback={(studySessionId, sessionType) => handleSelectedStudySession(studySessionId, sessionType)} />
-      <div className="plus-button-container">
-        {' '}
-        <PlusButton selectedCallback={handleAddStudySession} />
-      </div>
+      {userType === 'teacher' ? (
+        <div className="plus-button-container">
+          <PlusButton selectedCallback={handleAddStudySession} />
+        </div>
+      )
+        : null}
       {showPopup
         ? (
           <PopUp selectedCallback={() => setShowPopup(false)}>
             {showStudySessionDetails
-              ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false); }} handleEdit={() => { setShowStudySessionEdit(true); setShowStudySessionDetails(false); }} />
+              ? <StudySessionDetail sessionType={sessionType} selectedCallback={() => { setShowFeedback(true); setShowStudySessionDetails(false); setAfterFeedback(false); }} handleEdit={() => { setShowStudySessionEdit(true); setShowStudySessionDetails(false); }} />
               : showFeedback
-                ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => { setShowPopup(false); setAfterFeedback(true); }} />
                 : addStudySession
-                  ? <StudySessionForm selectedCallback={() => { setAddStudySessionFeedback(true); setAddStudySession(false); setSessionType('added-class'); }} />
+                  ? <StudySessionForm selectedCallback={() => { setAddStudySessionFeedback(true); setAddStudySession(false); setSessionType('added-class'); setAfterFeedback(false); }} />
                   : addStudySessionFeeback
-                    ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => setShowPopup(false)} />
+                    ? <StudySessionFeedback sessionType={sessionType} selectedCallback={() => { setShowPopup(false); setAfterFeedback(true); }} />
                     : showStudySessionEdit
-                      ? <StudySessionEdit selectedCallback={() => { setShowFeedback(true); setShowStudySessionEdit(false); setSessionType('updated-session'); }} />
+                      ? <StudySessionEdit selectedCallback={() => { setShowFeedback(true); setShowStudySessionEdit(false); setSessionType('updated-session'); setAfterFeedback(false); }} />
                       : null}
           </PopUp>
         )
@@ -71,6 +83,7 @@ const SchedulePage = ({ user, load_study_sessions, load_study_session }) => {
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  userType: state.auth.userType,
 });
 
 export default connect(mapStateToProps, { load_study_sessions, load_study_session })(SchedulePage);

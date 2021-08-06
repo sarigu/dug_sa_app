@@ -22,12 +22,25 @@ const AccessCodes = ({
   const [showFeedback, setShowFeedback] = useState(false);
   const [addAccessCode, setAddAccessCode] = useState(false);
   const [showAccessCodeCreatedFeeback, setShowAccessCodeCreatedFeeback] = useState(false);
+  const [afterFeedback, setAfterFeedback] = useState(false);
 
   const history = useHistory();
 
   useEffect(() => {
     load_active_access_codes();
   }, []);
+
+  useEffect(() => {
+    if (afterFeedback) {
+      setIsLoaded(false);
+      if (sortByActive) {
+        load_active_access_codes();
+      } else {
+        load_inactive_access_codes();
+      }
+    }
+    setShowFeedback(false);
+  }, [afterFeedback]);
 
   useEffect(() => {
     if (sortByActive) {
@@ -65,6 +78,7 @@ const AccessCodes = ({
     setAddAccessCode(true);
     setShowDetails(false);
     setShowPopup(true);
+    setShowFeedback(false);
   };
 
   return (
@@ -115,13 +129,13 @@ const AccessCodes = ({
         ? (
           <PopUp selectedCallback={() => setShowPopup(false)}>
             {showDetails
-              ? <AccessCodeDetails selectedCallback={() => { setShowDetails(false); setShowFeedback(true); }} />
+              ? <AccessCodeDetails selectedCallback={() => { setShowDetails(false); setShowFeedback(true); setAfterFeedback(false); }} />
               : showFeedback
-                ? <AccessCodeFeedback feedbackType="updated-access-code" />
+                ? <AccessCodeFeedback feedbackType="updated-access-code" selectedCallback={() => { setShowPopup(false); setAfterFeedback(true); }} />
                 : addAccessCode
-                  ? <AccessCodeForm selectedCallback={() => { setShowAccessCodeCreatedFeeback(true); setAddAccessCode(false); }} />
+                  ? <AccessCodeForm selectedCallback={() => { setShowAccessCodeCreatedFeeback(true); setAddAccessCode(false); setAfterFeedback(false); }} />
                   : showAccessCodeCreatedFeeback
-                    ? <AccessCodeFeedback feedbackType="added-access-code" />
+                    ? <AccessCodeFeedback feedbackType="added-access-code" selectedCallback={() => { setShowPopup(false); setAfterFeedback(true); }} />
                     : null}
           </PopUp>
         )
