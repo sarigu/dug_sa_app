@@ -39,7 +39,7 @@ describe('auth Reducer', () => {
             user: null,
             userType: null,
             error: null,
-            selectedRole: undefined,
+            selectedRole: 'student',
             signUpStatus: '',
             subjects: [],
             languages: [],
