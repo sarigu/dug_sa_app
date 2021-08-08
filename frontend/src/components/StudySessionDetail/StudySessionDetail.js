@@ -45,13 +45,15 @@ const StudySessionDetail = ({
       {isLoaded && studySession
         ? (
           <div className="study-session-container">
-            {userType === 'student' && sessionType && sessionType === 'study-session'
+            {userType === 'student' && sessionType && sessionType === 'study-session' && studySession.taken_spots < studySession.available_spots
               ? <h2>Do you want to book a slot for this study session?</h2>
-              : userType === 'student' && sessionType && sessionType === 'booked-study-session'
-                ? <h2>Do you want to cancel your slot in this study session?</h2>
-                : sessionType && sessionType === 'cancelled-session'
-                  ? <h2>This class was cancelled</h2>
-                  : <h2>Study session details</h2>}
+              : userType === 'student' && sessionType && sessionType === 'study-session' && studySession.taken_spots >= studySession.available_spots
+                ? <h2>This study session is fully booked</h2>
+                : userType === 'student' && sessionType && sessionType === 'booked-study-session'
+                  ? <h2>Do you want to cancel your slot in this study session?</h2>
+                  : sessionType && sessionType === 'cancelled-session'
+                    ? <h2>This class was cancelled</h2>
+                    : <h2>Study session details</h2>}
             <div className="study-session-details">
               <h3>Teacher</h3>
               <p>{studySession.teacher ? `${studySession.teacher.first_name} ${studySession.teacher.last_name}` : null}</p>
@@ -79,18 +81,20 @@ const StudySessionDetail = ({
                 )
                 : null}
             </div>
-            {userType === 'student' && sessionType && sessionType === 'study-session'
+            {userType === 'student' && sessionType && sessionType === 'study-session' && studySession.taken_spots < studySession.available_spots
               ? <button onClick={handleStudySessionParticipation}>Yes, book a slot!</button>
-              : userType === 'student' && sessionType && sessionType === 'booked-study-session'
-                ? <button onClick={handleCancelStudySessionParticipation} className="pink-background">Drop out</button>
-                : sessionType && sessionType === 'cancelled-session'
-                  ? null
-                  : (
-                    <div>
-                      {userType === 'teacher' ? <button onClick={handleEditStudySession} className="green-background" style={{ marginBottom: '20px' }}>Edit the class</button> : null}
-                      <button onClick={handleCancelStudySession} className="pink-background">Cancel the class</button>
-                    </div>
-                  )}
+              : userType === 'student' && sessionType && sessionType === 'study-session' && studySession.taken_spots >= studySession.available_spots
+                ? null
+                : userType === 'student' && sessionType && sessionType === 'booked-study-session'
+                  ? <button onClick={handleCancelStudySessionParticipation} className="pink-background">Drop out</button>
+                  : sessionType && sessionType === 'cancelled-session'
+                    ? null
+                    : (
+                      <div>
+                        {userType === 'teacher' ? <button onClick={handleEditStudySession} className="green-background" style={{ marginBottom: '20px' }}>Edit the class</button> : null}
+                        <button onClick={handleCancelStudySession} className="pink-background">Cancel the class</button>
+                      </div>
+                    )}
           </div>
         )
         : <LoadingIcon />}

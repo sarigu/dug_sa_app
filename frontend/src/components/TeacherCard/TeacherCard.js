@@ -64,7 +64,7 @@ const TeacherCard = ({
                               {' '}
                               years
                             </h5>
-                            <button className="availibility-button" onClick={selectedCallback}>Check availibility</button>
+                            <button className="availibility-button" onClick={selectedCallback}>Classes</button>
                           </div>
                           <div onClick={handleBookmark} style={{ alignSelf: 'flex-start', marginRight: '10px' }}>
                             {' '}
@@ -98,7 +98,7 @@ const TeacherCard = ({
                           {' '}
                           years
                         </h5>
-                        <button className="availibility-button" onClick={() => selectedCallback(user.id)}>Check availibility</button>
+                        <button className="availibility-button" onClick={() => selectedCallback(user.id)}>Classes</button>
                       </div>
                       <div onClick={handleBookmark} style={{ alignSelf: 'flex-start', marginRight: '10px' }}>{bookmarkIsSet ? <FilledHeart /> : <Heart />}</div>
                     </div>
