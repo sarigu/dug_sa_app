@@ -34,7 +34,7 @@ SECRET_KEY = 'django-insecure-iq1-6ib#i7#z_xq_y9c7%5tva&d2f2q4(dfgll!-ig%!tb$w_%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['dug-app.herokuapp.com', '127.0.0.1:8000', 'localhost']
+ALLOWED_HOSTS = ['dug-sa-app.herokuapp.com', '127.0.0.1:8000', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -52,12 +52,13 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'study_sessions',
     'material',
+    'storages',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -203,7 +204,20 @@ DJOSER = {
     }
 }
 
-import django_heroku
-django_heroku.settings(locals())
-options = DATABASES['default'].get('OPTIONS', {})
-options.pop('sslmode', None)
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_REGION_NAME = "eu-north-1"
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+#AWS_S3_ADDRESSING_STYLE = "virtual"
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
