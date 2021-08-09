@@ -112,7 +112,7 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         user: null,
         userType: null,
-        selectedRole: undefined,
+        selectedRole: 'student',
       };
     case PASSWORD_RESET_SUCCESS:
     case PASSWORD_RESET_FAIL:

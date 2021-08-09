@@ -10,7 +10,6 @@ class UserModel(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         cls.accessCode = AccessCode.objects.create(
             code="dug teacher test code",
             is_active = True
@@ -29,25 +28,6 @@ class UserModel(TestCase):
             role="teacher",
             access_code="dug teacher test code",
             is_active = True
-        )
-
-        cls.teacher = Teacher.objects.create(
-            user=cls.user
-        )
-
-        cls.subject = Subject.objects.create(
-            name='Math',
-            color='Blue'
-        )
-
-        cls.subject2 = Subject.objects.create(
-            name='Biology',
-            color='green'
-        )
-
-        cls.teacher_subject_relation = Teacher_Subject.objects.create(
-            teacher=cls.teacher,
-            subject=cls.subject
         )
 
     def test_create_user_with_wrong_access_code(self):
