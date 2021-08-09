@@ -9,16 +9,18 @@ import ApprovalFeedback from '../../../components/ApprovalFeedback/ApprovalFeedb
 import { load_new_teachers, load_teacher_details } from '../../../actions/data';
 
 const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
-  const [teachersListShortened, setTeachersListShortened] = useState();
-  const [teachersList, setTeachersList] = useState();
+  const [teachersListShortened, setTeachersListShortened] = useState([]);
+  const [teachersList, setTeachersList] = useState([]);
   const [index, setIndex] = useState(5);
   const [hideShowMore, setHideShowMore] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [afterFeedback, setAfterFeedback] = useState(false);
 
-  useEffect(() => {
+  const loadInitialTeachersList = () => {
     load_new_teachers().then((res) => {
+      console.log(res, 'res');
       if (res && res.length > 0) {
         setTeachersListShortened(res.slice(0, 5));
         setTeachersList(res);
@@ -27,9 +29,22 @@ const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
         }
       } else {
         setHideShowMore(true);
+        setTeachersListShortened([]);
+        setTeachersList([]);
       }
     });
+  };
+
+  useEffect(() => {
+    loadInitialTeachersList();
   }, []);
+
+  useEffect(() => {
+    if (afterFeedback) {
+      loadInitialTeachersList();
+    }
+    setShowFeedback(false);
+  }, [afterFeedback]);
 
   const loadMoreTeachers = () => {
     const newIndex = index + 5;
@@ -52,13 +67,13 @@ const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
   return (
     <div>
       <section className="teachers-container">
-        <div className="heading-wrapper" style={{ width: '300px' }}>
+        <div className="heading-wrapper">
           <h2>New teachers</h2>
           <div>
             <div className="numberCircle"><p>{teachersList ? teachersList.length : '0'}</p></div>
           </div>
         </div>
-        {teachersList ? teachersListShortened.map((teacher, index) => (
+        {teachersList && teachersList.length > 0 ? teachersListShortened.map((teacher, index) => (
           <TeacherCard
             key={index}
             view="overview"
@@ -81,9 +96,9 @@ const StaffDashboard = ({ load_new_teachers, load_teacher_details }) => {
         ? (
           <PopUp selectedCallback={() => setShowPopup(false)}>
             {showDetails
-              ? <TeacherDetails selectedCallback={() => { setShowFeedback(true); setShowDetails(false); }} />
+              ? <TeacherDetails selectedCallback={() => { setShowFeedback(true); setShowDetails(false); setAfterFeedback(false); }} />
               : showFeedback
-                ? <ApprovalFeedback selectedCallback={() => setShowPopup(false)} />
+                ? <ApprovalFeedback selectedCallback={() => { setShowPopup(false); setAfterFeedback(true); }} />
                 : null}
           </PopUp>
         )

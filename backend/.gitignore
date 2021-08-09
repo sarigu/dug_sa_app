@@ -2,8 +2,8 @@
 
 # dependencies
 /db.sqlite3
-.env
+/dug_app/.env
 /build
 /media
 .DS_Store
-Pipfile
+/Pipfile

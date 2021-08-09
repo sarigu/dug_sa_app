@@ -9,22 +9,12 @@ const TeacherCard = ({
   create_bookmark, user, profileImage, subjects, languages, isBookmarked, view, experience, teachingFacilities, sortByBookmarks, selectedCallback,
 }) => {
   const [bookmarkIsSet, setBookmarkIsSet] = useState();
-  const [backgroundImage, setBackgroundImage] = useState();
-
-  useEffect(() => {
-    if (profileImage.startsWith('http://localhost:8000')) {
-      setBackgroundImage(profileImage);
-    } else {
-      setBackgroundImage(`http://localhost:8000${profileImage}`);
-    }
-  }, [profileImage]);
 
   useEffect(() => {
     setBookmarkIsSet(isBookmarked);
   }, [isBookmarked]);
 
   const handleBookmark = () => {
-    console.log(user.id);
     create_bookmark(user.id);
     setBookmarkIsSet(!bookmarkIsSet);
   };
@@ -35,7 +25,7 @@ const TeacherCard = ({
         {view === 'overview' ? (
           <div className="teacher-card small" onClick={() => selectedCallback(user.id)}>
             <div className="teacher-information-container small-container">
-              <div className="teacher-image" style={{ backgroundImage: `url(${backgroundImage})` }} />
+              <div className="teacher-image" style={{ backgroundImage: `url(${profileImage})` }} />
               <div className="teacher-details">
                 <h4>
                   {user.first_name}
@@ -55,7 +45,7 @@ const TeacherCard = ({
                     {bookmarkIsSet ? (
                       <div className="teacher-card big">
                         <div className="teacher-information-container big-container">
-                          <div className="teacher-image" style={{ backgroundImage: `url( ${backgroundImage})` }} />
+                          <div className="teacher-image" style={{ backgroundImage: `url( ${profileImage})` }} />
                           <div className="teacher-details">
                             <h4>
                               {user.first_name}
@@ -74,7 +64,7 @@ const TeacherCard = ({
                               {' '}
                               years
                             </h5>
-                            <button className="availibility-button" onClick={selectedCallback}>Check availibility</button>
+                            <button className="availibility-button" onClick={selectedCallback}>Classes</button>
                           </div>
                           <div onClick={handleBookmark} style={{ alignSelf: 'flex-start', marginRight: '10px' }}>
                             {' '}
@@ -89,7 +79,7 @@ const TeacherCard = ({
                 : (
                   <div className="teacher-card big">
                     <div className="teacher-information-container big-container">
-                      <div className="teacher-image" style={{ backgroundImage: `url( ${backgroundImage})` }} />
+                      <div className="teacher-image" style={{ backgroundImage: `url( ${profileImage})` }} />
                       <div className="teacher-details">
                         <h4>
                           {user.first_name}
@@ -108,7 +98,7 @@ const TeacherCard = ({
                           {' '}
                           years
                         </h5>
-                        <button className="availibility-button" onClick={() => selectedCallback(user.id)}>Check availibility</button>
+                        <button className="availibility-button" onClick={() => selectedCallback(user.id)}>Classes</button>
                       </div>
                       <div onClick={handleBookmark} style={{ alignSelf: 'flex-start', marginRight: '10px' }}>{bookmarkIsSet ? <FilledHeart /> : <Heart />}</div>
                     </div>

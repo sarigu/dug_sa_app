@@ -1,15 +1,14 @@
 .about-wrapper{
     padding:30px;
-    width:calc(100%-30px);
 }
 
 .about-wrapper .content-container p{
-    width:100%;
+    width:90%;
 }
 
 .about-wrapper img{
-    width:300px;
-    height:300px;
+    width:200px;
+    height:200px;
 }
 
 @media only screen and (min-width: 800px)  {

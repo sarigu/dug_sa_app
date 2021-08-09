@@ -1,5 +1,5 @@
 .menu{
-    height:100%;
+    height:calc(100% - 45px);
     background-color: #FFF5F4;
     float: right;
     padding: 45px 0 0 0;
@@ -8,6 +8,7 @@
     top:105px;
     right:0;
     z-index: 99;  
+    overflow-y: scroll;
 }
 
 .active{
@@ -36,6 +37,8 @@
     width: fit-content;
     position: relative;
     float: right;
+    height: fit-content;
+    padding: 0 0 150px 0;
 }
 
 .menu-links-container * {

@@ -80,6 +80,7 @@ class StudySessionView(viewsets.ModelViewSet):
             else:
                 raise ValueError('No access right')
         except Exception as e:
+            print(e, "err")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(response_data)
 

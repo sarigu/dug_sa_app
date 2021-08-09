@@ -51,12 +51,12 @@ const TeacherDetails = ({ teacherData, add_teacher_review, selectedCallback }) =
                   ? <h2 style={{ margin: '0 0 30px 0' }}>Teacher Details</h2>
                   : teacher.is_reviewed && !teacher.is_approved ? <h2 style={{ margin: ' 0 0 30px 0' }}>(Rejected) Teacher Details</h2>
                     : null}
-                <div className="profile-image" style={{ backgroundImage: `url(${`http://localhost:8000${teacher.profile_image}`})` }} />
+                <div className="profile-image" style={{ backgroundImage: `url(${teacher.profile_image})` }} />
                 {!teacher.is_reviewed
                   ? (
                     <div>
                       <h3>Proof of address</h3>
-                      <div onClick={() => { setShowAdressProofDetails(true); }} className="address-proof-image" style={{ backgroundImage: `url( ${`http://localhost:8000${teacher.proof_of_address}`})` }} />
+                      <div onClick={() => { setShowAdressProofDetails(true); }} className="address-proof-image" style={{ backgroundImage: `url( ${teacher.proof_of_address})` }} />
                     </div>
                   )
                   : null}
@@ -130,7 +130,7 @@ const TeacherDetails = ({ teacherData, add_teacher_review, selectedCallback }) =
               <CloseButton selectedCallback={() => setShowAdressProofDetails(false)} />
             </div>
             <div className="address-proof-image">
-              <img alt="address-proof" src={`http://localhost:8000${teacher.proof_of_address}`} />
+              <img alt="address-proof" src={teacher.proof_of_address} />
             </div>
           </div>
         )
